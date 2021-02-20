@@ -65,14 +65,13 @@ class EditPlan extends Component {
       this.setState({
         dog: prevProps.user.dogs[index],
         cookedRecipes: loadRecipes,
-        // kibble: currentdog.kibble
+        kibble: currentdog.kibble
       });
     }
   }
 
   selectedDog = (dog) => {
     this.setState({ dog });
-    console.log("selected dog", dog);
   };
 
   toggleKibble = () => {
@@ -88,7 +87,6 @@ class EditPlan extends Component {
   };
 
   handleSelectedCookedRecipes = (food) => {
-    console.log('ran')
     const { cookedRecipes } = this.state;
     if (cookedRecipes.length > 0 && cookedRecipes.includes(food.recipe)) {
       let recipes = [...cookedRecipes];
@@ -118,7 +116,7 @@ class EditPlan extends Component {
       const data = {
         dog_id: dog.id,
         cooked_portion: dietPortion.cooked_portion,
-        kibble_portion: null,
+        kibble_portion: dietPortion.kibble_portion,
       };
       if (kibble.length > 0) {
         data.kibble_recipe = kibble[0];
@@ -126,27 +124,25 @@ class EditPlan extends Component {
       for (let item of cookedRecipes) {
         data[`${item}_recipe`] = true;
       }
-      // this.props.updateMealPlan(data);
       this.props.getSubscriptionEstimate(data)
-
     }
     this.setState({ step: this.state.step + 1 });
   };
+
   handlePrevious = () => {
     this.setState({ step: this.state.step - 1 });
   };
+
   handleEstimate = () => {
     this.setState({ previous: false, next: false, estimate: true });
   };
-
-
 
   handleMealUpdate = () => {
     const { cookedRecipes, kibble, dietPortion, dog } = this.state;
     const data = {
       dog_id: dog.id,
       cooked_portion: dietPortion.cooked_portion,
-      kibble_portion: null,
+      kibble_portion: dietPortion.kibble_portion,
     };
     if (kibble.length > 0) {
       data.kibble_recipe = kibble[0];
@@ -155,18 +151,14 @@ class EditPlan extends Component {
       data[`${item}_recipe`] = true;
     }
     this.props.updateMealPlan(data);
-    // this.props.getSubscriptionEstimate(data)
   };
 
   render() {
     const { user, meal, getDailyDietPortion } = this.props;
     const { cookedRecipes, kibble, dog, dietPortion, index, step } = this.state;
-    console.log(user.subLoading)
+
     if (user.subLoading) return <LoadingCircle />
-    console.log(cookedRecipes, kibble)
-    // if (cookedRecipes.length === 0 && kibble.length === 0) return <LoadingCircle />
-    // console.log(index)
-    console.log(dog)
+
     return (
       <React.Fragment>
         {step == 0 && (
@@ -193,6 +185,7 @@ class EditPlan extends Component {
             togglePortion={this.togglePortion}
             selectedDietPortion={this.selectedDietPortion}
             getDailyDietPortion={getDailyDietPortion}
+            kibbleRecipe={kibble}
           />
         )}
         {step > 1 && (
@@ -213,12 +206,14 @@ class EditPlan extends Component {
 
         <div className="w-full flex flex-col py-3 bg-white items-center">
           <div className="inline-flex">
-            <button
-              onClick={this.handlePrevious}
-              className="text-green-600 mr-2 focus:outline-none"
-            >
-              Previous
-            </button>
+            {step !== 0 && (
+              <button
+                onClick={this.handlePrevious}
+                className="text-green-600 mr-2 focus:outline-none"
+              >
+                Previous
+              </button>)
+            }
             {step == 0 && (
               <button
                 onClick={this.handleNext}
@@ -276,29 +271,7 @@ const mapDispatchToProps = (dispatch) => ({
   getSubscriptionEstimate: (data) => dispatch(userActions.getSubscriptionEstimate(data)),
 });
 
-// const mapStateToProps = (state) => {
-//   const {
-//     user: { subscriptions, dogs },
-//     user,
-//   } = state;
-//   const dog = dogs.length > 0 ? dogs[0] : {};
-//   // const {chicken_recipe, beef_recipe, turkey_recipe, lamb_recipe} = dog
-//   // console.log(dogs)
-//   return {
-//     subscriptions,
-//     dogs,
-//     user,
-//     initialValues: {
-//       chicken_recipe: dog.chicken_recipe,
-//       beef_recipe: dog.beef_recipe,
-//       turkey_recipe: dog.turkey_recipe,
-//       lamb_recipe: dog.lamb_recipe,
-//     },
-//   };
-// };
-
 const mapStateToProps = (state) => {
-  // console.log(state.user);
   return {
     user: state.user,
     meal: state.meal,

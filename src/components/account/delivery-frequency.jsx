@@ -12,6 +12,7 @@ class FrequencyModal extends React.Component {
     super(props);
     this.state = {
       dogIndex: 0,
+      submitted: false,
     };
     this.setDog = this.setDog.bind(this)
   }
@@ -24,6 +25,9 @@ class FrequencyModal extends React.Component {
 
   handleSubmit = (event) => {
     event.preventDefault()
+    this.setState({
+      submitted: true
+    })
     let submitData = {
       amount_of_food: event.target[0].value,
       how_often: event.target[1].value,
@@ -33,14 +37,15 @@ class FrequencyModal extends React.Component {
   }
 
   render() {
-    const { dogIndex } = this.state
-    const { dogs, next_occurrencies, user } = this.props
-    const { amount_of_food_options, amount_of_food, how_often_options, delivery_starting_date_options, how_often } = user
+    const { dogIndex, submitted } = this.state
+    const { dogs, user } = this.props
+    const { amount_of_food_options, amount_of_food, how_often_options, delivery_starting_date_options, how_often, error, loading } = user
     const currentDog = dogs[dogIndex]
 
     const SelectOptions = (array,) => (array.map((delayOption, i) => (
       <option className="w-full" key={i} value={delayOption.value}>{delayOption.label}  </option>
     )))
+    console.log(submitted, error, loading)
 
     return (
       <div className="py-8 px-5 relative border-r border-l rounded-b-xl border-b border-gray-300">
@@ -89,6 +94,16 @@ class FrequencyModal extends React.Component {
             Save Changes
           </button>
         </form>
+        {!error && !loading && submitted && (
+          <div className="text-primary text-xs mt-1">
+            Your changes have been saved
+          </div>
+        )}
+        {error && !loading && submitted && (
+          <div className="text-red-500 text-xs mt-1">
+            An error occured please try again later
+          </div>
+        )}
       </div>
     );
   }
@@ -96,7 +111,7 @@ class FrequencyModal extends React.Component {
 
 function mapStateToProps(state) {
   const { user } = state
-  const { subscriptions, dogs, next_occurrencies, } = state.user
+  const { subscriptions, dogs, next_occurrencies, error, loading } = state.user
   return {
     user,
     subscriptions,
