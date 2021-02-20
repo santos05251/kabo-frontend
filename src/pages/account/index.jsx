@@ -1,6 +1,8 @@
 /* eslint-disable semi */
 import React from "react";
 import { connect } from "react-redux";
+import { isMobile } from 'react-device-detect';
+
 import { ReactComponent as DeliveryBox } from "../../assets/images/delivery-box.svg";
 import { ReactComponent as Arrow } from "../../assets/images/Vectorarrow.svg";
 import { ReactComponent as MealBox } from "../../assets/images/meal-plan.svg";
@@ -16,7 +18,7 @@ class AccountPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      nextExpanded: false,
+      nextExpanded: !isMobile,
       mealExpanded: false,
       frequencyExpanded: false,
     };

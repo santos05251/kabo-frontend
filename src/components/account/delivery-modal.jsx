@@ -26,12 +26,16 @@ class DeliveryModal extends React.Component {
     const { dogs, user } = this.props
     const dogsLength = dogs.length
 
+
     let deliveryStatus
 
-    if (user.subscription_phase_status = 'normal_user_preparing_order') {
+    if (user.subscription_phase && user.subscription_phase.status.includes('deliver')) {
+      deliveryStatus = 3
+    } else if (user.subscription_phase && user.subscription_phase.status.includes('prepar')) {
+      deliveryStatus = 2
+    }
+    else {
       deliveryStatus = 1
-    } else {
-      deliveryStatus = 0
     }
 
     if (dogsLength === 0) return null
@@ -64,7 +68,7 @@ class DeliveryModal extends React.Component {
 }
 
 function mapStateToProps(state) {
-  const { user } = state.authentication
+  const { user } = state
   const { subscriptions, dogs } = state.user
   return {
     user,
