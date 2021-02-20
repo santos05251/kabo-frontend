@@ -59,7 +59,7 @@ class Navbar extends React.Component {
 
     const loggedIn = user && user.token
     return (
-      <nav className="bg-white md:h-28">
+      <nav className="bg-white md:h-28 mx-auto w-11/12 xl:w-full">
         <div className="md:py-8 pt-8 pb-4">
           <div className="relative flex items-center justify-between">
             <div className="flex-1 flex-col md:flex-row flex items-center justify-center sm:items-stretch sm:justify-start">
