@@ -1,37 +1,51 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import Input from "../global/input.jsx";
 import Button from "../global/button.jsx";
 import Dropdown from "../global/dropdown.jsx";
-
+import { connect } from "react-redux";
 import addIcon from "../../assets/images/add_icon.svg";
 import LoadingCircle from "../partials/loading.jsx";
 import PwdModal from "./pwd-modal";
-
-const AccountDetails = ({ user = null, dogs = null }) => {
+import { userActions } from "../../actions/index.js";
+const AccountDetails = ({ user = null, dogs = null, updateUserPhoneEmail }) => {
   const dog = dogs[0];
   var dogBirthday = parseDogAge(dog);
   const flatBreeds = user.breeds;
   const [showUpdatePwdModal, setShowUpdatePwdModal] = React.useState(false);
+  const [phoneNumber, setPhoneNumber] = React.useState("");
+  const [email, setEmail] = React.useState("");
+
+  useEffect(() => {
+    if (user.shipping_address) {
+      setPhoneNumber(user.shipping_address.phone);
+      setEmail(user.shipping_address.email);
+    }
+  }, [user]);
+
+  const phoneEmailSubmitHandler = () => {
+    let apiObject = {
+      email: email,
+      phone_number: phoneNumber,
+    };
+
+    updateUserPhoneEmail(apiObject);
+  };
   return (
     <div>
-      <div className="flex-auto text-2xl font-cooper mb-3 md:mb-6">
-        Account Details
-      </div>
-      <Input
-        inputValue={user.user.email}
-        name="EMAIL ADDRESS"
-        size="md:w-2/5 w-full mb-2"
-        styles="mr-2.5"
-      />
-      <Input
-        inputValue={user.shipping_address && user.shipping_address.phone}
-        name="PHONE NUMBER"
-        size="w-full md:w-2/5"
+      <div className="flex-auto text-2xl font-cooper mb-3 md:mb-6">Account Details</div>
+      <Input inputValue={user.user.email} name="EMAIL ADDRESS" size="md:w-2/5 w-full mb-2" styles="mr-2.5" />
+      <Input inputValue={phoneNumber} name="PHONE NUMBER" size="w-full md:w-2/5" onChange={(e) => setPhoneNumber(e.target.value)} />
+      <Button
+        text="Save Phone Number"
+        styles="mt-6 sm:mb-6"
+        onClick={() => {
+          phoneEmailSubmitHandler();
+        }}
       />
       <Button
         text="Update My Password"
-        styles="my-6"
+        styles="mt-6 mb-2 sm:mb-6 sm:ml-4"
         onClick={() => {
           setShowUpdatePwdModal(true);
         }}
@@ -122,5 +136,11 @@ function parseDogAge(dog) {
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
+const mapDispatchToProps = (dispatch) => {
+  return {
+    updateUserPhoneEmail: (data) => dispatch(userActions.updateUserPhoneEmail(data)),
+  };
+};
+const AccountDetail = connect(null, mapDispatchToProps)(AccountDetails);
 
-export { AccountDetails };
+export { AccountDetail as AccountDetails };

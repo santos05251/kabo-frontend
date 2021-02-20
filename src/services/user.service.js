@@ -168,6 +168,19 @@ const updatePaymentMethod = async (data) => {
     .then((res) => res);
 };
 
+const updatePhoneEmail = (data) => {
+  const requestOptions = request.options(
+    'PUT',
+    JSON.stringify(data),
+    true,
+    true
+  );
+ 
+  return fetch(endpointConstants.UPDATE_PHONE_EMAIL, requestOptions)
+    .then(request.handleResponse)
+    .then((res) => res);
+};
+
 export const userService = {
   getAccountData,
   getRecipeData,
@@ -182,4 +195,5 @@ export const userService = {
   updatePaymentMethod,
   getSubscriptionEstimate,
   updateDeliveryFrequency,
+  updatePhoneEmail
 };
