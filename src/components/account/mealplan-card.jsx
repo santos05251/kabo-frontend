@@ -63,10 +63,10 @@ const MealPlanCard = (props) => {
 
   const readableRecipe = recipeArray.join(' and ')
   return (
-    <div className="w-full flex justify-between font-semibold text-base mb-14">
+    <div className="w-full flex justify-between font-semibold text-base mb-14 md:flex-col xl:flex-row">
       <div className="flex">
         {iconArray}
-        <div className="ml-9">
+        <div className="ml-9 md:ml-4 xl:ml-9">
           <div>{readableRecipe}</div>
           <div>{portion}</div>
         </div>
