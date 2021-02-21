@@ -32,13 +32,10 @@ const FoodCard = ({
   };
 
   const selectCookedFood = (food) => {
-    console.log('food')
     isCooked(!cooked);
     isSelected(!selected);
     handleSelectedCookedRecipes(food);
   };
-
-  if (!selectedCookedRecipes && !kibble) return null
 
   const selectedText = "bg-green-700 border border-green-700 hover:border-transparent focus:outline-none text-white font-bold p-1 md:py-2 md:px-5 w-4/5 md:w-3/5 rounded-full"
   const unSelectedText = "bg-transparent border border-green-700 hover:border-transparent focus:outline-none hover:bg-green-700 text-primary hover:text-white font-bold w-4/5 md:w-3/5 p-1 md:py-2 md:px-5 rounded-full"
@@ -74,8 +71,8 @@ const FoodCard = ({
             onClick={() => selectKibbleRecipe(food)}
             value={kibble_}
             disabled={
-              (!kibble_ && !selected && selectedCookedRecipes && selectedCookedRecipes.length === 2) ||
-              (!kibble_ && !selected && kibble && kibble.length === 1)
+              (!kibble_ && selectedCookedRecipes.length === 2) ||
+              (!kibble_ && kibble.length === 1)
             }
           >
             {selected ? 'Recipe Added' : 'Add Recipe'}
@@ -90,9 +87,9 @@ const FoodCard = ({
               onClick={() => selectCookedFood(food)}
               value={cooked}
               disabled={
-                (!cooked && selectedCookedRecipes.length === 2 && !selected) ||
-                (!cooked && !selected &&
-                  kibble && kibble.length > 0 &&
+                (!cooked && selectedCookedRecipes.length === 2) ||
+                (!cooked &&
+                  kibble.length > 0 &&
                   selectedCookedRecipes.length === 1)
               }
             >

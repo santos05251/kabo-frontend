@@ -1,5 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux'
+import beefIcon from '../../assets/images/recipe/beef-recipe.png'
+import chickenIcon from '../../assets/images/recipe/chicken-recipe.png'
+import lambIcon from '../../assets/images/recipe/lamb-recipe.png'
+import turkeyIcon from '../../assets/images/recipe/turkey-recipe.png'
 
 const MealIcon = ({ source, notFirst }) => (
   <img
@@ -13,53 +17,42 @@ const MealIcon = ({ source, notFirst }) => (
 const MealPlanCard = (props) => {
   let currentDog = {}
   const { dogs, dogIndex, subscriptions, noPrice, user } = props
-  const { cooked_recipes, kibble_recipes } = user
-
-  if (!cooked_recipes || !kibble_recipes) return null
-
+  const { cooked_recipes=["","","",""], kibble_recipes } = user
+  console.log(user)
   currentDog = dogs[dogIndex]
   let recipeArray = []
   let iconArray = []
-
-  if (currentDog.chicken_recipe) {
-    recipeArray.push(cooked_recipes[0].name)
-    iconArray.push(
-      <MealIcon key="chicken_recipe" notFirst={iconArray.length > 0} source={cooked_recipes[0].image_url} />
-    )
-  }
   if (currentDog.beef_recipe) {
-    recipeArray.push(cooked_recipes[1].name)
+    recipeArray.push('Savoury Beef')
     iconArray.push(
       <MealIcon key="beef_recipe" notFirst={iconArray.length > 0} source={cooked_recipes[1].image_url} />
     )
   }
-  if (currentDog.turkey_recipe) {
-    recipeArray.push(cooked_recipes[2].name)
+  if (currentDog.chicken_recipe) {
+    recipeArray.push('Tender Chicken')
     iconArray.push(
-      <MealIcon key="turkey_recipe" notFirst={iconArray.length > 0} source={cooked_recipes[2].image_url} />
+      <MealIcon key="chicken_recipe" notFirst={iconArray.length > 0} source={cooked_recipes[0].image_url} />
     )
   }
   if (currentDog.lamb_recipe) {
-    recipeArray.push(cooked_recipes[3].name)
+    recipeArray.push('Luscious Lamb')
     iconArray.push(
       <MealIcon key="lamb_recipe" notFirst={iconArray.length > 0} source={cooked_recipes[3].image_url} />
     )
   }
-  if (currentDog.kibble_recipe) {
-    recipeArray.push(`${currentDog.kibble_recipe} kibble`)
+  if (currentDog.turkey_recipe) {
+    recipeArray.push('Hearty Turkey')
     iconArray.push(
-      <MealIcon key="turkey_recipe" notFirst={iconArray.length > 0} source={kibble_recipes[0].image_url} />
+      <MealIcon key="turkey_recipe" notFirst={iconArray.length > 0} source={cooked_recipes[2].image_url} />
     )
   }
 
   let portion = ''
 
-  if (currentDog.cooked_portion === 100) {
+  if (currentDog.portion === 100) {
     portion = 'Full meal'
-  } else if (!currentDog.kibble_portion) {
-    portion = `${currentDog.cooked_portion}% Kabo`
   } else {
-    portion = `${currentDog.cooked_portion}% fresh food & ${currentDog.kibble_portion} kibble`
+    portion = `${portion}% Kabo`
   }
 
   var subscriptionArray = Object.values(subscriptions)
@@ -70,10 +63,10 @@ const MealPlanCard = (props) => {
 
   const readableRecipe = recipeArray.join(' and ')
   return (
-    <div className="w-full flex justify-between font-semibold text-base mb-14 md:flex-col xl:flex-row">
+    <div className="w-full flex justify-between font-semibold text-base">
       <div className="flex">
         {iconArray}
-        <div className="ml-9 md:ml-4 xl:ml-9">
+        <div className="ml-9">
           <div>{readableRecipe}</div>
           <div>{portion}</div>
         </div>
@@ -86,6 +79,7 @@ const MealPlanCard = (props) => {
 }
 
 function mapStateToProps(state) {
+  // console.log(state)
   const { user } = state
   const { subscriptions, dogs } = state.user
   return {

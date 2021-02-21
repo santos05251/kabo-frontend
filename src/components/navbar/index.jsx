@@ -59,10 +59,10 @@ class Navbar extends React.Component {
 
     const loggedIn = user && user.token
     return (
-      <nav className="bg-white md:h-28 mx-auto w-11/12 xl:w-full">
-        <div className="md:py-8 pt-8 pb-4">
+      <nav className="bg-white h-28">
+        <div className="py-8">
           <div className="relative flex items-center justify-between">
-            <div className="flex-1 flex-col md:flex-row flex items-center justify-center sm:items-stretch sm:justify-start">
+            <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
               <div className="flex-shrink-0 flex items-center">
                 <a href='/'>
                   <NavbarLogo className="block w-auto" />
@@ -71,7 +71,7 @@ class Navbar extends React.Component {
               {loggedIn
                 && (
                   <div>
-                    <div className=" align-center mt-5 md:mt-0 sm:ml-6">
+                    <div className="hidden sm:flex align-center just sm:ml-6">
                       <div className="flex space-x-4">
                         <a href="/" className={navStep === 1 ? active : inActive}>My Kabo</a>
                         {/* <a href="/store" className={navStep === 2 ? active : inActive}>Store</a> */}

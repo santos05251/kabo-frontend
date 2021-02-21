@@ -1,4 +1,4 @@
-import { userConstants } from "../constants";
+import { userConstants } from '../constants';
 
 const getAccountData = () => ({ type: userConstants.ACCOUNT_DATA_REQUESTED });
 
@@ -25,6 +25,11 @@ const getSubscriptionEstimate = (data) => ({
   payload: data,
 });
 
+const unpauseSubscription = (data) => ({
+  type: userConstants.UNPAUSE_SUBSCRIPTION_REQUESTED,
+  payload: data,
+});
+
 const cancelSubscription = (userID) => ({
   type: userConstants.CANCEL_SUBSCRIPTION_REQUESTED,
   payload: userID,
@@ -32,11 +37,6 @@ const cancelSubscription = (userID) => ({
 
 const updateDeliveryAddress = (data) => ({
   type: userConstants.DELIVERY_UPDATE_REQUESTED,
-  payload: data,
-});
-
-const updateDeliveryFrequency = (data) => ({
-  type: userConstants.UPDATE_DELIVERY_FREQUENCY_REQUESTED,
   payload: data,
 });
 
@@ -63,13 +63,11 @@ const updatePaymentMethod = (data) => ({
   type: userConstants.UPDATE_PAYMENT_METHOD,
   payload: data,
 });
-const  updateUserPhoneEmail = (data) => ({
-  type: userConstants.UPDATE_USER_PHONE_EMAIL,
-  payload: data,
-});
+
 export const userActions = {
   getAccountData,
   pauseSubscription,
+  unpauseSubscription,
   cancelSubscription,
   getRecipeData,
   getSubscriptionData,
@@ -82,6 +80,4 @@ export const userActions = {
   setBillingAddress,
   updatePaymentMethod,
   getSubscriptionEstimate,
-  updateDeliveryFrequency,
-  updateUserPhoneEmail
 };
