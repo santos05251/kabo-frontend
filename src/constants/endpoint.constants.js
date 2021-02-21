@@ -19,4 +19,5 @@ export const endpointConstants = {
   UPDATE_PAYMENT_METHOD: `${appDomain}/${apiVersion}/user/payment_method`,
   GET_SUBSCRIPTION_ESTIMATE: `${appDomain}/${apiVersion}/user/subscriptions/meal_plan/estimate`,
   UPDATE_DELIVERY_FREQUENCY: `${appDomain}/${apiVersion}/user/delivery_frequency`,
+  UPDATE_PHONE_EMAIL:`${appDomain}/${apiVersion}/user/contact`
 };

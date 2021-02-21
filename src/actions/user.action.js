@@ -1,4 +1,4 @@
-import { userConstants } from '../constants';
+import { userConstants } from "../constants";
 
 const getAccountData = () => ({ type: userConstants.ACCOUNT_DATA_REQUESTED });
 
@@ -63,7 +63,10 @@ const updatePaymentMethod = (data) => ({
   type: userConstants.UPDATE_PAYMENT_METHOD,
   payload: data,
 });
-
+const  updateUserPhoneEmail = (data) => ({
+  type: userConstants.UPDATE_USER_PHONE_EMAIL,
+  payload: data,
+});
 export const userActions = {
   getAccountData,
   pauseSubscription,
@@ -80,4 +83,5 @@ export const userActions = {
   updatePaymentMethod,
   getSubscriptionEstimate,
   updateDeliveryFrequency,
+  updateUserPhoneEmail
 };
