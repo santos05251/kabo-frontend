@@ -8,18 +8,19 @@ import addIcon from "../../assets/images/add_icon.svg";
 import LoadingCircle from "../partials/loading.jsx";
 import PwdModal from "./pwd-modal";
 import { userActions } from "../../actions/index.js";
-const AccountDetails = ({ user = null, dogs = null, updateUserPhoneEmail }) => {
+import {authenticationActions} from "../../actions"
+const AccountDetails = ({ user = null, dogs = null, updateUserPhoneEmail,logout}) => {
   const dog = dogs[0];
   var dogBirthday = parseDogAge(dog);
   const flatBreeds = user.breeds;
   const [showUpdatePwdModal, setShowUpdatePwdModal] = React.useState(false);
   const [phoneNumber, setPhoneNumber] = React.useState("");
   const [email, setEmail] = React.useState("");
-
+  const [submitted,setSubmitted] = React.useState(false)
   useEffect(() => {
     if (user.shipping_address) {
-      setPhoneNumber(user.shipping_address.phone);
-      setEmail(user.shipping_address.email);
+      setPhoneNumber(user.billing_address.phone);
+      setEmail(user.billing_address.email);
     }
   }, [user]);
 
@@ -29,12 +30,15 @@ const AccountDetails = ({ user = null, dogs = null, updateUserPhoneEmail }) => {
       phone_number: phoneNumber,
     };
 
-    updateUserPhoneEmail(apiObject);
+    updateUserPhoneEmail(apiObject) && setSubmitted(true)
+    
   };
+
+  console.log("check user",user)
   return (
     <div>
       <div className="flex-auto text-2xl font-cooper mb-3 md:mb-6">Account Details</div>
-      <Input inputValue={user.user.email} name="EMAIL ADDRESS" size="md:w-2/5 w-full mb-2" styles="mr-2.5" />
+      <Input inputValue={user.user.email} name="EMAIL ADDRESS" size="md:w-2/5 w-full mb-2" styles="mr-2.5" onChange={(e) => setEmail(e.target.value)}/>
       <Input inputValue={phoneNumber} name="PHONE NUMBER" size="w-full md:w-2/5" onChange={(e) => setPhoneNumber(e.target.value)} />
       <Button
         text="Save Phone Number"
@@ -50,6 +54,7 @@ const AccountDetails = ({ user = null, dogs = null, updateUserPhoneEmail }) => {
           setShowUpdatePwdModal(true);
         }}
       />
+       {submitted && <div className="text-primary text-xs font-messina mt-1" >Your changes have been saved</div>}
       {/* <div className='flex-auto text-lg font-semibold mb-2'>Dog Details</div>
       <div className='flex md:flex-row flex-col'>
         <Input
@@ -139,6 +144,7 @@ function capitalizeFirstLetter(string) {
 const mapDispatchToProps = (dispatch) => {
   return {
     updateUserPhoneEmail: (data) => dispatch(userActions.updateUserPhoneEmail(data)),
+    logout: () => dispatch(authenticationActions.logout()),
   };
 };
 const AccountDetail = connect(null, mapDispatchToProps)(AccountDetails);

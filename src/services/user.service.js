@@ -1,10 +1,10 @@
-import { request } from '../utils';
-import { endpointConstants } from '../constants';
-import { alertActions } from '../actions';
+import { request } from "../utils";
+import { endpointConstants } from "../constants";
+import { alertActions } from "../actions";
 // import { useDispatch } from "react-redux";
 
 const getAccountData = () => {
-  const requestOptions = request.options('GET', {}, true, false);
+  const requestOptions = request.options("GET", {}, true, false);
 
   return fetch(endpointConstants.GET_ACCOUNT_DATA, requestOptions)
     .then(request.handleResponse)
@@ -12,7 +12,7 @@ const getAccountData = () => {
 };
 
 const getSubscriptionData = () => {
-  const requestOptions = request.options('GET', {}, true, false);
+  const requestOptions = request.options("GET", {}, true, false);
 
   return fetch(endpointConstants.GET_SUBSCRIPTION_DATA, requestOptions)
     .then(request.handleResponse)
@@ -20,7 +20,7 @@ const getSubscriptionData = () => {
 };
 
 const getBreedData = () => {
-  const requestOptions = request.options('GET', {}, true, false);
+  const requestOptions = request.options("GET", {}, true, false);
 
   return fetch(endpointConstants.GET_BREEDS, requestOptions)
     .then(request.handleResponse)
@@ -28,7 +28,7 @@ const getBreedData = () => {
 };
 
 const getRecipeData = () => {
-  const requestOptions = request.options('GET', {}, true, false);
+  const requestOptions = request.options("GET", {}, true, false);
 
   return fetch(endpointConstants.GET_RECIPE_DATA, requestOptions)
     .then(request.handleResponse)
@@ -36,7 +36,7 @@ const getRecipeData = () => {
 };
 
 const getOrderData = () => {
-  const requestOptions = request.options('GET', {}, true, false);
+  const requestOptions = request.options("GET", {}, true, false);
 
   return fetch(endpointConstants.GET_ORDER_DATA, requestOptions)
     .then(request.handleResponse)
@@ -44,12 +44,7 @@ const getOrderData = () => {
 };
 
 const pauseSubscription = (data) => {
-  const requestOptions = request.options(
-    'POST',
-    JSON.stringify({ dog_id: data.dogId, pause_until: data.pauseUntil }),
-    true,
-    true
-  );
+  const requestOptions = request.options("POST", JSON.stringify({ dog_id: data.dogId, pause_until: data.pauseUntil }), true, true);
 
   return fetch(endpointConstants.PAUSE_SUBSCRIPTION, requestOptions)
     .then(request.handleResponse)
@@ -57,12 +52,7 @@ const pauseSubscription = (data) => {
 };
 
 const cancelSubscription = (userId) => {
-  const requestOptions = request.options(
-    'POST',
-    JSON.stringify({ id: userId }),
-    true,
-    false
-  );
+  const requestOptions = request.options("POST", JSON.stringify({ id: userId }), true, false);
 
   return fetch(endpointConstants.CANCEL_SUBSCRIPTION, requestOptions)
     .then(request.handleResponse)
@@ -70,12 +60,7 @@ const cancelSubscription = (userId) => {
 };
 
 const getSubscriptionEstimate = (data) => {
-  const requestOptions = request.options(
-    'POST',
-    JSON.stringify(data),
-    true,
-    true
-  );
+  const requestOptions = request.options("POST", JSON.stringify(data), true, true);
 
   return fetch(endpointConstants.GET_SUBSCRIPTION_ESTIMATE, requestOptions)
     .then(request.handleResponse)
@@ -83,12 +68,7 @@ const getSubscriptionEstimate = (data) => {
 };
 
 const updateDeliveryFrequency = (data) => {
-  const requestOptions = request.options(
-    'PUT',
-    JSON.stringify(data),
-    true,
-    true
-  );
+  const requestOptions = request.options("PUT", JSON.stringify(data), true, true);
 
   return fetch(endpointConstants.UPDATE_DELIVERY_FREQUENCY, requestOptions)
     .then(request.handleResponse)
@@ -96,12 +76,7 @@ const updateDeliveryFrequency = (data) => {
 };
 
 const updateDeliveryAddress = (data) => {
-  const requestOptions = request.options(
-    'PUT',
-    JSON.stringify(data),
-    true,
-    true
-  );
+  const requestOptions = request.options("PUT", JSON.stringify(data), true, true);
 
   return fetch(endpointConstants.UPDATE_DELIVERY_ADDRESS, requestOptions)
     .then(request.handleResponse)
@@ -110,7 +85,7 @@ const updateDeliveryAddress = (data) => {
 
 const updatePwd = (data) => {
   const requestOptions = request.options(
-    'PUT',
+    "PUT",
     JSON.stringify({
       password: data.password,
       password_confirmation: data.password_confirmation,
@@ -125,20 +100,20 @@ const updatePwd = (data) => {
       // login successful if there's a jwt token in the response
       if (res.token) {
         // store user details and jwt token in local storage
-        const oldUser = localStorage.getItem('user');
+        const oldUser = localStorage.getItem("user");
         const newUser = { ...oldUser };
         newUser.token = res.token;
-        console.log('ewuser data after update pwd: ', newUser);
-        localStorage.setItem('user', JSON.stringify(newUser));
+        console.log("ewuser data after update pwd: ", newUser);
+        localStorage.setItem("user", JSON.stringify(newUser));
 
         return {
           pwd_update_success: true,
-          pwd_alert: 'Successfully updated',
+          pwd_alert: "Successfully updated",
         };
       } else {
         return {
           pwd_update_success: false,
-          pwd_alert: 'Failed to update password',
+          pwd_alert: "Failed to update password",
         };
       }
     })
@@ -146,22 +121,14 @@ const updatePwd = (data) => {
       console.error(ex);
       return {
         pwd_update_success: false,
-        pwd_alert:
-          ex.message && ex.message.length > 0
-            ? ex.message[0]
-            : 'Failed to update',
+        pwd_alert: ex.message && ex.message.length > 0 ? ex.message[0] : "Failed to update",
       };
     });
 };
 
 const updatePaymentMethod = async (data) => {
-  console.log('from payment service', data);
-  const requestOptions = request.options(
-    'PUT',
-    JSON.stringify(data),
-    true,
-    true
-  );
+  console.log("from payment service", data);
+  const requestOptions = request.options("PUT", JSON.stringify(data), true, true);
 
   return fetch(endpointConstants.UPDATE_PAYMENT_METHOD, requestOptions)
     .then(request.handleResponse)
@@ -169,16 +136,18 @@ const updatePaymentMethod = async (data) => {
 };
 
 const updatePhoneEmail = (data) => {
-  const requestOptions = request.options(
-    'PUT',
-    JSON.stringify(data),
-    true,
-    true
-  );
- 
+  const requestOptions = request.options("PUT", JSON.stringify(data), true, true);
+
   return fetch(endpointConstants.UPDATE_PHONE_EMAIL, requestOptions)
     .then(request.handleResponse)
-    .then((res) => res);
+    .then((res) => {
+      if (res.email_updated) {
+        console.log("check response dataaaaaaaaaaaaaaaaaa",res)
+        request.logout();
+        window.location.reload();
+      }
+      return res;
+    });
 };
 
 export const userService = {
@@ -195,5 +164,5 @@ export const userService = {
   updatePaymentMethod,
   getSubscriptionEstimate,
   updateDeliveryFrequency,
-  updatePhoneEmail
+  updatePhoneEmail,
 };

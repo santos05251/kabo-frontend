@@ -63,7 +63,7 @@ const updatePaymentMethod = (data) => ({
   type: userConstants.UPDATE_PAYMENT_METHOD,
   payload: data,
 });
-const updateUserPhoneEmail = (data) => ({
+const  updateUserPhoneEmail = (data) => ({
   type: userConstants.UPDATE_USER_PHONE_EMAIL,
   payload: data,
 });
