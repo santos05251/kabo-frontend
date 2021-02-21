@@ -73,7 +73,9 @@ class MealPlanModal extends React.Component {
       <>
         <div className="py-8 px-5 relative border-r border-l rounded-b-xl border-b border-gray-300">
           {dogsLength > 1 && <DogSelector dogs={dogs} setDog={this.setDog} dogIndex={dogIndex} />}
-          <MealPlanCard dogIndex={dogIndex} portion={portion} />
+          <div className="mb-14">
+            <MealPlanCard dogIndex={dogIndex} portion={portion} />
+          </div>
           <div className="text-primary w-full font-bold">
             <a href={`/edit-plan/${dogIndex}`}>
               Select a different meal plan
