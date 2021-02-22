@@ -41,10 +41,10 @@ class LoginPage extends React.Component {
     const { loggingIn, error } = this.props
     const { email, password, submitted } = this.state
     return (
-      <div className="login mt-28">
+      <div className="login md:mt-28 sm:mt-23">
         <div className="max-w-2xl mx-auto">
           <form name="form" onSubmit={this.handleSubmit}>
-            <div className="bg-white px-8 py-10 sm:h-60 sm:px-12 sm:py-8 ">
+            <div className="bg-white px-8 md:py-10 sm:py-1 sm:h-60 sm:px-12 sm:py-8 ">
               <div className="grid grid-cols-12">
                 <div className="col-span-12 sm:col-span-5">
                   <label htmlFor="email" className="leading-snug text-sm font-semibold text-black">Email</label>

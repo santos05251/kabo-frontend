@@ -12,6 +12,9 @@ const initialState = {
   updating_payment_method: false,
   payment_method_updated: false,
   payment_billing_address: {},
+
+  open_skip_delivery_modal: false,
+  skipping_dog_delivery: false,
 };
 
 export const user = (state = initialState, action) => {
@@ -53,6 +56,26 @@ export const user = (state = initialState, action) => {
         ...state,
         estimate: { ...action.payload },
         loading: false,
+      };
+    case userConstants.UPDATE_DELIVERY_FREQUENCY_SUCCESS:
+      return {
+        ...state,
+        ...action.payload,
+        loading: false,
+        error: false,
+      };
+    case userConstants.UPDATE_DELIVERY_FREQUENCY_FAILURE:
+      return {
+        ...state,
+        ...action.payload,
+        loading: false,
+        error: true,
+      };
+    case userConstants.UPDATE_DELIVERY_FREQUENCY_REQUESTED:
+      return {
+        ...state,
+        loading: true,
+        error: false,
       };
 
     case userConstants.PAUSE_SUBSCRIPTION_REQUESTED:
@@ -99,8 +122,8 @@ export const user = (state = initialState, action) => {
     case userConstants.UPDATE_PWD_ALERT_CLEAR:
       return {
         ...state,
-        pwd_update_success: ' ',
-        pwd_alert: ' ',
+        pwd_update_success: " ",
+        pwd_alert: " ",
       };
     case userConstants.OPEN_UPDATE_PAYMENT_MODAL_SUCCESS:
       return {
@@ -143,6 +166,31 @@ export const user = (state = initialState, action) => {
       return {
         ...state,
         updating_payment_method: false,
+      };
+
+    case userConstants.OPEN_SKIP_DELIVERY_MODAL_SUCCESS:
+      return {
+        ...state,
+        open_skip_delivery_modal: action.payload,
+      };
+
+    case userConstants.SKIP_DOG_DELIVERY:
+      return {
+        ...state,
+        skipping_dog_delivery: true,
+      };
+
+    case userConstants.SKIP_DOG_DELIVERY_SUCCESS:
+      return {
+        ...state,
+        skipping_dog_delivery: false,
+        open_skip_delivery_modal: !state.open_skip_delivery_modal,
+      };
+
+    case userConstants.SKIP_DOG_DELIVERY_FAILED:
+      return {
+        ...state,
+        skipping_dog_delivery: false,
       };
     default:
       return state;

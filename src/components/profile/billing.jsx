@@ -1,9 +1,9 @@
 import React from "react";
 import Button from "../global/button.jsx";
-import Reminder from "../global/reminder.jsx";
 import PaymentCardIcon from "../global/payment-card-icon.jsx";
 import OrderCard from "../global/order-card.jsx";
 import ChangePaymentMethodModal from "./change-payment-method-modal";
+import { Link } from 'react-router-dom'
 
 class Billing extends React.Component {
   toggle = () => {
@@ -16,7 +16,7 @@ class Billing extends React.Component {
     const { orders } = user;
     console.log(user);
 
-    const ccLastFour = "4242";
+    const ccLastFour = user.card.last4;
 
     return (
       <div>
@@ -42,7 +42,6 @@ class Billing extends React.Component {
             </div>
           </div>
         )}
-        <Reminder content="Keep in mind changes you make to your delivery amount, frequency and next delivery date will only affect your next delivery" />
         <div className="flex my-6">
           <PaymentCardIcon icon="visa" />
           <span className="inline-block ml-3">Visa ending in {ccLastFour}</span>
@@ -61,7 +60,7 @@ class Billing extends React.Component {
             return <OrderCard {...order} styles="w-full" />;
           })}
         </div>
-        <Button text="View All Orders" />
+        <Link to={`/orders`} className="font-bold text-primary border rounded-xl py-2 px-6 text-base font-bold text-primary button-border focus:outline-none">View All Orders</Link>
 
         <ChangePaymentMethodModal
           isOpen={this.props.open_payment_modal}

@@ -1,6 +1,8 @@
 /* eslint-disable semi */
 import React from "react";
 import { connect } from "react-redux";
+import { isMobile } from 'react-device-detect';
+
 import { ReactComponent as DeliveryBox } from "../../assets/images/delivery-box.svg";
 import { ReactComponent as Arrow } from "../../assets/images/Vectorarrow.svg";
 import { ReactComponent as MealBox } from "../../assets/images/meal-plan.svg";
@@ -9,6 +11,7 @@ import DeliveryModal from "../../components/account/delivery-modal.jsx";
 import MealPlanModal from "../../components/account/meal-modal.jsx";
 import FrequencyModal from "../../components/account/delivery-frequency.jsx";
 import LoadingCircle from "../../components/partials/loading.jsx";
+import DogImage from '../../assets/images/Badge-Labrador-Retriever.svg';
 
 import { userActions } from "../../actions";
 
@@ -16,7 +19,7 @@ class AccountPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      nextExpanded: true,
+      nextExpanded: !isMobile,
       mealExpanded: false,
       frequencyExpanded: false,
     };
@@ -60,7 +63,7 @@ class AccountPage extends React.Component {
               <div className="w-8 h-8 mr-6">
                 <Icon className="w-full h-full" />
               </div>
-              {text}
+              <p className="text-base sm:text-xs xl:text-base">{text}</p>
             </div>
             <Arrow
               className="w-8 h-3"
@@ -76,7 +79,7 @@ class AccountPage extends React.Component {
       return (
         <img
           key={i}
-          src="https://bit.ly/3bXTqXh"
+          src={DogImage}
           alt=""
           className="md:mr-9 h-16 w-16 rounded-full"
         />
@@ -84,18 +87,18 @@ class AccountPage extends React.Component {
     });
 
     return (
-      <div className="pb-40 bg-white ">
-        <div className="account-dashboard w-full bg-account flex items-center md:h-28 rounded-xl p-5 md:p-8 text-5x1 font-bold mb-6 font-messina">
+      <div className="pb-40 bg-white px-3 md:px-0 md:w-11/12 mx-auto xl:w-full">
+        <div className="account-dashboard w-full bg-account flex items-center md:justify-start justify-center md:h-28 rounded-xl p-5 md:p-8 text-5x1 font-bold mb-6 font-messina">
           <div className="flex justify-center items-center flex-col md:flex-row">
             <div className="flex justify-around w-3/4 md:w-auto md:justify-center">
               {profileImages}
             </div>
             <div className="h-full text-xl text-center md:text-left font-bold md:m-6 font-messina">
-              {readableNames}'s Dashboard
+              {readableNames}'s
             </div>
           </div>
         </div>
-        <div className="grid md:grid-cols-3 gap-5 md:gap-10 grid-cols-1">
+        <div className="grid md:grid-cols-3 gap-5 md:gap-4 xl:gap-10 grid-cols-1">
           {sectionHeader(
             "nextExpanded",
             DeliveryBox,

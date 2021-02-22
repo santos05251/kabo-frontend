@@ -25,7 +25,7 @@ class EditPlan extends Component {
     previous: true,
     selectedBox: false,
     cookedRecipes: [],
-    kibble: [],
+    kibbleRecipes: [],
     isKibble: false,
     selectedPortion: false,
     estimate: false,
@@ -47,7 +47,7 @@ class EditPlan extends Component {
       prevProps.user.dogs.length > 0 &&
       Object.keys(prevState.dog).length === 0
     ) {
-      let currentdog = prevProps.user.dogs[index]
+      let currentdog = prevProps.user.dogs[index];
       let loadRecipes = []
       if (currentdog.chicken_recipe) {
         loadRecipes.push('chicken')
@@ -62,17 +62,17 @@ class EditPlan extends Component {
       if (currentdog.turkey_recipe) {
         loadRecipes.push('turkey')
       }
+      ///again not sure can be more then one kibble recipe
       this.setState({
         dog: prevProps.user.dogs[index],
         cookedRecipes: loadRecipes,
-        // kibble: currentdog.kibble
+        kibbleRecipes: [currentdog.kibble_recipe] || []
       });
     }
   }
 
   selectedDog = (dog) => {
     this.setState({ dog });
-    console.log("selected dog", dog);
   };
 
   toggleKibble = () => {
@@ -84,13 +84,13 @@ class EditPlan extends Component {
   };
 
   selectedDietPortion = (diet) => {
+    console.log(diet)
     this.setState({ dietPortion: diet });
   };
 
   handleSelectedCookedRecipes = (food) => {
-    console.log('ran')
     const { cookedRecipes } = this.state;
-    if (cookedRecipes.length > 0 && cookedRecipes.includes(food.recipe)) {
+    if (cookedRecipes && cookedRecipes.length > 0 && cookedRecipes.includes(food.recipe)) {
       let recipes = [...cookedRecipes];
       const index = recipes.indexOf(food.recipe);
       recipes.splice(index, 1);
@@ -101,130 +101,142 @@ class EditPlan extends Component {
   };
 
   handleSelectedKibbleRecipe = (food) => {
-    const { kibble } = this.state;
-    if (kibble.length > 0 && kibble.includes(food.recipe)) {
-      let recipes = [...kibble];
+    const { kibbleRecipes } = this.state;
+    if (kibbleRecipes.length > 0 && kibbleRecipes.includes(food.recipe)) {
+      let recipes = [...kibbleRecipes];
       const index = recipes.indexOf(food.recipe);
       recipes.splice(index, 1);
-      this.setState({ kibble: recipes });
+      this.setState({ kibbleRecipes: [recipes] });
       return;
     }
-    this.setState({ kibble: [...kibble, food.recipe] });
+    this.setState({ kibbleRecipes: [food.recipe] });
   };
 
   handleNext = () => {
     if (this.state.step === 1) {
-      const { cookedRecipes, kibble, dietPortion, dog } = this.state;
+      const { cookedRecipes, kibbleRecipes, dietPortion, dog } = this.state;
       const data = {
         dog_id: dog.id,
-        cooked_portion: dietPortion.cooked_portion,
-        kibble_portion: null,
+        cooked_portion: dietPortion.cooked_portion || null,
+        kibble_portion: dietPortion.kibble_portion || null,
+        portion_adjusment: dietPortion.portion_adjusment || null
       };
-      if (kibble.length > 0) {
-        data.kibble_recipe = kibble[0];
+      if (kibbleRecipes && kibbleRecipes.length > 0) {
+        data.kibble_recipe = kibbleRecipes[0];
       }
       for (let item of cookedRecipes) {
         data[`${item}_recipe`] = true;
       }
-      // this.props.updateMealPlan(data);
+      console.log(data)
       this.props.getSubscriptionEstimate(data)
-
     }
     this.setState({ step: this.state.step + 1 });
   };
+
   handlePrevious = () => {
     this.setState({ step: this.state.step - 1 });
   };
+
   handleEstimate = () => {
     this.setState({ previous: false, next: false, estimate: true });
   };
 
-
-
   handleMealUpdate = () => {
-    const { cookedRecipes, kibble, dietPortion, dog } = this.state;
+    const { cookedRecipes, kibbleRecipes, dietPortion, dog } = this.state;
     const data = {
       dog_id: dog.id,
-      cooked_portion: dietPortion.cooked_portion,
-      kibble_portion: null,
+      cooked_portion: dietPortion.cooked_portion || null,
+      kibble_portion: dietPortion.kibble_portion || null,
+      portion_adjusment: dietPortion.portion_adjusment || null
     };
-    if (kibble.length > 0) {
-      data.kibble_recipe = kibble[0];
+    ///not sure what to do if selected kibbleRecipes more than one
+    if (kibbleRecipes && kibbleRecipes.length > 0) {
+      data.kibble_recipe = kibbleRecipes[0];
     }
     for (let item of cookedRecipes) {
       data[`${item}_recipe`] = true;
     }
     this.props.updateMealPlan(data);
-    // this.props.getSubscriptionEstimate(data)
   };
 
   render() {
     const { user, meal, getDailyDietPortion } = this.props;
-    const { cookedRecipes, kibble, dog, dietPortion, index, step } = this.state;
-    console.log(user.subLoading)
+    const { cookedRecipes, kibbleRecipes, dog, dietPortion, index, step } = this.state;
+
     if (user.subLoading) return <LoadingCircle />
-    console.log(cookedRecipes, kibble)
-    // if (cookedRecipes.length === 0 && kibble.length === 0) return <LoadingCircle />
-    // console.log(index)
-    console.log(dog)
+    let filteredKibble = (kibbleRecipes[0] === null || !kibbleRecipes) ? 0 : kibbleRecipes.length
+    let filteredCooked = (cookedRecipes[0] === null || !cookedRecipes) ? 0 : cookedRecipes.length
+
+    ///checking selected plans length.
+    console.log(kibbleRecipes, cookedRecipes)
+    const selectedLength = filteredCooked + filteredKibble
+    // console.log(selectedLength)
     return (
       <React.Fragment>
-        {step == 0 && (
+        { step == 0 && (
           <RecipeSelection
             user={user}
             index={this.props.match.params.id}
             selectedDog={this.selectedDog}
-            cookedRecipes={this.state.cookedRecipes}
             handleSelectedCookedRecipes={this.handleSelectedCookedRecipes}
-            selectedCookedRecipes={this.state.cookedRecipes}
+            selectedCookedRecipes={cookedRecipes}
             handleSelectedKibbleRecipe={this.handleSelectedKibbleRecipe}
-            kibble={this.state.kibble}
+            selectedKibble={kibbleRecipes}
+            selectedLength={selectedLength}
             toggleKibble={this.toggleKibble}
             isKibble={this.state.isKibble}
           />
-        )}
-        {step > 0 && (
-          <DailyDietPortion
-            meal={meal}
-            dog={dog}
-            cookedRecipes={cookedRecipes}
-            dietPortion={this.state.dietPortion}
-            selectedPortion={this.state.selectedPortion}
-            togglePortion={this.togglePortion}
-            selectedDietPortion={this.selectedDietPortion}
-            getDailyDietPortion={getDailyDietPortion}
-          />
-        )}
-        {step > 1 && (
-          <ConfirmMeal
-            dog={dog}
-            open={true}
-            cookedRecipes={cookedRecipes}
-            index={this.props.match.params.id}
-            subs={user.subscriptions}
-            kibble={this.state.kibble}
-            onClose={this.handlePrevious}
-            dietPortion={this.state.dietPortion}
-            estimate={user.estimate}
-            onConfirm={(e) => this.handleMealUpdate(e)}
-          />)
+        )
+        }
+        {
+          step > 0 && (
+            <DailyDietPortion
+              meal={meal}
+              dog={dog}
+              cookedRecipes={cookedRecipes}
+              dietPortion={this.state.dietPortion}
+              selectedPortion={this.state.selectedPortion}
+              togglePortion={this.togglePortion}
+              selectedDietPortion={this.selectedDietPortion}
+              getDailyDietPortion={getDailyDietPortion}
+              kibbleRecipes={kibbleRecipes}
+            />
+          )
+        }
+        {
+          step > 1 && (
+            <ConfirmMeal
+              dog={dog}
+              user={user}
+              open={true}
+              cookedRecipes={cookedRecipes}
+              index={this.props.match.params.id}
+              subs={user.subscriptions}
+              kibble={this.state.kibbleRecipes}
+              onClose={this.handlePrevious}
+              dietPortion={this.state.dietPortion}
+              estimate={user.estimate}
+              onConfirm={(e) => this.handleMealUpdate(e)}
+            />)
         }
 
 
-        <div className="w-full flex flex-col py-3 bg-white items-center">
+        <div className="w-full flex flex-col py-3 bg-white items-center fixed bottom-0">
           <div className="inline-flex">
-            <button
-              onClick={this.handlePrevious}
-              className="text-green-600 mr-2 focus:outline-none"
-            >
-              Previous
-            </button>
+            {step !== 0 && (
+              <button
+                onClick={this.handlePrevious}
+                className="text-green-600 mr-2 focus:outline-none"
+              >
+                Previous
+              </button>)
+            }
             {step == 0 && (
               <button
                 onClick={this.handleNext}
-                disabled={cookedRecipes.length === 0 && kibble.length === 0}
+                disabled={selectedLength == 0}
                 className={
-                  cookedRecipes.length === 0 && kibble.length === 0
+                  selectedLength == 0
                     ? "bg-gray-300 focus:outline-none text-white font-bold py-2 px-4 rounded"
                     : "bg-green-600 focus:outline-none text-white font-bold py-2 px-4 rounded"
                 }
@@ -237,7 +249,7 @@ class EditPlan extends Component {
                 onClick={this.handleNext}
                 disabled={Object.keys(dietPortion).length <= 0}
                 className={
-                  cookedRecipes.length === 0 && kibble.length === 0
+                  cookedRecipes.length === 0 && kibbleRecipes.length === 0
                     ? "bg-gray-300 focus:outline-none text-white font-bold py-2 px-4 rounded"
                     : "bg-green-600 focus:outline-none text-white font-bold py-2 px-4 rounded"
                 }
@@ -261,7 +273,7 @@ class EditPlan extends Component {
             )}
           </div>
         </div>
-      </React.Fragment>
+      </React.Fragment >
     );
   }
 }
@@ -276,29 +288,7 @@ const mapDispatchToProps = (dispatch) => ({
   getSubscriptionEstimate: (data) => dispatch(userActions.getSubscriptionEstimate(data)),
 });
 
-// const mapStateToProps = (state) => {
-//   const {
-//     user: { subscriptions, dogs },
-//     user,
-//   } = state;
-//   const dog = dogs.length > 0 ? dogs[0] : {};
-//   // const {chicken_recipe, beef_recipe, turkey_recipe, lamb_recipe} = dog
-//   // console.log(dogs)
-//   return {
-//     subscriptions,
-//     dogs,
-//     user,
-//     initialValues: {
-//       chicken_recipe: dog.chicken_recipe,
-//       beef_recipe: dog.beef_recipe,
-//       turkey_recipe: dog.turkey_recipe,
-//       lamb_recipe: dog.lamb_recipe,
-//     },
-//   };
-// };
-
 const mapStateToProps = (state) => {
-  // console.log(state.user);
   return {
     user: state.user,
     meal: state.meal,
