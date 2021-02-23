@@ -132,7 +132,6 @@ class MealPlanModal extends React.Component {
                onRequestClose={this.toggleCancelBox}
         >
           <CancelMealModal
-             closeHandler={this.toggleCancelBox}
               currentDog={currentDog}
               dogIndex={dogIndex}
           />

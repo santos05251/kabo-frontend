@@ -10,8 +10,7 @@ import SorryMessage from "./sorry-message";
 const CancelMealModal = ({
   currentDog,
   cancelUserSubscription,
-  dogIndex,
-  closeHandler
+  dogIndex
 }) => {
   const [cancelType, setCancelType] = useState("1-delivery");
   const [step, setStep] = useState(1);
@@ -35,7 +34,7 @@ const CancelMealModal = ({
           />
         )}
         {step === 2 && <CancelReason />}
-        {step === 3 && <SorryMessage closeHandler={closeHandler}/>}
+        {step === 3 && <SorryMessage />}
 
         {step !== 3 && (
           <div>

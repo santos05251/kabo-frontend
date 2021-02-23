@@ -212,7 +212,7 @@ class EditPlan extends Component {
     ///checking selected plans length.
     const selectedLength = filteredCooked + filteredKibble
 
-    if (selectedLength === 0) this.forceUpdate()
+    if (selectedLength === 0 && !dirty) this.forceUpdate()
     return (
       <div className="bg-recipeGray">
         <div className="font-messina text-center font-bold mb-4 text-black bg-recipeGray">
