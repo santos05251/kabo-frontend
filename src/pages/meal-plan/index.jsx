@@ -18,7 +18,7 @@ import DailyDietPortion from "./DailyDietPortion";
 import DogSelector from "../../components/account/dog-selector";
 import { useParams } from "react-router-dom";
 import ConfirmMeal from "../../components/meal-plan/confirmCard";
-
+import Loader from "../../loaders/mealPlan"
 class EditPlan extends Component {
   state = {
     next: false,
@@ -163,7 +163,7 @@ class EditPlan extends Component {
     const { user, meal, getDailyDietPortion } = this.props;
     const { cookedRecipes, kibbleRecipes, dog, dietPortion, index, step } = this.state;
 
-    if (user.subLoading) return <LoadingCircle />
+    if (user.subLoading) return <Loader />
     let filteredKibble = (kibbleRecipes[0] === null || !kibbleRecipes) ? 0 : kibbleRecipes.length
     let filteredCooked = (cookedRecipes[0] === null || !cookedRecipes) ? 0 : cookedRecipes.length
 
