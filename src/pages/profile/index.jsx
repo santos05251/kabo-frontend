@@ -31,11 +31,10 @@ class ProfilePage extends React.Component {
     this.props.getSubscriptionData();
     this.props.getBreedData();
   }
-
   render() {
     if (!this.props.dogs.length || !this.props.user.shipping_address) return <Loader />;
     const { user, subscriptions, dogs, updatePaymentMethod } = this.props;
-
+      
     const detailsCard =
       "container pb-4 mb-4 bg-white shadow-2xl p-4 md:m-6 rounded-xl flex-initial inline-block w-accountdetail-card";
     return (
