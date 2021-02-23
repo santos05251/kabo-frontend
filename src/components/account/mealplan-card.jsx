@@ -58,7 +58,7 @@ const MealPlanCard = (props) => {
         {nextDelivery && <p className="pb-8 font-messina text-gray-600 text-15 leading-20">Expected Arrival: {nextDelivery}</p>}
 
         <div className="w-full font-semibold text-base mb-6 md:flex-col xl:flex-row">
-          <div className="flex">
+          <div className="flex items-center">
             {iconArray}
             <div className="ml-4 md:ml-4 xl:pr-9">
               <p className="font-normal text-17 leading-24">{readableRecipe}</p>
