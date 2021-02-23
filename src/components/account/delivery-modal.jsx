@@ -36,7 +36,7 @@ class DeliveryModal extends React.Component {
   render() {
     const { dogIndex } = this.state
     const { dogs, user, subscriptions, userDetails, User } = this.props
-    
+
     const dogsLength = dogs.length
     const currentDog = dogs[dogIndex]
     const { portion } = currentDog;
@@ -50,7 +50,7 @@ class DeliveryModal extends React.Component {
     let deliveryStatus;
     console.log(currentDog)
     const nextDelivery = user.next_occurrencies[0];
-    
+
     if (user.subscription_phase && user.subscription_phase.status && user.subscription_phase.status.includes('deliver')) {
       deliveryStatus = 3
     } else if (user.subscription_phase && user.subscription_phase.status && user.subscription_phase.status.includes('prepar')) {
@@ -98,7 +98,7 @@ class DeliveryModal extends React.Component {
             {dogsLength > 1 && (
               <DogSelector dogs={dogs} setDog={this.setDog} dogIndex={dogIndex} />
             )}
-            <MealPlanCard dogIndex={dogIndex} nextDelivery={nextDelivery}/>
+            <MealPlanCard dogIndex={dogIndex} />
             <nav aria-label="Progress">
               <Stepper
                 labels={[

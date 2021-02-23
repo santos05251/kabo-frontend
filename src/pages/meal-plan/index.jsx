@@ -46,14 +46,17 @@ class EditPlan extends Component {
     this.props.getRecipeData();
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps, prevState, snap) {
     let index = parseInt(this.props.match.params.id);
 
     if (
+      !prevProps.user.subLoading &&
       prevProps.user.dogs.length > 0 &&
-      Object.keys(prevState.dog).length === 0
+      !prevState.dog.name
+      // Object.keys(prevState.dog).length === 0
     ) {
       let currentdog = prevProps.user.dogs[index];
+      this.setState({ dog: currentdog })
       let loadRecipes = []
       if (currentdog.chicken_recipe) {
         loadRecipes.push('chicken')
@@ -70,7 +73,6 @@ class EditPlan extends Component {
       }
       ///again not sure can be more then one kibble recipe
       this.setState({
-        dog: prevProps.user.dogs[index],
         cookedRecipes: loadRecipes,
         kibbleRecipes: [currentdog.kibble_recipe] || []
       });
@@ -210,7 +212,7 @@ class EditPlan extends Component {
     ///checking selected plans length.
     const selectedLength = filteredCooked + filteredKibble
 
-    // if (selectedLength === 0 && !dirty) return null
+    if (selectedLength === 0) this.forceUpdate()
     return (
       <div className="bg-recipeGray">
         <div className="font-messina text-center font-bold mb-4 text-black bg-recipeGray">

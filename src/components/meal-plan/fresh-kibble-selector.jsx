@@ -10,7 +10,6 @@ export default function FreshOrKibble({
   const handleCooked = (status) => {
     setFresh(status)
   }
-  console.log(showCooked, showKibble)
 
   return (
     <div className="rounded overflow-hidden flex h-7 mb-7 border border-gray-200">
