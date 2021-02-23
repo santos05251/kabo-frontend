@@ -5,7 +5,7 @@ const MealIcon = ({ source, notFirst }) => <img src={source} className={`w-12 h-
 
 const MealPlanCard = (props) => {
   let currentDog = {};
-  const { dogs, dogIndex, subscriptions, noPrice, user } = props;
+  const { dogs, dogIndex, subscriptions, noPrice, user, nextDelivery } = props;
   const { cooked_recipes, kibble_recipes } = user;
 
   if (!cooked_recipes || !kibble_recipes) return null;
@@ -24,13 +24,7 @@ const MealPlanCard = (props) => {
   }
   if (currentDog.turkey_recipe) {
     recipeArray.push(cooked_recipes[2].name);
-    iconArray.push(
-      <MealIcon
-        key={"turkey_recipe" + cooked_recipes[2].name}
-        notFirst={iconArray.length > 0}
-        source={cooked_recipes[2].image_url}
-      />
-    );
+    iconArray.push(<MealIcon key={"turkey_recipe" + cooked_recipes[2].name} notFirst={iconArray.length > 0} source={cooked_recipes[2].image_url} />);
   }
   if (currentDog.lamb_recipe) {
     recipeArray.push(cooked_recipes[3].name);
@@ -59,7 +53,8 @@ const MealPlanCard = (props) => {
   const readableRecipe = recipeArray.join(" and ");
   return (
     <div>
-      <p className="pb-8 font-messina text-gray-600 text-15 leading-20">Expected Arrival: March 3rd</p>
+      {nextDelivery && <p className="pb-8 font-messina text-gray-600 text-15 leading-20">Expected Arrival: {nextDelivery}</p>}
+
       <div className="w-full font-semibold text-base mb-6 md:flex-col xl:flex-row">
         <div className="flex">
           {iconArray}

@@ -92,7 +92,7 @@ class MealPlanModal extends React.Component {
     const dogsLength = dogs.length;
     const currentDog = dogs[dogIndex];
     const { portion } = currentDog;
-
+  
     return (
       <>
         <div className="py-8 px-5 relative border-r border-l rounded-b-xl border-b border-gray-300">

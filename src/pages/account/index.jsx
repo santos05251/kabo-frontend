@@ -37,16 +37,16 @@ class AccountPage extends React.Component {
     this.props.getSubscriptionData();
     this.props.getRecipeData()
   }
-
+  
   render() {
+    
     if (!this.props.dogs.length) return <null />;
     const { user, subscriptions, dogs } = this.props;
-
     let dogNames = dogs.map((dog, i) => {
       return dog.name;
     });
     let readableNames = dogNames.join(" and ");
-
+   
     const sectionHeader = (stateValue, Icon, text, Modal) => {
       let expanded = this.state[stateValue];
       return (
