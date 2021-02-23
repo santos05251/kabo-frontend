@@ -24,7 +24,13 @@ const MealPlanCard = (props) => {
   }
   if (currentDog.turkey_recipe) {
     recipeArray.push(cooked_recipes[2].name);
-    iconArray.push(<MealIcon key="turkey_recipe" notFirst={iconArray.length > 0} source={cooked_recipes[2].image_url} />);
+    iconArray.push(
+      <MealIcon
+        key={"turkey_recipe" + cooked_recipes[2].name}
+        notFirst={iconArray.length > 0}
+        source={cooked_recipes[2].image_url}
+      />
+    );
   }
   if (currentDog.lamb_recipe) {
     recipeArray.push(cooked_recipes[3].name);
