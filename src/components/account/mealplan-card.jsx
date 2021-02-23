@@ -98,7 +98,7 @@ const MealPlanCard = (props) => {
           <p className="font-normal text-gray-800 pr-4">{portion}</p> {!noPrice && <span className="font-medium">${price}</span>}
         </div>
       </div>
-      {!noPrice && <div>${price}</div>}
+     
     </div>
   );
 };
