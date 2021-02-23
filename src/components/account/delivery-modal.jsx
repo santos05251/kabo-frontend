@@ -98,7 +98,7 @@ class DeliveryModal extends React.Component {
             {dogsLength > 1 && (
               <DogSelector dogs={dogs} setDog={this.setDog} dogIndex={dogIndex} />
             )}
-            <MealPlanCard dogIndex={dogIndex} />
+            <MealPlanCard dogIndex={dogIndex} nextDelivery={nextDelivery}/>
             <nav aria-label="Progress">
               <Stepper
                 labels={[
