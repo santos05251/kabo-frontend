@@ -8,7 +8,7 @@ import { userActions } from "../../actions";
 import Billing from "../../components/profile/billing.jsx";
 import { AccountDetails } from "../../components/profile/account-details.jsx";
 import { DeliveryAddress } from "../../components/profile/delivery-address.jsx";
-import Loader from "../../loaders/profileLoader";
+
 class ProfilePage extends React.Component {
   constructor(props) {
     super(props);
@@ -33,10 +33,12 @@ class ProfilePage extends React.Component {
   }
 
   render() {
-    if (!this.props.dogs.length || !this.props.user.shipping_address) return <Loader />;
+    if (!this.props.dogs.length || !this.props.user.shipping_address)
+      return null;
     const { user, subscriptions, dogs, updatePaymentMethod } = this.props;
 
-    const detailsCard = "container pb-4 mb-4 bg-white shadow-2xl p-4 md:m-6 rounded-xl flex-initial inline-block w-accountdetail-card";
+    const detailsCard =
+      "container pb-4 mb-4 bg-white shadow-2xl p-4 md:m-6 rounded-xl flex-initial inline-block w-accountdetail-card";
     return (
       <div className="flex flex-wrap py-x">
         <div className={detailsCard}>
@@ -55,7 +57,10 @@ class ProfilePage extends React.Component {
           />
         </div>
         <div className={detailsCard}>
-          <DeliveryAddress user={user} deliveryAddress={user.shipping_address} />
+          <DeliveryAddress
+            user={user}
+            deliveryAddress={user.shipping_address}
+          />
         </div>
       </div>
     );
@@ -66,9 +71,12 @@ const mapDispatchToProps = (dispatch) => ({
   getAccountData: () => dispatch(userActions.getAccountData()),
   getSubscriptionData: () => dispatch(userActions.getSubscriptionData()),
   getBreedData: () => dispatch(userActions.getBreedData()),
-  openUpdatePaymentModal: (payload) => dispatch(userActions.openUpdatePaymentModal(payload)),
-  setBillingAddress: (payload) => dispatch(userActions.setBillingAddress(payload)),
-  updatePaymentMethod: (payload) => dispatch(userActions.updatePaymentMethod(payload)),
+  openUpdatePaymentModal: (payload) =>
+    dispatch(userActions.openUpdatePaymentModal(payload)),
+  setBillingAddress: (payload) =>
+    dispatch(userActions.setBillingAddress(payload)),
+  updatePaymentMethod: (payload) =>
+    dispatch(userActions.updatePaymentMethod(payload)),
 });
 
 const mapStateToProps = (state) => {
