@@ -1,5 +1,5 @@
-import { ReactComponent as UnfilledCircle } from "../../assets/images/unfilled-circle.svg";
-import { ReactComponent as FilledCircle } from "../../assets/images/filled-circle.svg";
+import { ReactComponent as UnfilledCircle } from '../../assets/images/unfilled-circle.svg'
+import { ReactComponent as FilledCircle } from '../../assets/images/filled-circle.svg'
 
 const PortionDisplay = ({ portion }) => {
   

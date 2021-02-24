@@ -26,7 +26,6 @@ class DeliveryModalWrapper extends React.Component {
     this.setState({
       dogIndex: i,
     });
-    this.props.setDogIndex(i)
   }
   showUnpauseBoxCallBack(val) {
     this.setState({ showUnpauseBox: val })
@@ -58,6 +57,7 @@ const DeliveryModal = ({
   let readableNames = dogs && dogs.map((dog) => dog.name).join(' and ')
 
   const PAUSED = (dogSubscription.status == "paused");
+
   let deliveryStatus;
   const nextDelivery = user.next_occurrencies[0];
 
