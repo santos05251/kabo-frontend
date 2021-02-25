@@ -59,7 +59,7 @@ class OrderDetail extends React.Component {
                 
                 <div className=' text-sm'>{order.card}</div>
               </div>
-              <div className='text-sm  mb-11 md-max-hidden'>Qty:{order?.items?.length || 0}</div>
+              <div className='text-sm  mb-11 md-max-hidden'>{order?.plan || ""}</div>
 
               <div className='text-2xl font-bold mb-2'>Items</div>
               {order.items.map((item, index) => {
