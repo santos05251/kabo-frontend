@@ -9,6 +9,7 @@ import Billing from "../../components/profile/billing.jsx";
 import { AccountDetails } from "../../components/profile/account-details.jsx";
 import { DeliveryAddress } from "../../components/profile/delivery-address.jsx";
 import Loader from "../../loaders/profileLoader";
+import Cupon from "../../components/profile/cupon";
 class ProfilePage extends React.Component {
   constructor(props) {
     super(props);
@@ -57,6 +58,12 @@ class ProfilePage extends React.Component {
         </div>
         <div className={detailsCard}>
           <DeliveryAddress
+            user={user}
+            deliveryAddress={user.shipping_address}
+          />
+        </div>
+        <div className={detailsCard}>
+          <Cupon
             user={user}
             deliveryAddress={user.shipping_address}
           />
