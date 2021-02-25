@@ -1,34 +1,34 @@
-import React from "react";
-import { connect } from "react-redux";
+import React from 'react'
+import { connect } from 'react-redux'
 
-import { authenticationActions } from "../../actions";
+import { authenticationActions } from '../../actions'
 import Loader from "../../assets/images/buttonLoader.svg";
 class LoginPage extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
       submitted: false,
-    };
+    }
 
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
   }
 
   handleChange(e) {
-    const { name, value } = e.target;
-    this.setState({ [name]: value });
+    const { name, value } = e.target
+    this.setState({ [name]: value })
   }
 
   handleSubmit(e) {
-    e.preventDefault();
+    e.preventDefault()
 
-    this.setState({ submitted: true });
-    const { email, password } = this.state;
+    this.setState({ submitted: true })
+    const { email, password } = this.state
     if (email && password) {
-      this.props.login(email, password);
+      this.props.login(email, password)
     }
   }
 
@@ -42,41 +42,13 @@ class LoginPage extends React.Component {
             <div className="bg-white px-8 md:py-10 sm:py-1 sm:h-60 sm:px-12 sm:py-8 ">
               <div className="grid grid-cols-12">
                 <div className="col-span-12 sm:col-span-5">
-                  <label
-                    htmlFor="email"
-                    className="leading-snug text-sm font-semibold text-black"
-                  >
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    name="email"
-                    id="email"
-                    value={email}
-                    autoComplete="email"
-                    onChange={this.handleChange}
-                    required
-                    className="block w-full h-12 px-3 py-2 border border-solid border-gray-400 rounded-lg"
-                  />
+                  <label htmlFor="email" className="leading-snug text-sm font-semibold text-black">Email</label>
+                  <input type="email" name="email" id="email" value={email} autoComplete="email" onChange={this.handleChange} required className="block w-full h-12 px-3 py-2 border border-solid border-gray-400 rounded-lg" />
                 </div>
 
                 <div className="col-span-12 pl-0 pt-5 sm:col-span-5 sm:pl-4.5 sm:pt-0">
-                  <label
-                    htmlFor="password"
-                    className="leading-snug text-sm font-semibold text-black"
-                  >
-                    Password
-                  </label>
-                  <input
-                    type="password"
-                    name="password"
-                    id="password"
-                    value={password}
-                    autoComplete="current-password"
-                    onChange={this.handleChange}
-                    required
-                    className="block w-full h-12 px-3 py-2 border border-solid border-gray-400 rounded-lg"
-                  />
+                  <label htmlFor="password" className="leading-snug text-sm font-semibold text-black">Password</label>
+                  <input type="password" name="password" id="password" value={password} autoComplete="current-password" onChange={this.handleChange} required className="block w-full h-12 px-3 py-2 border border-solid border-gray-400 rounded-lg" />
                 </div>
               </div>
               {error && (
@@ -102,7 +74,7 @@ class LoginPage extends React.Component {
           </form>
         </div>
       </div>
-    );
+    )
   }
 }
 
@@ -116,9 +88,13 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  login: (email, password) =>
-    dispatch(authenticationActions.login({ email, password })),
-});
+const mapDispatchToProps = (dispatch) => (
+  {
+    login: (email, password) => dispatch(authenticationActions.login({ email, password }))
+  }
+)
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(LoginPage)
