@@ -50,28 +50,35 @@ class OrderDetail extends React.Component {
               <div className="text-2xl font-bold mb-1">
                 Order #{order.invoice_id}
               </div>
-              <div className="flex  justify-between text-sm  text-gray-400 font-semibold mb-2">
-                <p>Subtotal</p>
-                <p>{order.total}</p>
-              </div>
-              <div className="text-sm font-semibold mb-2">
-                <div className="flex justify-between text-sm text-gray-400 font-semibold mb-2">
-                  <p>Discount</p>
-                  <p>
-                    {coupon &&
-                    coupon?.toLowerCase() === order?.coupon_key?.toLowerCase()
-                      ? `-$${discount}`
-                      : "$0"}
-                  </p>
-                </div>
-                {coupon &&
-                  coupon?.toLowerCase() ===
-                    order?.coupon_key?.toLowerCase() && (
-                    <span className="text-green-500 text-xs ">
-                      PROMO CODE: {coupon} USED
-                    </span>
-                  )}
-              </div>
+              {coupon &&
+                coupon?.toLowerCase() === order?.coupon_key?.toLowerCase() && (
+                  <div>  
+                    <div className="flex  justify-between text-sm  text-gray-400 font-semibold mb-2">
+                      <p>Subtotal</p>
+                      <p>{order.total}</p>
+                    </div>
+                    <div className="text-sm font-semibold mb-2">
+                      <div className="flex justify-between text-sm text-gray-400 font-semibold mb-2">
+                        <p>Discount</p>
+                        <p>
+                          {coupon &&
+                          coupon?.toLowerCase() ===
+                            order?.coupon_key?.toLowerCase()
+                            ? `-$${discount}`
+                            : "$0"}
+                        </p>
+                      </div>
+                      {coupon &&
+                        coupon?.toLowerCase() ===
+                          order?.coupon_key?.toLowerCase() && (
+                          <span className="text-green-500 text-xs ">
+                            PROMO CODE: {coupon} USED
+                          </span>
+                        )}
+                    </div>
+                  </div>
+                )}
+
               <div className="flex  justify-between text-sm py-5 font-semibold mb-2">
                 <p>Total Paid</p>
                 <p>{order.total}</p>
@@ -158,4 +165,3 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrderDetail);
-
