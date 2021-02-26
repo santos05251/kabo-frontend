@@ -39,7 +39,9 @@ class OrderDetail extends React.Component {
     if (!order) {
       return null;
     }
-    console.log(order, "check orderrrrrrrrrrrrrrr");
+    const coupon = this.props?.user?.couponResponse?.coupon || null;
+    const discount = this.props?.user?.couponResponse?.discount || null;
+    order.coupon_key="testing1";
     return (
       <div className="container pb-40 bg-white">
         <div className="flex items-center flex-col mt-10">
@@ -50,16 +52,25 @@ class OrderDetail extends React.Component {
               </div>
               <div className="flex  justify-between text-sm  text-gray-400 font-semibold mb-2">
                 <p>Subtotal</p>
-                <p>$44.73</p>
+                <p>{order.total}</p>
               </div>
               <div className="text-sm font-semibold mb-2">
                 <div className="flex justify-between text-sm text-gray-400 font-semibold mb-2">
                   <p>Discount</p>
-                  <p>-$8.62</p>
+                  <p>
+                    {coupon &&
+                    coupon?.toLowerCase() === order?.coupon_key?.toLowerCase()
+                      ? `-$${discount}`
+                      : "$0"}
+                  </p>
                 </div>
-                <span className="text-green-500 text-xs ">
-                  PROMO CODE: SAVE20 USED
-                </span>
+                {coupon &&
+                  coupon?.toLowerCase() ===
+                    order?.coupon_key?.toLowerCase() && (
+                    <span className="text-green-500 text-xs ">
+                      PROMO CODE: {coupon} USED
+                    </span>
+                  )}
               </div>
               <div className="flex  justify-between text-sm py-5 font-semibold mb-2">
                 <p>Total Paid</p>
@@ -134,7 +145,6 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => {
-  console.log("state in mapstate to props", state);
   const {
     user: { subscriptions, dogs, orders },
     user,
@@ -143,9 +153,9 @@ const mapStateToProps = (state) => {
   return {
     subscriptions,
     user,
-
     orders,
   };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrderDetail);
+
