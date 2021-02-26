@@ -58,6 +58,12 @@ class MealPlanModal extends React.Component {
             </div>
             <PortionDisplay portion={portion} />
           </React.Fragment> : null}
+          <div
+            className="text-primary w-full py-5 font-bold"
+            onClick={()=>this.editMealTracking()}
+          >
+            <a href={`/edit-plan/${dogIndex}`}>Edit portions</a>
+          </div>
         </div>
       </>
     );
