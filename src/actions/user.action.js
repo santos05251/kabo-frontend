@@ -93,6 +93,11 @@ const resetUserLoading = () => ({
 
 const setUserLoading = (key, value) => ({type: userConstants.SET_USER_LOADING, key, value})
 
+const applyCoupon = (data) => ({
+  type: userConstants.APPLY_COUPON,
+  payload: data,
+});
+
 export const userActions = {
   getAccountData,
   pauseSubscription,
@@ -115,5 +120,6 @@ export const userActions = {
   updateUserPhoneEmail,
   resetUserError,
   resetUserLoading,
-  setUserLoading
+  setUserLoading,
+  applyCoupon
 };

@@ -178,12 +178,23 @@ function* openSkipDeliveryModal(action) {
 function* skipDogDelivery(action) {
   try {
     const payload = yield call(userService.skipDogDelivery, action.payload);
-    yield put({ type: userConstants.SKIP_DOG_DELIVERY_SUCCESS, payload });
+   
+    yield put({ type: userConstants.SKIP_DOG_DELIVERY_SUCCESS, payload});
   } catch (error) {
     yield put({ type: userConstants.SKIP_DOG_DELIVERY_FAILED, payload: error });
   }
 }
+function* addCoupon(action) {
+  try {
+    const payload = yield call(userService.applyCoupon, action.payload);
+    payload.coupon =  action.payload.coupon;
+    yield put({ type: userConstants.APPLY_COUPON_SUCCESS, payload });
+  } catch (error) {
+    yield put({ type: userConstants.APPLY_COUPON_FAILURE, error });
+  }
+}
 export default function* user() {
+  yield takeLatest(userConstants.APPLY_COUPON, addCoupon);
   yield takeLatest(userConstants.ACCOUNT_DATA_REQUESTED, getAccountDataSaga);
   yield takeLatest(userConstants.RECIPE_DATA_REQUESTED, getRecipeDataSaga);
   yield takeLatest(userConstants.BREED_DATA_REQUESTED, getBreedDataSaga);
