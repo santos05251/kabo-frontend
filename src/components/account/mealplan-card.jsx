@@ -74,7 +74,8 @@ const MealPlanCard = ({ noPrice, cooked_recipes, kibble_recipes, subscription, c
   } else if (!currentDog.kibble_portion) {
     portion = `${currentDog.cooked_portion}% Kabo`;
   } else {
-    portion = `${currentDog.cooked_portion}% fresh food & ${currentDog.kibble_portion}% kibble`;
+    portion = `${currentDog.cooked_portion ? currentDog.cooked_portion : 0}% fresh food & ${
+      currentDog.kibble_portion ? currentDog.kibble_portion : 0}% kibble`;
   }
 
   let price = subscription
@@ -85,7 +86,6 @@ const MealPlanCard = ({ noPrice, cooked_recipes, kibble_recipes, subscription, c
   price /= 100;
 
   const readableRecipe = recipeArray.join(" and ");
-  
   return (
     <div>
       <div>
@@ -96,7 +96,6 @@ const MealPlanCard = ({ noPrice, cooked_recipes, kibble_recipes, subscription, c
             {iconArray}
             <div className="ml-4 md:ml-4 xl:pr-9">
               <p className="font-normal text-17 leading-24">{readableRecipe}{amountOfFood && ' for ' + amountOfFood.split("_").join(" ") }</p>
-             {/* {amountOfFood && <p className="font-normal text-xs mt-4">Food for: {amountOfFood.split("_").join(" ")}</p>}   */}
             </div>
           </div>
           <div className="flex justify-between mt-6">
@@ -116,9 +115,7 @@ function mapStateToProps(state, props) {
     kibble_recipes,
     subscription: userSelectors.selectSubscriptionByDogIndex(state, props.dogIndex),
     currentDog: userSelectors.selectDogByIndex(state, props.dogIndex)
-    
   };
-  
 }
 
 export default connect(mapStateToProps)(MealPlanCard);
