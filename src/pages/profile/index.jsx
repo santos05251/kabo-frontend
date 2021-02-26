@@ -9,6 +9,7 @@ import Billing from "../../components/profile/billing.jsx";
 import { AccountDetails } from "../../components/profile/account-details.jsx";
 import { DeliveryAddress } from "../../components/profile/delivery-address.jsx";
 import Loader from "../../loaders/profileLoader";
+import Cupon from "../../components/profile/cupon";
 class ProfilePage extends React.Component {
   constructor(props) {
     super(props);
@@ -34,7 +35,7 @@ class ProfilePage extends React.Component {
 
   render() {
     if (!this.props.dogs.length || !this.props.user.shipping_address) return <Loader />;
-    const { user, subscriptions, dogs, updatePaymentMethod } = this.props;
+    const { user, subscriptions, dogs, updatePaymentMethod,addCoupon,couponResponse,userError} = this.props;
 
     const detailsCard =
       "container pb-4 mb-4 bg-white shadow-2xl p-4 md:m-6 rounded-xl flex-initial inline-block w-accountdetail-card";
@@ -61,6 +62,15 @@ class ProfilePage extends React.Component {
             deliveryAddress={user.shipping_address}
           />
         </div>
+        <div className={detailsCard}>
+          <Cupon
+            user={user}
+            deliveryAddress={user.shipping_address}
+            addCoupon={addCoupon}
+            couponResponse={couponResponse}
+            userError={userError}
+          />
+        </div>
       </div>
     );
   }
@@ -76,15 +86,19 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(userActions.setBillingAddress(payload)),
   updatePaymentMethod: (payload) =>
     dispatch(userActions.updatePaymentMethod(payload)),
+    addCoupon: (payload) =>
+    dispatch(userActions.applyCoupon(payload)),
 });
 
 const mapStateToProps = (state) => {
   const { user } = state;
-  const { subscriptions, dogs } = state.user;
+  const { subscriptions, dogs,couponResponse,errorMessage} = state.user;
   return {
     user,
     subscriptions,
     dogs,
+    couponResponse,
+    userError:errorMessage
   };
 };
 

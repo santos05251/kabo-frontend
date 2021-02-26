@@ -210,7 +210,18 @@ const updatePhoneEmail = (data) => {
       return res;
     });
 };
+const applyCoupon = (data) => {
+  const requestOptions = request.options(
+    "POST",
+    JSON.stringify(data),
+    true,
+    true
+  );
 
+  return fetch(endpointConstants.APPLY_COUPON, requestOptions)
+    .then(request.handleResponse)
+    .then((res) => res);
+};
 export const userService = {
   getAccountData,
   getRecipeData,
@@ -227,4 +238,5 @@ export const userService = {
   updateDeliveryFrequency,
   skipDogDelivery,
   updatePhoneEmail,
+  applyCoupon
 };

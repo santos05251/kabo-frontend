@@ -68,4 +68,7 @@ export const userConstants = {
   RESET_USER_LOADING: 'userConstants/RESET_USER_LOADING',
 
   SET_USER_LOADING: 'userConstants/SET_USER_LOADING',
+  APPLY_COUPON:'userConstants/APPLY_COUPON',
+  APPLY_COUPON_SUCCESS:'userConstants/APPLY_COUPON_SUCCESS',
+  APPLY_COUPON_FAILURE:'userConstants/APPLY_COUPON_FAILURE',
 };

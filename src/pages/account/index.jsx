@@ -1,7 +1,7 @@
 /* eslint-disable semi */
 import React from "react";
 import { connect } from "react-redux";
-import { isMobile } from 'react-device-detect';
+import { isMobile } from "react-device-detect";
 
 import { ReactComponent as DeliveryBox } from "../../assets/images/delivery-box.svg";
 import { ReactComponent as Arrow } from "../../assets/images/Vectorarrow.svg";
@@ -29,7 +29,7 @@ class AccountPage extends React.Component {
 
   openModal(name, isCardDisable) {
     if (
-      name === "frequencyExpanded" && isCardDisable ||
+      (name === "frequencyExpanded" && isCardDisable) ||
       (name === "mealExpanded" && isCardDisable)
     ) {
       return;
@@ -73,10 +73,16 @@ class AccountPage extends React.Component {
           <div
             onClick={() => this.openModal(stateValue, isCardDisable)}
             className={`flex bg-account justify-between items-center h-12 text-xl font-light p-3 cursor-pointer 
-              ${expanded
+            ${
+              expanded
                 ? "rounded-t-xl border-t border-l border-r border-gray-300"
                 : "rounded-xl"
-              } ${stateValue === "frequencyExpanded" && isCardDisable || stateValue === "mealExpanded" && isCardDisable ? "opacity-40" : ""}`}
+            } ${
+              (stateValue === "frequencyExpanded" && isCardDisable) ||
+              (stateValue === "mealExpanded" && isCardDisable)
+                ? "opacity-40"
+                : ""
+            }`}
           >
             <div className="flex justify-between items-center  h-full">
               <div className="w-8 h-8 mr-6">
@@ -89,7 +95,23 @@ class AccountPage extends React.Component {
               style={{ transform: expanded ? "rotateX(180deg)" : null }}
             />
           </div>
+
           {expanded && <Modal setDogIndex={this.setDogIndex} />}
+          {!expanded && !this.state.nextExpanded && stateValue === "nextExpanded" &&(
+            <div class="flex items-center flex-col mb-4 mt-5">
+              <div class="w-full p-6 bg-promptYellow rounded-1lg">
+                <h4 class="text-left text-base font-semibold mb-1">
+                  You have a coupon avaliable for Blake!
+                </h4>
+                <p class="text-left text-sm">
+                  Use the code <span className="font-bold"> SAVE20 </span>on
+                  your next delivery!
+                </p>
+
+                <a href={"/profile"} className="text-green-500 font-bold">Add cupon</a>
+              </div>
+            </div>
+          )}
         </div>
       );
     };

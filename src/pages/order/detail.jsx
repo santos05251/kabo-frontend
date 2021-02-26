@@ -4,17 +4,15 @@ import { connect } from "react-redux";
 import { userActions } from "../../actions";
 import visaIcon from "../../assets/images/visa-icon.png";
 
-
-import OrderItemModal from '../../components/order/order-item-modal'
-
+import OrderItemModal from "../../components/order/order-item-modal";
 
 class OrderDetail extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       showDetailModal: false,
-      selItem: null
-    }
+      selItem: null,
+    };
   }
 
   getOrder = () => {
@@ -41,46 +39,74 @@ class OrderDetail extends React.Component {
     if (!order) {
       return null;
     }
-
+    console.log(order, "check orderrrrrrrrrrrrrrr");
     return (
-      <div className='container pb-40 bg-white'>
-        <div className='flex items-center flex-col mt-10'>
-          <div className='flex justify-center'>
-            <div className='w-72 p-5 mx-2 rounded-xl'>
-              <div className='text-2xl font-bold mb-1'>
+      <div className="container pb-40 bg-white">
+        <div className="flex items-center flex-col mt-10">
+          <div className="flex justify-center">
+            <div className="w-72 p-5 mx-2 rounded-xl">
+              <div className="text-2xl font-bold mb-1">
                 Order #{order.invoice_id}
               </div>
-              <div className='text-sm font-semibold mb-2'>{order.total}</div>
-              <div className='text-sm  mb-2 md-max-hidden'>{order.date}</div>
-              <div className='text-sm  mb-2 md:hidden'>{order.date_mobile}</div>
-              <div className=' flex justify-start mb-2 items-center'>
-                <div className='text-sm '>{order.payment_status}</div>
-                <img src={visaIcon} className='ml-2 mr-2'></img>
-                
-                <div className=' text-sm'>{order.card}</div>
+              <div className="flex  justify-between text-sm  text-gray-400 font-semibold mb-2">
+                <p>Subtotal</p>
+                <p>$44.73</p>
               </div>
-              <div className='text-sm  mb-11 md-max-hidden'>{order?.plan || ""}</div>
+              <div className="text-sm font-semibold mb-2">
+                <div className="flex justify-between text-sm text-gray-400 font-semibold mb-2">
+                  <p>Discount</p>
+                  <p>-$8.62</p>
+                </div>
+                <span className="text-green-500 text-xs ">
+                  PROMO CODE: SAVE20 USED
+                </span>
+              </div>
+              <div className="flex  justify-between text-sm py-5 font-semibold mb-2">
+                <p>Total Paid</p>
+                <p>{order.total}</p>
+              </div>
 
-              <div className='text-2xl font-bold mb-2'>Items</div>
+              <div className="text-sm  mb-2 md-max-hidden">{order.date}</div>
+              <div className="text-sm  mb-2 md:hidden">{order.date_mobile}</div>
+              <div className=" flex justify-start mb-2 items-center">
+                <div className="text-sm ">{order.payment_status}</div>
+                <img src={visaIcon} className="ml-2 mr-2"></img>
+
+                <div className=" text-sm">{order.card}</div>
+              </div>
+              <div className="text-sm  mb-11 md-max-hidden">
+                {order?.plan || ""}
+              </div>
+
+              <div className="text-2xl font-bold mb-2">Items</div>
               {order.items.map((item, index) => {
-                if (Object.keys(item).length === 0) return null
+                if (Object.keys(item).length === 0) return null;
                 return (
                   <div
                     key={index + ""}
-                    className='rounded-md border border-gray-200'
+                    className="rounded-md border border-gray-200"
                   >
-                    <div className='flex rounded-md rounded-b-none justify-center bg-chicken'>
-                      <img src={item.image_url} className='self-center w-3/5 m-5' sizes="147px"></img>
+                    <div className="flex rounded-md rounded-b-none justify-center bg-chicken">
+                      <img
+                        src={item.image_url}
+                        className="self-center w-3/5 m-5"
+                        sizes="147px"
+                      ></img>
                     </div>
-                    <div className='p-5 text-center'>
-                      <div className='text-2xl'>{item.name}</div>
+                    <div className="p-5 text-center">
+                      <div className="text-2xl">{item.name}</div>
                       <div
-                        className='text-primary text-xs font-bold cursor-pointer'
-                        onClick={() => { this.setState({ selItem: item, showDetailModal: true }) }}
+                        className="text-primary text-xs font-bold cursor-pointer"
+                        onClick={() => {
+                          this.setState({
+                            selItem: item,
+                            showDetailModal: true,
+                          });
+                        }}
                       >
                         See Details
                       </div>
-                      <div className='text-sm text-left mt-2'>
+                      <div className="text-sm text-left mt-2">
                         {item.description}
                       </div>
                     </div>
@@ -91,8 +117,13 @@ class OrderDetail extends React.Component {
           </div>
         </div>
 
-        <OrderItemModal item={selItem} showModal={this.state.showDetailModal} onClose={() => { this.setState({ showDetailModal: false }) }} />
-
+        <OrderItemModal
+          item={selItem}
+          showModal={this.state.showDetailModal}
+          onClose={() => {
+            this.setState({ showDetailModal: false });
+          }}
+        />
       </div>
     );
   }

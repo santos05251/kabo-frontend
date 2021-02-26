@@ -22,5 +22,6 @@ export const endpointConstants = {
   GET_SUBSCRIPTION_ESTIMATE: `${appDomain}/${apiVersion}/user/subscriptions/meal_plan/estimate`,
   UPDATE_DELIVERY_FREQUENCY: `${appDomain}/${apiVersion}/user/delivery_frequency`,
   SKIP_DOG_DELIVERY: `${appDomain}/${apiVersion}/user/subscriptions/skip_delivery`,
-  UPDATE_PHONE_EMAIL:`${appDomain}/${apiVersion}/user/contact`
+  UPDATE_PHONE_EMAIL:`${appDomain}/${apiVersion}/user/contact`,
+  APPLY_COUPON:`${appDomain}/${apiVersion}/user/apply_coupon`,
 };
