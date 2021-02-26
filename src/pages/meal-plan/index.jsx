@@ -218,10 +218,12 @@ class EditPlan extends Component {
     if (selectedLength === 0 && !dirty) this.forceUpdate()
     return (
       <div className="md:bg-recipeGray">
-        <div className="hidden md:block font-messina text-center font-bold py-8 text-black bg-recipeGray text-xl">
-          Choose 1 or 2 recipes per Order for {dog && dog.name}
+        <div className="hidden md:block font-messina text-center font-bold py-5 text-black bg-recipeGray text-xl">
+          
+        What's in {dog && dog.name}'s Box
 
         </div>
+        <div className={"text-center py-5"}>Choose up to 2 and click Save Changes </div>
         <div className="w-1/2 m-auto">
           <FreshOrKibble
             extraClasses="hidden lg:flex"
