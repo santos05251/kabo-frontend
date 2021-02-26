@@ -52,13 +52,13 @@ class MealPlanModal extends React.Component {
             </a>
             </div>
           )}
-          {kibble_portion ? <React.Fragment>
+          {!kibble_portion ? <React.Fragment>
             <div className="text-lightGrey text-xs text-semibold mt-7">
               PORTIONS
             </div>
             <PortionDisplay portion={portion} />
           </React.Fragment> : null}
-                    <div
+          <div
             className="text-primary w-full py-5 font-bold"
             onClick={()=>this.editMealTracking()}
           >
