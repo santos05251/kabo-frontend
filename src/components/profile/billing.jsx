@@ -108,7 +108,7 @@ class Billing extends React.Component {
             if (index > 1) return null;
             return <OrderCard {...order} styles="w-full" />;
           })} */}
-          <OrderTable orders={orders} />
+          <OrderTable orders={orders} noTitlePadding />
         </div>
         <Link
           to={`/orders`}

@@ -57,6 +57,7 @@ module.exports = {
       },
       boxShadow: {
         modal: "0px 8px 40px rgb(0 0 0 / 20%)",
+        profileBoxes: "0px 4px 28px rgba(0, 0, 0, 0.04)",
       },
       width: {
         7.3: "1.875rem",

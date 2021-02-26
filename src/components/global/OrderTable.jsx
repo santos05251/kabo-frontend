@@ -1,15 +1,37 @@
 import React from "react";
 
-const OrderTable = ({ orders }) => (
+const OrderTable = ({ orders, noTitlePadding }) => (
   <table className="table-fixed w-full">
     <thead>
       <tr>
-        <th className="text-sm text-left font-semibold px-4 pb-4">
+        <th
+          className={`text-sm text-left font-semibold ${
+            !noTitlePadding && "px-4"
+          } pb-4`}
+        >
           PAYMENT DATE
         </th>
-        <th className="text-sm text-left font-semibold px-4 pb-4">AMOUNT</th>
-        <th className="text-sm text-left font-semibold px-4 pb-4">STATUS</th>
-        <th className="text-sm text-left font-semibold px-4 pb-4">INVOICE ID</th>
+        <th
+          className={`text-sm text-left font-semibold ${
+            !noTitlePadding && "px-4"
+          } pb-4`}
+        >
+          AMOUNT
+        </th>
+        <th
+          className={`text-sm text-left font-semibold ${
+            !noTitlePadding && "px-4"
+          } pb-4`}
+        >
+          STATUS
+        </th>
+        <th
+          className={`text-sm text-left font-semibold ${
+            !noTitlePadding && "px-4"
+          } pb-4`}
+        >
+          INVOICE ID
+        </th>
       </tr>
     </thead>
     <tbody>
