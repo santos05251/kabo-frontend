@@ -41,7 +41,7 @@ class OrderDetail extends React.Component {
     }
     const coupon = this.props?.user?.couponResponse?.coupon || null;
     const discount = this.props?.user?.couponResponse?.discount || null;
-    order.coupon_key="testing1";
+    
     return (
       <div className="container pb-40 bg-white">
         <div className="flex items-center flex-col mt-10">
