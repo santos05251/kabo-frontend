@@ -34,13 +34,21 @@ class ProfilePage extends React.Component {
   }
 
   render() {
-    if (!this.props.dogs.length || !this.props.user.shipping_address) return <Loader />;
-    const { user, subscriptions, dogs, updatePaymentMethod,addCoupon,couponResponse,userError} = this.props;
+    if (!this.props.dogs.length || !this.props.user.shipping_address)
+      return <Loader />;
+    const {
+      user,
+      subscriptions,
+      dogs,
+      updatePaymentMethod,
+      addCoupon,
+      couponResponse,
+      userError,
+    } = this.props;
 
-    const detailsCard =
-      "container pb-4 mb-4 bg-white shadow-2xl p-4 md:m-6 rounded-xl flex-initial inline-block w-accountdetail-card";
+    const detailsCard = "container pb-4  shadow-profileBoxes p-10 rounded-xl";
     return (
-      <div className="flex flex-wrap py-x">
+      <div className="grid grid-cols-2 gap-7 pb-10">
         <div className={detailsCard}>
           <AccountDetails user={user} dogs={dogs} />
         </div>
@@ -86,19 +94,18 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(userActions.setBillingAddress(payload)),
   updatePaymentMethod: (payload) =>
     dispatch(userActions.updatePaymentMethod(payload)),
-    addCoupon: (payload) =>
-    dispatch(userActions.applyCoupon(payload)),
+  addCoupon: (payload) => dispatch(userActions.applyCoupon(payload)),
 });
 
 const mapStateToProps = (state) => {
   const { user } = state;
-  const { subscriptions, dogs,couponResponse,errorMessage} = state.user;
+  const { subscriptions, dogs, couponResponse, errorMessage } = state.user;
   return {
     user,
     subscriptions,
     dogs,
     couponResponse,
-    userError:errorMessage
+    userError: errorMessage,
   };
 };
 
