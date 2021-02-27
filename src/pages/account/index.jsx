@@ -1,11 +1,12 @@
 /* eslint-disable semi */
 import React from "react";
 import { connect } from "react-redux";
-import { isMobile } from "react-device-detect";
+import { isMobile } from 'react-device-detect';
 
-import { ReactComponent as DeliveryBox } from "../../assets/images/delivery-box.svg";
+import { ReactComponent as DeliveryBox } from "../../assets/images/box-colour.svg";
 import { ReactComponent as Arrow } from "../../assets/images/Vectorarrow.svg";
-import { ReactComponent as MealBox } from "../../assets/images/meal-plan.svg";
+import { ReactComponent as MealBox } from "../../assets/images/food-colour.svg";
+import { ReactComponent as BowlIcon } from "../../assets/images/bowl-colour.svg";
 
 import DeliveryModal from "../../components/account/delivery-modal.jsx";
 import MealPlanModal from "../../components/account/meal-modal.jsx";
@@ -29,7 +30,7 @@ class AccountPage extends React.Component {
 
   openModal(name, isCardDisable) {
     if (
-      (name === "frequencyExpanded" && isCardDisable) ||
+      name === "frequencyExpanded" && isCardDisable ||
       (name === "mealExpanded" && isCardDisable)
     ) {
       return;
@@ -53,10 +54,10 @@ class AccountPage extends React.Component {
     const { user, subscriptions, dogs, globalState } = this.props;
 
     let dogNames = dogs.map((dog, i) => {
-      return dog.name;
+      return dog.name + `'s`;
     });
 
-    let readableNames = dogNames.join(" and ");
+    let readableNames = dogNames.join(" + ");
     let dogSubscription = userSelectors.selectSubscriptionByDogIndex(
       globalState,
       this.state.dogsIndex
@@ -73,16 +74,10 @@ class AccountPage extends React.Component {
           <div
             onClick={() => this.openModal(stateValue, isCardDisable)}
             className={`flex bg-account justify-between items-center h-12 text-xl font-light p-3 cursor-pointer 
-            ${
-              expanded
+              ${expanded
                 ? "rounded-t-xl border-t border-l border-r border-gray-300"
                 : "rounded-xl"
-            } ${
-              (stateValue === "frequencyExpanded" && isCardDisable) ||
-              (stateValue === "mealExpanded" && isCardDisable)
-                ? "opacity-40"
-                : ""
-            }`}
+              } ${stateValue === "frequencyExpanded" && isCardDisable || stateValue === "mealExpanded" && isCardDisable ? "opacity-40" : ""}`}
           >
             <div className="flex justify-between items-center  h-full">
               <div className="w-8 h-8 mr-6">
@@ -95,7 +90,6 @@ class AccountPage extends React.Component {
               style={{ transform: expanded ? "rotateX(180deg)" : null }}
             />
           </div>
-
           {expanded && <Modal setDogIndex={this.setDogIndex} />}
           {!expanded && !this.state.nextExpanded && stateValue === "nextExpanded" &&(
             <div class="flex items-center flex-col mb-4 mt-5">
@@ -135,18 +129,18 @@ class AccountPage extends React.Component {
               {profileImages}
             </div>
             <div className="h-full text-xl text-center md:text-left font-bold md:m-6 font-messina">
-              {readableNames}'s
+              {readableNames} plan
             </div>
           </div>
         </div>
         <div className="grid md:grid-cols-3 gap-5 md:gap-4 xl:gap-10 grid-cols-1">
           {sectionHeader(
             "nextExpanded",
-            DeliveryBox,
+              MealBox,
             "Next Delivery",
             DeliveryModal
           )}
-          {sectionHeader("mealExpanded", MealBox, "Meal Plan", MealPlanModal)}
+          {sectionHeader("mealExpanded", BowlIcon, "Meal Plan", MealPlanModal)}
           {sectionHeader(
             "frequencyExpanded",
             DeliveryBox,

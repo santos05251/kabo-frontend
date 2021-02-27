@@ -56,14 +56,14 @@ class Navbar extends React.Component {
     const { user, logout } = this.props
     const { navStep } = this.state
 
-    const active = "bg-primary text-white px-3 py-2 rounded-md text-sm font-medium"
-    const inActive = "text-charcoal hover:bg-green-500 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+    const active = "bg-primary text-white px-2 sm:px-3 py-1 sm:py-2 rounded-md text-xs sm:text-sm font-medium"
+    const inActive = "text-charcoal hover:bg-green-500 hover:text-white px-2 sm:px-3 py-1 sm:py-2 rounded-md text-xs sm:text-sm  font-medium"
 
     const loggedIn = user && user.token
 
     return (
         <nav className="fixed md:relative md:h-28 sm:h-22 bg-white md:bg-none z-50 w-full" id="outer-container">
-          <div className="py-8 flex items-center sm:justify-between sm:items-stretch">
+          <div className="py-3 sm:py-8 pl-3 sm:pl-0 flex items-center sm:justify-between sm:items-stretch">
             <div className="sm:hidden">
               <Menu pageWrapId={ "page-wrap" } noTransition={true} outerContainerId={ "outer-container" } right>
                 <a id="home" className="menu-item" href="/redirect?location=kabo.co" >Kabo Homepage</a>
@@ -74,13 +74,13 @@ class Navbar extends React.Component {
                 {loggedIn && <a onClick={() => this.clickLogout()} className="menu-item" href="">Logout</a>}
               </Menu>
             </div>
-            <div className="flex-shrink-0 flex items-center left-0" id="page-wrap">
-              <a href='/'>
+            <div className="flex-shrink-0 flex flex-wrap w-4/5 items-center left-0" id="page-wrap">
+              <a href='/' className="self-start">
                 <NavbarLogo className="block w-auto" />
               </a>
               {loggedIn && (
                   <div>
-                    <div className="hidden sm:flex align-center just sm:ml-6">
+                    <div className="flex align-center just sm:ml-6 mt-1 sm:mt-0">
                       <div className="flex space-x-4">
                         <a href="/" className={navStep === 1 ? active : inActive}>My Kabo</a>
                         {/* <a href="/store" className={navStep === 2 ? active : inActive}>Store</a> */}

@@ -3,11 +3,10 @@ import Button from "../global/button.jsx";
 import PaymentCardIcon from "../global/payment-card-icon.jsx";
 import OrderCard from "../global/order-card.jsx";
 import ChangePaymentMethodModal from "./change-payment-method-modal";
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom'
 import PauseMealModal from "../account/PauseMealModal";
 import Modal from "../global/modal";
 import CancelMealModal from "../account/cancel-meal-modal";
-import OrderTable from "../global/OrderTable";
 
 class Billing extends React.Component {
   constructor(props) {
@@ -20,38 +19,32 @@ class Billing extends React.Component {
   }
 
   getCalculateShowButtons = (subscriptions) => {
-    // getting array with subscription statuses
-    let statuses = Object.keys(subscriptions).map(
-      (key) => subscriptions[key].status
-    );
-    let showPause =
-      statuses.filter((s) => s === "paused").length !== statuses.length;
-    let showCancel =
-      statuses.filter((s) => s === "cancelled").length !== statuses.length;
+      // getting array with subscription statuses
+    let statuses = Object.keys(subscriptions).map(key => subscriptions[key].status);
+    let showPause = statuses.filter(s => s === 'paused').length !== statuses.length;
+    let showCancel = statuses.filter(s => s === 'cancelled').length !== statuses.length;
     // and return if all of them cancelled or paused
     return { showPause, showCancel };
-  };
+  }
 
   componentDidMount() {
-    // initially describing if displaying pause button
+      // initially describing if displaying pause button
     const { subscriptions } = this.props.user;
     const { showPause } = this.getCalculateShowButtons(subscriptions);
-    this.setState({ showManageButton: showPause });
+    this.setState({ showManageButton: showPause})
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     const { subscriptions } = this.props.user;
     const { showPause } = this.getCalculateShowButtons(subscriptions);
-    // describing if displaying pause button with props update
+      // describing if displaying pause button with props update
     if (prevState.showManageButton !== showPause) {
-      this.setState({ showManageButton: showPause });
+      this.setState({ showManageButton: showPause })
     }
   }
 
   toggleCancelBox() {
-    this.setState({
-      showManageSubscriptionsBox: !this.state.showManageSubscriptionsBox,
-    });
+    this.setState({ showManageSubscriptionsBox: !this.state.showManageSubscriptionsBox });
   }
 
   toggle = () => {
@@ -99,49 +92,34 @@ class Billing extends React.Component {
           onClick={this.toggle}
           styles="focus:outline-none"
         />
-        <div className="flex-auto text-lg font-semibold my-5">
+        <div className="flex-auto text-lg font-semibold my-4">
           Recent Orders
         </div>
-        <div className="mb-5 ">
-          {/* grid md:grid-cols-2 grid-cols-1 gap-2 */}
-          {/* {orders.map((order, index) => {
+        <div className="mb-5 grid md:grid-cols-2 grid-cols-1 gap-2">
+          {orders.map((order, index) => {
             if (index > 1) return null;
             return <OrderCard {...order} styles="w-full" />;
-          })} */}
-          <OrderTable orders={orders} noTitlePadding />
+          })}
         </div>
-        <Link
-          to={`/orders`}
-          className="font-bold mt-3 text-primary border rounded-xl py-2 px-6 text-base font-bold text-primary button-border focus:outline-none"
-        >
-          View All Orders
-        </Link>
+        <Link to={`/orders`} className="font-bold text-primary border rounded-xl py-2 px-6 text-base font-bold text-primary button-border focus:outline-none">View All Orders</Link>
 
         <div className="flex justify-between px-7 mt-7">
           <span> </span>
-          {showManageButton ? (
-            <button
+          {showManageButton
+            ? <button
               type="button"
               onClick={this.toggleCancelBox}
               className="text-primary font-bold"
             >
               Manage subscription
-            </button>
-          ) : (
-            <span> </span>
-          )}
+                </button> : <span> </span>}
         </div>
 
-        <Modal
-          title="Manage subscription"
+        <Modal title="Manage subscription"
           isOpen={this.state.showManageSubscriptionsBox}
           onRequestClose={this.toggleCancelBox}
         >
-          <PauseMealModal
-            closeModal={() =>
-              this.setState({ showManageSubscriptionsBox: false })
-            }
-          />
+          <PauseMealModal closeModal={() => this.setState({ showManageSubscriptionsBox: false })} />
         </Modal>
 
         <ChangePaymentMethodModal

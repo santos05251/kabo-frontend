@@ -11,6 +11,7 @@ import { ReactComponent as Arrow } from "../../assets/images/Vectorarrow.svg";
 import { ReactComponent as DeliveryBox } from "../../assets/images/delivery-box.svg";
 import { userSelectors } from "../../selectors/user.selectors";
 
+
 class EditPlan extends Component {
   state = {
     next: false,
@@ -20,7 +21,7 @@ class EditPlan extends Component {
     kibbleRecipes: [],
     isKibble: false,
     selectedPortion: false,
-    estimate: this.props.user?.estimate || false,
+    estimate: false,
     dietPortion: {},
     dog: {},
     step: 0,
@@ -46,24 +47,24 @@ class EditPlan extends Component {
       // Object.keys(prevState.dog).length === 0
     ) {
       let currentdog = this.props.user.dogs[index];
-      this.setState({ dog: currentdog });
-      let loadRecipes = [];
+      this.setState({ dog: currentdog })
+      let loadRecipes = []
       if (currentdog.chicken_recipe) {
-        loadRecipes.push("chicken");
+        loadRecipes.push('chicken')
       }
       if (currentdog.beef_recipe) {
-        loadRecipes.push("beef");
+        loadRecipes.push('beef')
       }
       if (currentdog.lamb_recipe) {
-        loadRecipes.push("lamb");
+        loadRecipes.push('lamb')
       }
       if (currentdog.turkey_recipe) {
-        loadRecipes.push("turkey");
+        loadRecipes.push('turkey')
       }
       ///again not sure can be more then one kibble recipe
       this.setState({
         cookedRecipes: loadRecipes,
-        kibbleRecipes: [currentdog.kibble_recipe] || [],
+        kibbleRecipes: [currentdog.kibble_recipe] || []
       });
     }
   }
@@ -73,20 +74,20 @@ class EditPlan extends Component {
   };
 
   displayKibble = (state) => {
-    this.setState({ showKibble: state });
-  };
+    this.setState({ showKibble: state })
+  }
 
   displayCooked = (state) => {
-    this.setState({ showCooked: state });
-  };
+    this.setState({ showCooked: state })
+  }
 
   toggleKibble = () => {
     this.setState({ isKibble: !this.state.isKibble });
   };
 
   toggleDirty = () => {
-    this.setState({ dirty: true });
-  };
+    this.setState({ dirty: true })
+  }
 
   togglePortion = () => {
     this.setState({ selectedPortion: !this.state.selectedPortion });
@@ -94,7 +95,7 @@ class EditPlan extends Component {
 
   selectedDietPortion = (diet) => {
     this.setState({ dietPortion: diet, step: 2 });
-    this.handleNext();
+    this.handleNext()
   };
   openModal(name) {
     this.setState({
@@ -103,16 +104,12 @@ class EditPlan extends Component {
   }
   handleSelectedCookedRecipes = (food) => {
     const { cookedRecipes } = this.state;
-    if (
-      cookedRecipes &&
-      cookedRecipes.length > 0 &&
-      cookedRecipes.includes(food.recipe)
-    ) {
+    if (cookedRecipes && cookedRecipes.length > 0 && cookedRecipes.includes(food.recipe)) {
       let recipes = [...cookedRecipes];
       const index = recipes.indexOf(food.recipe);
       recipes.splice(index, 1);
       this.setState({ cookedRecipes: recipes, step: 1, dirty: true });
-      this.handleNext();
+      this.handleNext()
       return;
     }
     this.setState({
@@ -120,7 +117,7 @@ class EditPlan extends Component {
       dirty: true,
       step: 1,
     });
-    this.handleNext();
+    this.handleNext()
   };
 
   handleSelectedKibbleRecipe = (food) => {
@@ -130,21 +127,21 @@ class EditPlan extends Component {
       const index = recipes.indexOf(food.recipe);
       recipes.splice(index, 1);
       this.setState({ kibbleRecipes: [], step: 1, dirty: true });
-      this.handleNext();
+      this.handleNext()
       return;
     }
     this.setState({
       kibbleRecipes: [food.recipe],
       step: 1,
-      dirty: true,
+      dirty: true
     });
-    this.handleNext();
+    this.handleNext()
   };
 
   handleNext = () => {
     if (this.state.step === 1) {
       const { cookedRecipes, kibbleRecipes, dietPortion, dog } = this.state;
-      console.log(kibbleRecipes);
+      console.log(kibbleRecipes)
       const data = {
         dog_id: dog.id,
         cooked_portion: dietPortion.cooked_portion,
@@ -154,20 +151,21 @@ class EditPlan extends Component {
         lamb_recipe: false,
         beef_recipe: false,
         kibble_recipe: null,
-        portion_adjusment: dietPortion.portion_adjusment || null,
+        portion_adjusment: dietPortion.portion_adjusment || null
       };
       let kibbleNotNull = kibbleRecipes.some(function (el) {
         return el !== null;
-      });
+      })
       if (kibbleNotNull) {
         data.kibble_recipe = kibbleRecipes[0];
       } else {
         data.kibble_recipe = null;
+
       }
       for (let item of cookedRecipes) {
         data[`${item}_recipe`] = true;
       }
-      this.props.getSubscriptionEstimate(data);
+      this.props.getSubscriptionEstimate(data)
     }
     // this.setState({ step: this.state.step + 1 });
   };
@@ -181,14 +179,7 @@ class EditPlan extends Component {
   };
 
   handleMealUpdate = () => {
-    const {
-      cookedRecipes,
-      kibbleRecipes,
-      dietPortion,
-      dog,
-      showCooked,
-      showKibble,
-    } = this.state;
+    const { cookedRecipes, kibbleRecipes, dietPortion, dog, showCooked, showKibble } = this.state;
     const data = {
       dog_id: dog.id,
       cooked_portion: dietPortion.cooked_portion || null,
@@ -212,50 +203,24 @@ class EditPlan extends Component {
     this.props.updateMealPlan(data);
   };
 
+
   render() {
     const { user, meal, getDailyDietPortion } = this.props;
-    const {
-      cookedRecipes,
-      kibbleRecipes,
-      dog,
-      step,
-      dirty,
-      showCooked,
-      showKibble,
-      editRecipiesOpen,
-      editPortionsOpen,
-    } = this.state;
+    const { cookedRecipes, kibbleRecipes, dog, step, dirty, showCooked, showKibble, editRecipiesOpen, editPortionsOpen } = this.state;
 
-    if (user.subLoading) return <Loader />;
-    let filteredKibble =
-      kibbleRecipes[0] === null || !kibbleRecipes ? 0 : kibbleRecipes.length;
-    let filteredCooked =
-      cookedRecipes[0] === null || !cookedRecipes ? 0 : cookedRecipes.length;
+    if (user.subLoading) return <Loader />
+    let filteredKibble = (kibbleRecipes[0] === null || !kibbleRecipes) ? 0 : kibbleRecipes.length
+    let filteredCooked = (cookedRecipes[0] === null || !cookedRecipes) ? 0 : cookedRecipes.length
 
     ///checking selected plans length.
-    const selectedLength = filteredCooked + filteredKibble;
+    const selectedLength = filteredCooked + filteredKibble
 
-    if (selectedLength === 0 && !dirty) this.forceUpdate();
-    let cbID = dog.chargebee_subscription_id;
-
-    let subData = user.subscriptions[cbID];
-
-    ////resolved NaN
-    let totalReadable =
-      subData && subData.invoice_estimate_total === "N/A"
-        ? 0
-        : subData && (subData.invoice_estimate_total / 100).toFixed(2);
-
+    if (selectedLength === 0 && !dirty) this.forceUpdate()
     return (
       <div className="md:bg-recipeGray">
-        <div className="hidden md:block font-messina text-center font-bold pt-5 text-black bg-recipeGray text-xl">
-          What's in {dog && dog.name}'s Box
-        </div>
-        <div className={"hidden md:block text-center py-5"}>
-          Choose up to 2 and click Save Changes{" "}
-        </div>
-        <div className="md:hidden font-messina text-center font-bold py-5 text-black text-xl">
-          What's in {dog && dog.name}'s Box
+        <div className="hidden md:block font-messina text-center font-bold py-8 text-black bg-recipeGray text-xl">
+          Choose 1 or 2 recipes per Order for {dog && dog.name}
+
         </div>
         <div className="w-1/2 m-auto">
           <FreshOrKibble
@@ -305,11 +270,8 @@ class EditPlan extends Component {
               selectedLength={selectedLength}
               toggleKibble={this.toggleKibble}
               isKibble={this.state.isKibble}
-              estimate={
-                !user.estimate ? `$${totalReadable}` : user.estimate.amount
-              }
-              onConfirm={(e) => this.handleMealUpdate(e)}
             />
+
           </div>
         </div>
 
@@ -318,27 +280,14 @@ class EditPlan extends Component {
         <div className="md:hidden grid grid-cols-1">
           <div>
             <div
-              onClick={() =>
-                this.setState({ editRecipiesOpen: !editRecipiesOpen })
-              }
+              onClick={() => this.setState({ editRecipiesOpen: !editRecipiesOpen })}
               className={`flex bg-recipeGray justify-between items-center h-12 text-xl font-light p-3 cursor-pointer 
-              ${
-                editRecipiesOpen
-                  ? "rounded-t-xl border-t border-l border-r border-gray-300"
-                  : "rounded-xl"
-              }`}
+              ${editRecipiesOpen ? "rounded-t-xl border-t border-l border-r border-gray-300" : "rounded-xl"}`}
             >
               <div className="flex justify-between items-center  h-full">
-                <p className="text-base sm:text-xs xl:text-base">
-                  Edit Recipies
-                </p>
+                <p className="text-base sm:text-xs xl:text-base">Edit Recipies</p>
               </div>
-              <Arrow
-                className="w-8 h-3"
-                style={{
-                  transform: editRecipiesOpen ? "rotateX(180deg)" : null,
-                }}
-              />
+              <Arrow className="w-8 h-3" style={{ transform: editRecipiesOpen ? "rotateX(180deg)" : null }} />
             </div>
             {editRecipiesOpen && (
               <div>
@@ -349,9 +298,7 @@ class EditPlan extends Component {
                   setKibble={this.displayKibble}
                   setFresh={this.displayCooked}
                 />
-                <div className="font-messina text-center font-bold py-8 text-black bg-recipeGray">
-                  Choose up to 2 recipes
-                </div>
+                <div className="font-messina text-center font-bold py-8 text-black bg-recipeGray">Choose 1 or 2 recipes per Order for {dog && dog.name}</div>
                 <RecipeSelection
                   user={user}
                   showCooked={showCooked}
@@ -366,80 +313,19 @@ class EditPlan extends Component {
                   toggleKibble={this.toggleKibble}
                   isKibble={this.state.isKibble}
                 />
-                <div className="bg-recipeGray p-3">
-                  <button
-                    onClick={() =>
-                      this.setState({
-                        editRecipiesOpen: false,
-                        editPortionsOpen: true,
-                      })
-                    }
-                    class="bg-white border border-green-700 hover:border-transparent focus:outline-none hover:bg-green-700 text-primary hover:text-white font-bold text-sm md:text-base  p-3 px-5 rounded-md border-green  mt-2 md:mt-0 w-full"
-                  >
-                    Edit Portions
-                  </button>
-                  <p className="text-center w-full my-4">or</p>
-                  <p className="font-messina mt-1">
-                    Your new subscription price will be{" "}
-                    <span class="text-green-500 font-bold">
-                      {" "}
-                      {!user.estimate
-                        ? `$${totalReadable}`
-                        : user.estimate.amount}
-                    </span>{" "}
-                    every 4 weeks
-                  </p>
-                  <button
-                    onClick={() => this.handleMealUpdate()}
-                    className="rounded-lg bg-green-700 border border-green-700 hover:border-transparent focus:outline-none text-white text-sm md:text-base font-bold p-3 w-full px-5 rounded mt-2 mb-4"
-                  >
-                    Save Changes
-                  </button>
-                  <div className="flex items-center flex-col mb-4">
-                    <div className="w-full p-6 bg-promptYellow rounded-1lg">
-                      <h4 className="text-left text-base font-semibold mb-1">
-                        Changes will apply to your March 4 delivery onwards
-                      </h4>
-                      <p className="text-left text-sm ">
-                        Email{" "}
-                        <a
-                          className="font-bold underline"
-                          href="mailto:help@kabo.co"
-                        >
-                          {" "}
-                          help@kabo.co{" "}
-                        </a>{" "}
-                        if you require additional help.
-                      </p>
-                    </div>
-                  </div>
-                </div>
               </div>
             )}
           </div>
           <div className="mt-4">
             <div
-              onClick={() =>
-                this.setState({ editPortionsOpen: !editPortionsOpen })
-              }
+              onClick={() => this.setState({ editPortionsOpen: !editPortionsOpen })}
               className={`flex bg-recipeGray justify-between items-center h-12 text-xl font-light p-3 cursor-pointer 
-              ${
-                editPortionsOpen
-                  ? "rounded-t-xl border-t border-l border-r border-gray-300"
-                  : "rounded-xl"
-              }`}
+              ${editPortionsOpen ? "rounded-t-xl border-t border-l border-r border-gray-300" : "rounded-xl"}`}
             >
               <div className="flex justify-between items-center  h-full">
-                <p className="text-base sm:text-xs xl:text-base">
-                  Edit Portions
-                </p>
+                <p className="text-base sm:text-xs xl:text-base">Edit Portions</p>
               </div>
-              <Arrow
-                className="w-8 h-3"
-                style={{
-                  transform: editPortionsOpen ? "rotateX(180deg)" : null,
-                }}
-              />
+              <Arrow className="w-8 h-3" style={{ transform: editPortionsOpen ? "rotateX(180deg)" : null }} />
             </div>
             {editPortionsOpen && (
               <div>
@@ -466,31 +352,28 @@ class EditPlan extends Component {
                   selectedLength={selectedLength}
                   toggleKibble={this.toggleKibble}
                   isKibble={this.state.isKibble}
-                  estimate={
-                    !user.estimate ? `$${totalReadable}` : user.estimate.amount
-                  }
-                  onConfirm={(e) => this.handleMealUpdate(e)}
                 />
               </div>
             )}
           </div>
         </div>
-        {step > 1 && (
-          <ConfirmMeal
-            dog={dog}
-            user={user}
-            open={true}
-            cookedRecipes={cookedRecipes}
-            index={this.props.match.params.id}
-            subs={user.subscriptions}
-            kibble={this.state.kibbleRecipes}
-            onClose={this.handlePrevious}
-            dietPortion={this.state.dietPortion}
-            estimate={user.estimate}
-            onConfirm={(e) => this.handleMealUpdate(e)}
-          />
-        )}
-      </div>
+        {
+          step > 1 && (
+            <ConfirmMeal
+              dog={dog}
+              user={user}
+              open={true}
+              cookedRecipes={cookedRecipes}
+              index={this.props.match.params.id}
+              subs={user.subscriptions}
+              kibble={this.state.kibbleRecipes}
+              onClose={this.handlePrevious}
+              dietPortion={this.state.dietPortion}
+              estimate={user.estimate}
+              onConfirm={(e) => this.handleMealUpdate(e)}
+            />)
+        }
+      </div >
     );
   }
 }
@@ -499,11 +382,9 @@ const mapDispatchToProps = (dispatch) => ({
   getAccountData: () => dispatch(userActions.getAccountData()),
   getRecipeData: () => dispatch(userActions.getRecipeData()),
   updateMealPlan: (payload) => dispatch(mealActions.updateMealPlan(payload)),
-  getDailyDietPortion: (payload) =>
-    dispatch(mealActions.getDailyDietPortion(payload)),
+  getDailyDietPortion: (payload) => dispatch(mealActions.getDailyDietPortion(payload)),
   getSubscriptionData: () => dispatch(userActions.getSubscriptionData()),
-  getSubscriptionEstimate: (data) =>
-    dispatch(userActions.getSubscriptionEstimate(data)),
+  getSubscriptionEstimate: (data) => dispatch(userActions.getSubscriptionEstimate(data)),
 });
 
 const mapStateToProps = (state, props) => {

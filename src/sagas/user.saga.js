@@ -79,9 +79,15 @@ function* cancelSubscriptionSaga(action) {
 function* pauseSubscriptionSaga(action) {
   try {
     const payload = yield call(userService.pauseSubscription, action.payload);
-    yield put({ type: userConstants.PAUSE_SUBSCRIPTION_SUCCESS, payload });
+    yield all([
+      put({ type: userConstants.PAUSE_SUBSCRIPTION_SUCCESS, payload }),
+      put(userActions.setUserLoading(userConstants.PAUSE_SUBSCRIPTION_REQUESTED, false))
+    ]);
   } catch (e) {
-    yield put({ type: otherConstants.REQUEST_ERROR, payload: e });
+    yield all([
+      put({ type: otherConstants.REQUEST_ERROR, payload: e }),
+      put(userActions.setUserLoading(userConstants.PAUSE_SUBSCRIPTION_REQUESTED, false)),
+    ]);
   }
 }
 
@@ -178,8 +184,7 @@ function* openSkipDeliveryModal(action) {
 function* skipDogDelivery(action) {
   try {
     const payload = yield call(userService.skipDogDelivery, action.payload);
-   
-    yield put({ type: userConstants.SKIP_DOG_DELIVERY_SUCCESS, payload});
+    yield put({ type: userConstants.SKIP_DOG_DELIVERY_SUCCESS, payload });
   } catch (error) {
     yield put({ type: userConstants.SKIP_DOG_DELIVERY_FAILED, payload: error });
   }
