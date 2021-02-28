@@ -265,6 +265,14 @@ class Onboarding extends Component {
               selectedDogs={selectedDogs}
               selectedKibble={this.selectedKibble}
               selectedCookedRecipes={this.selectedCookedRecipes}
+
+
+              temp_user={temp_user}
+              getting_diet_portion={this.props.getting_diet_portion}
+              diet_portions={this.props.diet_portions}
+              getDogDietPortion={this.props.getDogDietPortion}
+              dietPortions={dietPortions}
+              handleDietPortion={this.handleDietPortion}
             />
           )}
           {step === 4 && (

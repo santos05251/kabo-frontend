@@ -11,8 +11,8 @@ const DietPortionCard = ({ item, handleSelect, dietPortion, recipeTypes }) => {
     <div
       className={
         item.title === dietPortion.title
-          ? " flex flex-col w-full pt-4 px-4 pb-16 items-center bg-green-100 font-messina relative rounded-lg border border-gray-200"
-          : " flex flex-col w-full  pt-4 px-4 pb-16 items-center bg-white font-messina relative rounded-lg border border-gray-200"
+          ? " flex flex-col w-full pt-4 px-4 pb-4 items-center bg-green-100 font-messina relative rounded-lg border border-gray-200"
+          : " flex flex-col w-full  pt-4 px-4 pb-4 items-center bg-white font-messina relative rounded-lg border border-gray-200"
       }
     >
       {recipeTypes === "MIXED_COOKED_AND_KIBBLE_RECIPE_DAILY_PORTIONS" ? (
@@ -52,12 +52,12 @@ const DietPortionCard = ({ item, handleSelect, dietPortion, recipeTypes }) => {
       )}
       <p className="font-messina mt-1">{item.title}</p>
       <p className="font-messina mt-1">{item.description}</p>
-      <button
+      {/* <button
         className="bg-green-600 focus:bg-green-800 focus:outline-none absolute bottom-3.5 text-white font-medium py-2 px-4 rounded "
         onClick={(e) => handleSelect(item)}
       >
         Select Diet
-      </button>
+      </button> */}
     </div>
   );
 };

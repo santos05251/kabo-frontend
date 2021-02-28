@@ -31,6 +31,23 @@ module.exports = {
         promptYellow: "#FFF5E7",
         recipeGray: "#F2F5F4",
         lightGray: "#FAFAFA",
+        skinColor: "#fff5e8",
+        chicken: "#FF9C63",
+        beef: "#239C6D",
+        turkey: "#875D45",
+        lamb: "#9EC694",
+        kibble: {
+          chicken: "#FECD6D",
+          "turkey+salmon": "#FE766D",
+          duck: "#91CEB6",
+        },
+        label: "#2F3D33",
+      },
+      borderWidth: {
+        "3": "1.72532px",
+      },
+      borderColor: {
+        green: "#239C6D",
         chicken: "#FF9C63",
         beef: "#239C6D",
         turkey: "#875D45",
@@ -41,11 +58,11 @@ module.exports = {
           duck: "#91CEB6",
         },
       },
-      borderColor: {
-        green: "#239C6D",
-      },
       borderRadius: {
         "1lg": "0.625rem",
+        "2lg": "0.9rem",
+        "5md": "5.75108px",
+        "6md": "9px",
       },
       margin: {
         1.3: "0.312rem",
@@ -73,6 +90,23 @@ module.exports = {
       screens: {
         xl: "1280px",
       },
+    },
+    gridTemplateColumns: {
+      // Simple 16 column grid
+      "6/4": "55fr 45fr",
+      "1": "repeat(1, minmax(0, 1fr))",
+      "2": "repeat(2, minmax(0, 1fr))",
+      "3": "repeat(3, minmax(0, 1fr))",
+      "4": "repeat(4, minmax(0, 1fr))",
+      "5": "repeat(5, minmax(0, 1fr))",
+      "6": "repeat(6, minmax(0, 1fr))",
+      "7": "repeat(7, minmax(0, 1fr))",
+      "8": "repeat(8, minmax(0, 1fr))",
+      "9": "repeat(9, minmax(0, 1fr))",
+      "10": "repeat(10, minmax(0, 1fr))",
+      "11": "repeat(11, minmax(0, 1fr))",
+      "12": "repeat(12, minmax(0, 1fr))",
+      none: "none",
     },
   },
   variants: {
