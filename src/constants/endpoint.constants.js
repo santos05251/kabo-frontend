@@ -22,6 +22,12 @@ export const endpointConstants = {
   GET_SUBSCRIPTION_ESTIMATE: `${appDomain}/${apiVersion}/user/subscriptions/meal_plan/estimate`,
   UPDATE_DELIVERY_FREQUENCY: `${appDomain}/${apiVersion}/user/delivery_frequency`,
   SKIP_DOG_DELIVERY: `${appDomain}/${apiVersion}/user/subscriptions/skip_delivery`,
-  UPDATE_PHONE_EMAIL:`${appDomain}/${apiVersion}/user/contact`,
-  APPLY_COUPON:`${appDomain}/${apiVersion}/user/apply_coupon`,
+  UPDATE_PHONE_EMAIL: `${appDomain}/${apiVersion}/user/contact`,
+  APPLY_COUPON: `${appDomain}/${apiVersion}/user/apply_coupon`,
+
+  ONBOARDING_STARTER_STEP: `${appDomain}/${apiVersion}/onboarding/signup?step=start`,
+  ONBOARDING_DETAILS_STEP: `${appDomain}/${apiVersion}/onboarding/signup?step=detail`,
+  CREATE_TEMP_USER: `${appDomain}/${apiVersion}/onboarding/users`,
+  UPDATE_TEMP_USER: `${appDomain}/${apiVersion}/onboarding/users`,
+  GET_DOG_DIET_PORTION: `${appDomain}/${apiVersion}/onboarding/portions`,
 };
