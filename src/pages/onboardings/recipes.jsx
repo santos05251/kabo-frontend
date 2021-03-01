@@ -72,7 +72,7 @@ class Recipes extends Component {
   };
 
   render() {
-    const { user, dog_ } = this.props;
+    const { user, dog_, separateVersion } = this.props;
     const { kibble, cookedRecipes } = this.state;
 
     return (
@@ -88,6 +88,7 @@ class Recipes extends Component {
           kibble={kibble}
           toggleKibble={this.toggleKibble}
           isKibble={this.state.isKibble}
+          separateVersion={separateVersion}
         />
       </React.Fragment>
     );

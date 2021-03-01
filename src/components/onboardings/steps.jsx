@@ -4,7 +4,7 @@ import "./style.css";
 const Steps = ({ completePercent }) => {
   return (
     <section className="flex flex-col items-center">
-      <div className="on-boarding-form-container xs:px-5 xs:pt-5 md:pt-10">
+      <div className="on-boarding-form-container xs:px-5 pt-10 xs:pt-5 ">
         <div className="flex justify-between pb-3">
           {[
             { title: "Sign up" },

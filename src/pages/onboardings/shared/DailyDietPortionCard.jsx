@@ -14,6 +14,7 @@ const DietPortionCard = ({ item, handleSelect, dietPortion, recipeTypes }) => {
           ? " flex flex-col w-full pt-4 px-4 pb-4 items-center bg-green-100 font-messina relative rounded-lg border border-gray-200"
           : " flex flex-col w-full  pt-4 px-4 pb-4 items-center bg-white font-messina relative rounded-lg border border-gray-200"
       }
+      onClick={(e) => handleSelect(item)}
     >
       {recipeTypes === "MIXED_COOKED_AND_KIBBLE_RECIPE_DAILY_PORTIONS" ? (
         <div className="w-2/5 relative">
