@@ -24,6 +24,7 @@ module.exports = {
         secondary: "#124E37",
         charcoal: "#414141",
         lightGrey: "#525252",
+        labelGray: "#848484",
       },
       backgroundColor: {
         primary: "#239C6D",
