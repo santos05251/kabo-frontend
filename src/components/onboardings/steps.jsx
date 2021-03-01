@@ -8,7 +8,7 @@ const Steps = ({ completePercent }) => {
         <div className="flex justify-between pb-3">
           {[
             { title: "Sign up" },
-            { title: "Recipes" },
+            { title: "Recipes & Portions" },
             { title: "Checkout" },
           ].map((item, idx) => {
             return (
