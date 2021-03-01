@@ -13,7 +13,8 @@ import EditPlan from "./pages/meal-plan";
 import OrderDetail from "./pages/order/detail";
 import { RedirectRoute } from "./route/RedirectRoute";
 
-import Onboarding from "./pages/onboardings";
+import OnboardingSeparateVersion from "./pages/onboardings/separate-version";
+import OnboardingCombinedVersion from "./pages/onboardings/combined-version";
 import FinalStep from "./pages/onboardings/step-6";
 
 function App() {
@@ -25,7 +26,16 @@ function App() {
       <BrowserRouter>
         <Switch>
           <Route path="/onboarding/checkout" component={FinalStep} />
-          <Route path="/onboarding" component={Onboarding} />
+          <Route
+            path="/a/signup"
+            exact
+            component={OnboardingCombinedVersion}
+          />
+          <Route
+            path="/b/signup"
+            exact
+            component={OnboardingSeparateVersion}
+          />
           <Route path="/redirect" exact component={RedirectRoute} />
           <Route path="/login" component={LoginPage} />
           <PrivateRoute path="/orders" exact component={AllOrdersPage} />

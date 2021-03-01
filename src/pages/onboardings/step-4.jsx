@@ -28,6 +28,7 @@ class FourthStep extends Component {
       getting_diet_portion,
       dietPortions,
       handleDietPortion,
+      separateVersion,
     } = this.props;
     const { daily_portions } = this.props.diet_portions;
     return (
@@ -46,6 +47,7 @@ class FourthStep extends Component {
               selectedDietPortion={this.selectedDietPortion}
               dietPortions={dietPortions}
               handleDietPortion={handleDietPortion}
+              separateVersion={separateVersion}
             />
           ))}
       </React.Fragment>

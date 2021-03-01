@@ -25,8 +25,8 @@ class FirstStep extends Component {
     console.log("starter",onboarding_starter_data)
     return (
       <>
-        <section className="flex flex-col items-center xs:mx-5 xs:pb-5 md:pb-10 xs:pt-4 md:pt-8">
-          <div className="on-boarding-form-container">
+        <section className="flex flex-col items-center xs:mx-5 xs:pb-5 md:pb-5 xs:pt-4 md:pt-8">
+          <div className="on-boarding-form-container pt-5">
             <DogForm
               breeds={onboarding_starter_data && onboarding_starter_data.breeds}
               ages={onboarding_starter_data && onboarding_starter_data.ages}

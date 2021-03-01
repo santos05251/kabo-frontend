@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import chevron from "../../assets/images/chevron.svg";
+import Checkbox from "../global/Checkbox";
 
 const DropDown = ({
   options,
@@ -48,18 +49,18 @@ const DropDown = ({
           </ul>
         </div>
         {isCheckbox && helpText ? (
-          <div className="flex items-center mt-2">
-            <input
+          <div className="mt-2">
+            <Checkbox
               type="checkbox"
               className="h-4 w-4 mr-3"
               checked={isChecked}
               onChange={handleIsChecked}
+              label={helpText}
             />
-            <p className="text-gray-400 text-xs">{helpText}</p>
           </div>
         ) : (
           <div className="flex items-center mt-2">
-            <p className="text-gray-400 text-xs">{helpText}</p>
+            <p className="text-labelGray font-medium text-xs">{helpText}</p>
           </div>
         )}
       </div>
