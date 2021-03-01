@@ -3,16 +3,16 @@
 
 module.exports = {
   purge: {
-    content: ["./src/**/*.{js,jsx,ts,tsx}", "./public/index.html"],
+    content: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
     options: {
       safelist: [
-        "bg-chicken",
-        "bg-beef",
-        "bg-turkey",
-        "bg-lamb",
-        "bg-kibble-chicken",
-        "bg-kibble-turkey+salmon",
-        "bg-kibble-duck",
+        'bg-chicken',
+        'bg-beef',
+        'bg-turkey',
+        'bg-lamb',
+        'bg-kibble-chicken',
+        'bg-kibble-turkey+salmon',
+        'bg-kibble-duck',
       ],
     },
   },
@@ -20,26 +20,25 @@ module.exports = {
   theme: {
     extend: {
       textColor: {
-        primary: "#239C6D",
-        secondary: "#124E37",
-        charcoal: "#414141",
-        lightGrey: "#525252",
+        primary: '#239C6D',
+        secondary: '#124E37',
+        charcoal: '#414141',
+        lightGrey: '#525252',
       },
       backgroundColor: {
-        primary: "#239C6D",
-        account: "#F2F5F4",
-        promptYellow: "#FFF5E7",
-        recipeGray: "#F2F5F4",
-        lightGray: "#FAFAFA",
+        primary: '#239C6D',
+        account: '#F2F5F4',
+        promptYellow: '#FFF5E7',
+        recipeGray: '#F2F5F4',
         skinColor: "#fff5e8",
-        chicken: "#FF9C63",
-        beef: "#239C6D",
-        turkey: "#875D45",
-        lamb: "#9EC694",
+        chicken: '#FF9C63',
+        beef: '#239C6D',
+        turkey: '#875D45',
+        lamb: '#9EC694',
         kibble: {
-          chicken: "#FECD6D",
-          "turkey+salmon": "#FE766D",
-          duck: "#91CEB6",
+          chicken: '#FECD6D',
+          'turkey+salmon': '#FE766D',
+          duck: '#91CEB6',
         },
         label: "#2F3D33",
       },
@@ -65,30 +64,29 @@ module.exports = {
         "6md": "9px",
       },
       margin: {
-        1.3: "0.312rem",
-        4.5: "1.125rem",
-        5.5: "1.375rem",
+        1.3: '0.312rem',
+        4.5: '1.125rem',
+        5.5: '1.375rem',
       },
       padding: {
-        4.5: "1.125rem",
+        4.5: '1.125rem',
       },
       boxShadow: {
-        modal: "0px 8px 40px rgb(0 0 0 / 20%)",
-        profileBoxes: "0px 4px 28px rgba(0, 0, 0, 0.04)",
+        modal: '0px 8px 40px rgb(0 0 0 / 20%)',
       },
       width: {
-        7.3: "1.875rem",
-        13: "3.25rem",
+        7.3: '1.875rem',
+        13: '3.25rem',
       },
     },
     fontFamily: {
-      messina: ["Messinasans, sans-serif"],
-      cooper: ["Cooper", "sans-serif"],
+      messina: ['Messinasans, sans-serif'],
+      cooper: ['Cooper', 'sans-serif'],
     },
     container: {
       center: true,
       screens: {
-        xl: "1280px",
+        xl: '1280px',
       },
     },
     gridTemplateColumns: {
