@@ -232,6 +232,7 @@ class Onboarding extends Component {
 
   render() {
     const { dogs, step, cookedRecipes, kibble, dietPortions } = this.state;
+    
     const {
       onboarding_starter_data,
       getOnboardingDetails,
