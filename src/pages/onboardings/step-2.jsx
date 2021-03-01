@@ -240,7 +240,7 @@ const Steps = ({ steps, value, setValue }) => (
               }
               onClick={() => setValue(item.value)}
             />
-            <p className="absolute xs:-left-3 -left-8 mt-5  text-sm md:w-20">
+            <p className="absolute xs:-left-1 -left-8 md:mt-5  text-sm md:w-20">
               {item.label}
             </p>
           </div>

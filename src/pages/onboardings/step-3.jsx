@@ -131,7 +131,7 @@ class ThirdStep extends Component {
                     Save Changes
                   </button>
                 </div>
-                <div className="p-4 pl-5 pr-20 h-40  flex-col bg-skinColor rounded-lg">
+                <div className="p-4 pl-5 pr-20 xs:45 md:h-40  flex-col bg-skinColor rounded-lg">
                   <h2 className="text-lg pb-3 text-left font-semibold">
                     Changes will apply to your <br /> March 4 delivery onwards
                   </h2>
