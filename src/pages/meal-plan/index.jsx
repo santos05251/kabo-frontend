@@ -21,7 +21,7 @@ class EditPlan extends Component {
     kibbleRecipes: [],
     isKibble: false,
     selectedPortion: false,
-    estimate: false,
+    estimate: this.props.user?.estimate || false,
     dietPortion: {},
     dog: {},
     step: 0,
@@ -141,7 +141,6 @@ class EditPlan extends Component {
   handleNext = () => {
     if (this.state.step === 1) {
       const { cookedRecipes, kibbleRecipes, dietPortion, dog } = this.state;
-      console.log(kibbleRecipes)
       const data = {
         dog_id: dog.id,
         cooked_portion: dietPortion.cooked_portion,
@@ -215,12 +214,27 @@ class EditPlan extends Component {
     ///checking selected plans length.
     const selectedLength = filteredCooked + filteredKibble
 
-    if (selectedLength === 0 && !dirty) this.forceUpdate()
+    if (selectedLength === 0 && !dirty) this.forceUpdate();
+    let cbID = dog.chargebee_subscription_id;
+
+    let subData = user.subscriptions[cbID];
+
+    ////resolved NaN
+    let totalReadable =
+      subData && subData.invoice_estimate_total === "N/A"
+        ? 0
+        : subData && (subData.invoice_estimate_total / 100).toFixed(2);
+
     return (
       <div className="md:bg-recipeGray">
-        <div className="hidden md:block font-messina text-center font-bold py-8 text-black bg-recipeGray text-xl">
-          Choose 1 or 2 recipes per Order for {dog && dog.name}
-
+        <div className="hidden md:block font-messina text-center font-bold pt-5 text-black bg-recipeGray text-xl">
+          What's in {dog && dog.name}'s Box
+        </div>
+        <div className={"hidden md:block text-center py-5"}>
+          Choose up to 2 and click Save Changes{" "}
+        </div>
+        <div className="md:hidden font-messina text-center font-bold py-5 text-black text-xl">
+          What's in {dog && dog.name}'s Box
         </div>
         <div className="w-1/2 m-auto">
           <FreshOrKibble
@@ -270,8 +284,11 @@ class EditPlan extends Component {
               selectedLength={selectedLength}
               toggleKibble={this.toggleKibble}
               isKibble={this.state.isKibble}
+              estimate={
+                !user.estimate ? `$${totalReadable}` : user.estimate.amount
+              }
+              onConfirm={(e) => this.handleMealUpdate(e)}
             />
-
           </div>
         </div>
 
@@ -313,6 +330,54 @@ class EditPlan extends Component {
                   toggleKibble={this.toggleKibble}
                   isKibble={this.state.isKibble}
                 />
+                <div className="bg-recipeGray p-3">
+                  <button
+                    onClick={() =>
+                      this.setState({
+                        editRecipiesOpen: false,
+                        editPortionsOpen: true,
+                      })
+                    }
+                    class="bg-white border border-green-700 hover:border-transparent focus:outline-none hover:bg-green-700 text-primary hover:text-white font-bold text-sm md:text-base  p-3 px-5 rounded-md border-green  mt-2 md:mt-0 w-full"
+                  >
+                    Edit Portions
+                  </button>
+                  <p className="text-center w-full my-4">or</p>
+                  <p className="font-messina mt-1">
+                    Your new subscription price will be{" "}
+                    <span class="text-green-500 font-bold">
+                      {" "}
+                      {!user.estimate
+                        ? `$${totalReadable}`
+                        : user.estimate.amount}
+                    </span>{" "}
+                    every 4 weeks
+                  </p>
+                  <button
+                    onClick={() => this.handleMealUpdate()}
+                    className="rounded-lg bg-green-700 border border-green-700 hover:border-transparent focus:outline-none text-white text-sm md:text-base font-bold p-3 w-full px-5 rounded mt-2 mb-4"
+                  >
+                    Save Changes
+                  </button>
+                  <div className="flex items-center flex-col mb-4">
+                    <div className="w-full p-6 bg-promptYellow rounded-1lg">
+                      <h4 className="text-left text-base font-semibold mb-1">
+                        Changes will apply to your March 4 delivery onwards
+                      </h4>
+                      <p className="text-left text-sm ">
+                        Email{" "}
+                        <a
+                          className="font-bold underline"
+                          href="mailto:help@kabo.co"
+                        >
+                          {" "}
+                          help@kabo.co{" "}
+                        </a>{" "}
+                        if you require additional help.
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
             )}
           </div>
@@ -352,6 +417,10 @@ class EditPlan extends Component {
                   selectedLength={selectedLength}
                   toggleKibble={this.toggleKibble}
                   isKibble={this.state.isKibble}
+                  estimate={
+                    !user.estimate ? `$${totalReadable}` : user.estimate.amount
+                  }
+                  onConfirm={(e) => this.handleMealUpdate(e)}
                 />
               </div>
             )}

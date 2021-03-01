@@ -10,6 +10,8 @@ import DogSelector from './dog-selector.jsx';
 import { connect } from 'react-redux';
 
 import SuccessIcon from '../../assets/images/success-icon.svg';
+import {userSelectors} from "../../selectors/user.selectors";
+import {userConstants} from "../../constants";
 
 class UnpauseMealPlanModal extends React.Component {
   constructor(props) {
@@ -23,6 +25,9 @@ class UnpauseMealPlanModal extends React.Component {
   }
 
   setDog(i) {
+    if (this.props.setDog) {
+      this.props.setDog(i);
+    }
     this.setState({
       dogIndex: i
     })
@@ -40,8 +45,7 @@ class UnpauseMealPlanModal extends React.Component {
         : this.state.pauseUntil;
 
     this.setState({
-      showUnpauseBox: false,
-      showUnpauseBoxSuccess: true
+      processing: true
     });
 
     this.props.unpauseSubscription({
@@ -51,10 +55,17 @@ class UnpauseMealPlanModal extends React.Component {
     });
   }
 
-  render() {
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (this.state.processing) {
+      if (prevProps.loading && !this.props.loading && !this.props.error) {
+        this.setState({ isSuccess: true, processing: null });
+      }
+    }
+  }
 
+  render() {
     const { dogIndex } = this.state
-    const { dogs, user, unpauseSubscription } = this.props
+    const { dogs, user, error, errorMessage } = this.props
     const dogsLength = dogs.length
     const ccLastFour = user.card.last4
     const currentDog = dogs[dogIndex]
@@ -133,9 +144,17 @@ class UnpauseMealPlanModal extends React.Component {
             </UnpauseCard>
           </div>
           <br />
-          <Button filled={true} text="Unpause and continue" handleClick={() => {
-            this.setState({ isSuccess: true });
-          }}
+          {error  ? (
+              <div className="text-red-500 text-xs mt-1">
+                {errorMessage
+                    ? errorMessage
+                    : 'An error occured please try again later'}
+              </div>
+          ) : null}
+          <Button filled={true} text={this.props.isCancelled ? "Reactivate and continue" : "Unpause and continue"}
+                  handleClick={() => {
+                    this.unpauseMeal();
+                  }}
           />
         </>}
         {this.state.isSuccess &&
@@ -225,11 +244,14 @@ const mapDispatchToProps = (dispatch) => ({
 
 function mapStateToProps(state) {
   const { user } = state
-  const { subscriptions, dogs } = state.user
+  const { subscriptions, dogs, error, errorMessage } = state.user
   return {
     user,
     subscriptions,
     dogs,
+    error,
+    errorMessage: errorMessage && errorMessage.message,
+    loading: userSelectors.selectUserLoadingByKey(state, userConstants.UNPAUSE_SUBSCRIPTION_REQUESTED)
   }
 }
 

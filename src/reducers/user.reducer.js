@@ -107,16 +107,25 @@ export const user = (state = initialState, action) => {
       return {
         ...state,
         ...action.payload,
-        loading: true,
+        loadingKeys: {...state.loadingKeys, [userConstants.UNPAUSE_SUBSCRIPTION_REQUESTED]: true},
         error: false,
       };
-    case userConstants.UNPAUSE_SUBSCRIPTION_SUCCESS:
+    case userConstants.UNPAUSE_SUBSCRIPTION_SUCCESS: {
+      let nextState = {...state};
+      if (action.payload.subscription.id) {
+        //setting new state directly in subscriptions object
+        nextState.subscriptions[action.payload.subscription.id] = {
+          ...nextState.subscriptions[action.payload.subscription.id],
+          ...action.payload.subscription
+        };
+      }
       return {
-        ...state,
+        ...nextState,
         ...action.payload,
-        loading: false,
         error: false,
       };
+    }
+
     case otherConstants.REQUEST_ERROR:
       return {
         ...state,

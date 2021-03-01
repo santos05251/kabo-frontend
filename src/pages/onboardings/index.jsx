@@ -265,9 +265,6 @@ class Onboarding extends Component {
               selectedDogs={selectedDogs}
               selectedKibble={this.selectedKibble}
               selectedCookedRecipes={this.selectedCookedRecipes}
-
-
-              temp_user={temp_user}
               getting_diet_portion={this.props.getting_diet_portion}
               diet_portions={this.props.diet_portions}
               getDogDietPortion={this.props.getDogDietPortion}
@@ -302,7 +299,7 @@ class Onboarding extends Component {
                     : "border btn mx-5 border-green-600 xs:bg-green-600 xs:text-white md:bg-green-600 md:text-white  focus:outline-none rounded-lg py-3 px-20"
                 }
               >
-                Next+
+                Next
               </button>
             )}
             {step === 2 && (

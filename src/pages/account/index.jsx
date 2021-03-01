@@ -83,7 +83,7 @@ class AccountPage extends React.Component {
               <div className="w-8 h-8 mr-6">
                 <Icon className="w-full h-full" />
               </div>
-              <p className="text-base sm:text-xs xl:text-base">{text}</p>
+              <p className="text-xl sm:text-xl xl:text-2xl">{text}</p>
             </div>
             <Arrow
               className="w-8 h-3"
@@ -91,21 +91,6 @@ class AccountPage extends React.Component {
             />
           </div>
           {expanded && <Modal setDogIndex={this.setDogIndex} />}
-          {!expanded && !this.state.nextExpanded && stateValue === "nextExpanded" &&(
-            <div class="flex items-center flex-col mb-4 mt-5">
-              <div class="w-full p-6 bg-promptYellow rounded-1lg">
-                <h4 class="text-left text-base font-semibold mb-1">
-                  You have a coupon avaliable for Blake!
-                </h4>
-                <p class="text-left text-sm">
-                  Use the code <span className="font-bold"> SAVE20 </span>on
-                  your next delivery!
-                </p>
-
-                <a href={"/profile"} className="text-green-500 font-bold">Add cupon</a>
-              </div>
-            </div>
-          )}
         </div>
       );
     };
@@ -128,7 +113,7 @@ class AccountPage extends React.Component {
             <div className="flex justify-around w-3/4 md:w-auto md:justify-center">
               {profileImages}
             </div>
-            <div className="h-full text-xl text-center md:text-left font-bold md:m-6 font-messina">
+            <div className="h-full text-3xl text-center md:text-left font-bold md:m-6 font-messina">
               {readableNames} plan
             </div>
           </div>

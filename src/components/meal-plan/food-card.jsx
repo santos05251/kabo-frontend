@@ -21,8 +21,8 @@ const FoodCard = ({
   //const [recipe_, setRecipe] = useState("");
 
 
-  const selectedText = "bg-green-700 border border-green-700 hover:border-transparent focus:outline-none text-white text-sm md:text-base font-bold p-1 md:py-2 md:px-5 w-4/5 rounded-xl mt-2 md:mt-0"
-  const unSelectedText = "bg-transparent border border-green-700 hover:border-transparent focus:outline-none hover:bg-green-700 text-primary hover:text-white font-bold text-sm md:text-base w-4/5 p-1 md:py-2 md:px-5 rounded-xl border-green  mt-2 md:mt-0"
+  const selectedText = "bg-green-700 border border-green-700 hover:border-transparent focus:outline-none text-white text-sm md:text-base font-bold p-1 md:py-2 md:px-5 w-4/5 rounded-xl mt-2"
+  const unSelectedText = "bg-transparent border border-green-700 hover:border-transparent focus:outline-none hover:bg-green-700 text-primary hover:text-white font-bold text-sm md:text-base w-4/5 p-1 md:py-2 md:px-5 rounded-xl border-green  mt-2"
   return (
     <div className={`rounded-6md  w-full mb-4  md:flex-row flex-col overflow-hidden  ${selected ? `border-3 border-${food.recipe}`: `border-2 border-gray-200`}`}>
       <div

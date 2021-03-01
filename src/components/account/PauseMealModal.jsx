@@ -8,11 +8,12 @@ import Radio from '../global/radio';
 import { ReactComponent as FilledCircle } from '../../assets/images/filled-circle.svg';
 import { userActions } from '../../actions';
 import CancelReason from './cancel-reasons';
-import {userSelectors} from "../../selectors/user.selectors";
-import {userConstants} from "../../constants";
+import { userSelectors } from '../../selectors/user.selectors';
+import { userConstants } from '../../constants';
+import UnpauseMealPlanModal from './unpause-modal';
 
 const PauseMealModal = ({
-  dogIndex, dogs, subscriptions, error, errorMessage, loading, resetUserError, userName, pauseSubscription, closeModal,
+  dogIndex, dogs, subscriptions, error, errorMessage, loading, resetUserError, userName, pauseSubscription, cancelSubscription, closeModal,
 }) => {
   const [currentDogIndex, setCurrentDogIndex] = useState(dogIndex || 0);
   const [pauseBoxType, setPauseBoxType] = useState('MAIN');
@@ -33,18 +34,26 @@ const PauseMealModal = ({
       : moment(pauseUntil).format('YYYY-MM-DD');
     // set local state to listen loading props.
     setPauseProcessing(true);
-    pauseSubscription({
-      dogId,
-      pauseUntil: pauseUntilToSend,
-    })
+    if (pauseType !== 'cancel') {
+      pauseSubscription({
+        dogId,
+        pauseUntil: pauseUntilToSend,
+      })
+    }
+  };
+
+  const cancelMeal = () => {
+    cancelSubscription({
+      userId: currentDog.user_id, dog_id: currentDog.id, reason, type: 'forever',
+    });
   };
 
   useEffect(() => {
-      /// resetting error if it exists on initial rendering
-      if (error) {
-          resetUserError()
-      }
-    }, []);
+    /// resetting error if it exists on initial rendering
+    if (error) {
+      resetUserError()
+    }
+  }, []);
 
   useEffect(() => {
     /// listning loading props if local processing state true to display success message
@@ -54,127 +63,161 @@ const PauseMealModal = ({
       }
     }
   }, [loading]);
-  const statuses = Object.keys(subscriptions).map((key) => ({ dog_id: subscriptions[key].dog_id, status: subscriptions[key].status }));
-  // calculating what status of selected dog.
-  const isPaused = statuses.filter((s) => +s.dog_id === +currentDog.id && s.status !== 'active').length;
+
+  let dogSubscription = {};
+
+  Object.keys(subscriptions).forEach((key) => {
+    if (+subscriptions[key].dog_id === +currentDog.id) {
+      dogSubscription = subscriptions[key];
+    }
+  });
+
+  const isPaused = dogSubscription.status !== 'active';
+
+  const options = [
+    {
+      value: '1_delivery',
+      text: `Pause ${currentDog.name}'s account for 1 delivery`,
+      displayText: 'for 1 delivery',
+    },
+    {
+      value: '2_deliveries',
+      text: `Pause ${currentDog.name}'s account for 2 deliveries`,
+      displayText: 'for 2 deliveries',
+    },
+    {
+      value: 'forever',
+      text: `Pause ${currentDog.name}'s account indefinitley`,
+      displayText: 'forever',
+    },
+    {
+      value: 'specific',
+      text: (
+        <>
+          <span>
+            Pause until &nbsp;
+            {pauseUntil === null
+              ? 'a specific date'
+              : moment(pauseUntil).format(
+                'MMM DD, YYYY',
+              )}
+          </span>
+                    &nbsp;
+          {pauseUntil !== null && (
+          <span
+            className="text-primary text-sm"
+            onClick={() => setPauseBoxType('TIME')}
+          >
+            Edit Date
+          </span>
+          )}
+        </>
+      ),
+      displayText: 'for 1 delivery',
+      onChange: () => {
+        if (pauseUntil === null) {
+          setPauseBoxType('TIME')
+        } else {
+          setPauseType('specific')
+        }
+      },
+    },
+    {
+      value: 'cancel',
+      text: 'Cancel deliveries',
+      displayText: 'cancel',
+    },
+  ];
+
   return pauseBoxType === 'MAIN'
     ? (
       <div className="p-6">
-        <div className="p-6">
-          {dogs.length > 1 && (
-            <DogSelector
+        {isPaused
+          ? (
+            <UnpauseMealPlanModal
               dogs={dogs}
               setDog={setCurrentDogIndex}
               dogIndex={currentDogIndex}
+              isCancelled={dogSubscription.status === 'cancelled'}
             />
+          )
+          : (
+            <>
+              <div className="p-6">
+                {dogs.length > 1 && (
+                <DogSelector
+                  dogs={dogs}
+                  setDog={setCurrentDogIndex}
+                  dogIndex={currentDogIndex}
+                />
+                )}
+              </div>
+              <div className="lg:flex justify-between lg:mb-12 mb-8">
+                <div className="lg:w-96">
+                  <MealPlanCard noPrice dogIndex={currentDogIndex} />
+                </div>
+                <div className="mt-6 sm:mt-0">
+                  <a
+                    className="text-sm font-semibold text-primary lg:mr-2 cursor-pointer"
+                    href={`/edit-plan/${currentDogIndex}`}
+                  >
+                    Select a different meal plan
+                  </a>
+                </div>
+              </div>
+              <div className="lg:flex justify-between lg:mb-9">
+                <div className="lg:w-80">
+                  {options.map((opt, i) => (
+                    <Radio
+                      key={opt.value + i}
+                      value={opt.value}
+                      text={opt.text}
+                      onChange={() => {
+                        if (opt.value === 'specific') {
+                          if (pauseUntil === null) {
+                            setPauseBoxType('TIME')
+                          } else {
+                            setPauseType('specific')
+                          }
+                        } else {
+                          setPauseType(opt.value)
+                          setPauseDisplay(opt.displayText)
+                        }
+                      }}
+                      selected={pauseType === opt.value}
+                      className={i === options.length - 1 ? '' : 'mb-7'}
+                    />
+                  ))}
+                </div>
+                <div className="mt-7 mb-6 sm:m-0">
+                  <div className="lg:w-72 p-6 bg-promptYellow rounded-1lg">
+                    <h3 className="text-base font-semibold mb-1.3">
+                      You can unpause anytime
+                    </h3>
+                    <p className="text-sm">
+                      Keep in mind you can pause your account at anytime
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div>
+                {error || isPaused ? (
+                  <div className="text-red-500 text-s mt-1">
+                    {isPaused
+                      ? 'This subscription already paused'
+                      : 'An error occured please try again later'}
+                  </div>
+                ) : null}
+                <button
+                  className={`rounded-xl py-3 px-8 ${loading ? 'opacity-50' : ''} text-base font-bold bg-primary text-white`}
+                  onClick={() => (pauseType === 'cancel' ? setPauseBoxType('REASON') : pauseMeal())}
+                  disabled={loading}
+                >
+                  {pauseType === 'cancel' ? 'Next' : 'Confirm'}
+                </button>
+              </div>
+            </>
           )}
-        </div>
-
-        <div className="lg:flex justify-between lg:mb-12 mb-8">
-          <div className="lg:w-96">
-            <MealPlanCard noPrice dogIndex={currentDogIndex} />
-          </div>
-          <div className="mt-6 sm:mt-0">
-            <a
-              className="text-sm font-semibold text-primary lg:mr-2 cursor-pointer"
-              href={`/edit-plan/${currentDogIndex}`}
-            >
-              Select a different meal plan
-            </a>
-          </div>
-        </div>
-        <div className="lg:flex justify-between lg:mb-9">
-          <div className="lg:w-80">
-            <Radio
-              value="1_week"
-              text={`Pause ${currentDog.name} account for 1 delivery`}
-              onChange={() => {
-                setPauseType('1_delivery')
-                setPauseDisplay('for 1 delivery')
-              }}
-              selected={pauseType === '1_delivery'}
-              className="mb-7"
-            />
-            <Radio
-              value="2_week"
-              text={`Pause ${currentDog.name} account for 2 deliveries`}
-              onChange={() => {
-                setPauseType('2_deliveries')
-                setPauseDisplay('for 2 deliveries')
-              }}
-              selected={pauseType === '2_deliveries'}
-              className="mb-7"
-            />
-            <Radio
-              value="forever"
-              text={`Pause ${currentDog.name} account indefinitley`}
-              onChange={() => {
-                setPauseType('forever')
-                setPauseDisplay('forever')
-              }}
-              selected={pauseType === 'forever'}
-              className="mb-7"
-            />
-            <Radio
-              value="specific"
-              text={(
-                <>
-                  <span>
-                    Pause until &nbsp;
-                    {pauseUntil === null
-                      ? 'a specific date'
-                      : moment(pauseUntil).format(
-                        'MMM DD, YYYY',
-                      )}
-                  </span>
-                                &nbsp;
-                  {pauseUntil !== null && (
-                    <span
-                      className="text-primary text-sm"
-                      onClick={() => setPauseBoxType('TIME')}
-                    >
-                      Edit Date
-                    </span>
-                  )}
-                </>
-                          )}
-              onChange={() => {
-                if (pauseUntil === null) {
-                  setPauseBoxType('TIME')
-                } else {
-                  setPauseType('specific')
-                }
-              }}
-              selected={pauseType === 'specific'}
-            />
-          </div>
-          <div className="mt-7 mb-6 sm:m-0">
-            <div className="lg:w-72 p-6 bg-promptYellow rounded-1lg">
-              <h3 className="text-base font-semibold mb-1.3">
-                You can unpause anytime
-              </h3>
-              <p className="text-sm">
-                Keep in mind you can pause your account at anytime
-              </p>
-            </div>
-          </div>
-        </div>
-        <div>
-          {error || isPaused ? (
-            <div className="text-red-500 text-s mt-1">
-              {isPaused
-                ? 'This subscription already paused'
-                : 'An error occured please try again later'}
-            </div>
-          ) : null}
-          <button
-            className={`rounded-xl py-3 px-8 ${isPaused ? 'opacity-50' : ''} text-base font-bold bg-primary text-white`}
-            onClick={() => setPauseBoxType('REASON')}
-            // disabled={!isPaused}
-          >
-            Next
-          </button>
-        </div>
       </div>
     )
     : pauseBoxType === 'TIME'
@@ -219,17 +262,17 @@ const PauseMealModal = ({
               dogName={currentDog.name}
               lastName={userName}
             />
-              {error  ? (
-                  <div className="text-red-500 text-xs mt-1">
-                      {errorMessage && errorMessage.message
-                          ? errorMessage.message
-                          : 'An error occured please try again later'}
-                  </div>
-              ) : null}
+            {error ? (
+              <div className="text-red-500 text-xs mt-1">
+                {errorMessage && errorMessage.message
+                  ? errorMessage.message
+                  : 'An error occured please try again later'}
+              </div>
+            ) : null}
             <button
               className={`rounded-xl py-3 px-8 ${!reason ? 'opacity-50' : ''} text-base font-bold bg-primary text-white`}
-              onClick={pauseMeal}
-              disabled={!reason}
+              onClick={cancelMeal}
+              disabled={!reason || loading}
             >
               Confirm
             </button>
@@ -271,6 +314,7 @@ const PauseMealModal = ({
 }
 
 const mapDispatchToProps = (dispatch) => ({
+  cancelSubscription: async (dogId) => dispatch(userActions.cancelSubscription(dogId)),
   pauseSubscription: async (data) => dispatch(userActions.pauseSubscription(data)),
   resetUserError: () => dispatch(userActions.resetUserError()),
 });
@@ -285,7 +329,8 @@ const mapStateToProps = (state) => {
     error,
     errorMessage,
     userName: user.last_name ? user.last_name : user.first_name ? user.first_name : 'Customer',
-    loading: userSelectors.selectUserLoadingByKey(state, userConstants.PAUSE_SUBSCRIPTION_REQUESTED),
+    loading: userSelectors.selectUserLoadingByKey(state, userConstants.PAUSE_SUBSCRIPTION_REQUESTED)
+        || userSelectors.selectUserLoadingByKey(state, userConstants.CANCEL_SUBSCRIPTION_REQUESTED),
   };
 };
 

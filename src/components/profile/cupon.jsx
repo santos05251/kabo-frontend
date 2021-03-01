@@ -18,19 +18,6 @@ const Cupon = ({ addCoupon, couponResponse, userError }) => {
   return (
     <div>
       <div className="flex-auto text-2xl font-cooper mb-3 md:mb-6">Coupons</div>
-      {!couponResponse && (
-        <div class="flex items-center flex-col mb-4">
-          <div class="w-full p-6 bg-promptYellow rounded-1lg">
-            <h4 class="text-left text-base font-semibold mb-1">
-              You have a coupon avaliable for Blake!
-            </h4>
-            <p class="text-left text-sm">
-              Use the code <span className="font-bold"> SAVE20 </span>on your
-              next delivery!
-            </p>
-          </div>
-        </div>
-      )}
 
       <form className="py-4" action="" onSubmit={handleSubmit}>
         <label className="pb-4">Enter coupon code below</label>

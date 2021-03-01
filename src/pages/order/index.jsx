@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { userActions } from '../../actions';
 import Loader from "../../loaders/ordersPage";
+import OrderTable from "../../components/global/OrderTable";
 class AllOrdersPage extends React.Component {
   constructor(props) {
     super(props);
@@ -26,20 +27,8 @@ class AllOrdersPage extends React.Component {
             </div>
           </div>
           {orders.length !== 0 ? (
-            <div className="flex gap-2 md:gap-3 justify-center flex-wrap max-w-2xl">
-              {orders.map((one, index) => {
-                return (
-                  <div className="w-72 p-5 mx-2 border border-gray-200 rounded-xl">
-                    <div className="text-2xl font-bold mb-1">Order #{one.invoice_id}</div>
-                    <div className="text-xs mb-2">
-                      {one.items?.length ?? 0} items ({one.total})
-                    </div>
-                    <Link className="text-primary text-xs font-bold cursor-pointer" to={"/orders/" + one.invoice_id}>
-                      View Order
-                    </Link>
-                  </div>
-                );
-              })}
+            <div>
+              <OrderTable orders={orders} background="bg-lightGray" />
             </div>
           ) : (
             <Loader />

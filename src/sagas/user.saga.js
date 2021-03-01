@@ -77,6 +77,7 @@ function* cancelSubscriptionSaga(action) {
 }
 
 function* pauseSubscriptionSaga(action) {
+  // need to check response of `/user/subscriptions/pause`
   try {
     const payload = yield call(userService.pauseSubscription, action.payload);
     yield all([
@@ -94,9 +95,15 @@ function* pauseSubscriptionSaga(action) {
 function* unpauseSubscriptionSaga(action) {
   try {
     const payload = yield call(userService.unpauseSubscription, action.payload);
-    yield put({ type: userConstants.UNPAUSE_SUBSCRIPTION_SUCCESS, payload });
+    yield all([
+      put({ type: userConstants.UNPAUSE_SUBSCRIPTION_SUCCESS, payload }),
+      put(userActions.setUserLoading(userConstants.UNPAUSE_SUBSCRIPTION_REQUESTED, false))
+    ]);
   } catch (e) {
-    yield put({ type: otherConstants.REQUEST_ERROR, payload: e });
+    yield all([
+      put({ type: otherConstants.REQUEST_ERROR, payload: e }),
+      put(userActions.setUserLoading(userConstants.UNPAUSE_SUBSCRIPTION_REQUESTED, false)),
+    ]);
   }
 }
 
