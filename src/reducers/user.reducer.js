@@ -1,7 +1,7 @@
-import { userConstants, otherConstants } from "../constants";
+import { userConstants, otherConstants } from '../constants';
 
-const couponResponse = localStorage.getItem("couponResponse")
-  ? JSON.parse(localStorage.getItem("couponResponse"))
+const couponResponse = localStorage.getItem('couponResponse')
+  ? JSON.parse(localStorage.getItem('couponResponse'))
   : null;
 const initialState = {
   subscriptions: {},
@@ -11,7 +11,7 @@ const initialState = {
   error: false,
   loading: true,
   loadingKeys: {},
-
+  estimate: null,
   open_payment_modal: false,
   updating_payment_method: false,
   payment_method_updated: false,
@@ -62,6 +62,12 @@ export const user = (state = initialState, action) => {
       return {
         ...state,
         estimate: { ...action.payload },
+        loading: false,
+      };
+    case userConstants.ESTIMATE_FAILED:
+      return {
+        ...state,
+        estimate: null,
         loading: false,
       };
     case userConstants.UPDATE_DELIVERY_FREQUENCY_SUCCESS:
@@ -168,8 +174,8 @@ export const user = (state = initialState, action) => {
     case userConstants.UPDATE_PWD_ALERT_CLEAR:
       return {
         ...state,
-        pwd_update_success: " ",
-        pwd_alert: " ",
+        pwd_update_success: ' ',
+        pwd_alert: ' ',
       };
     case userConstants.OPEN_UPDATE_PAYMENT_MODAL_SUCCESS:
       return {
@@ -195,15 +201,15 @@ export const user = (state = initialState, action) => {
         open_payment_modal: !state.open_payment_modal,
         payment_method_updated: true,
         payment_billing_address: {
-          stripe_token: "",
-          same_as_shipping_address: "",
-          billing_first_name: "",
-          billing_last_name: "",
-          billing_street_address: "  ",
-          billing_apt_suite: "",
-          billing_city: "",
-          billing_postal_code: "",
-          billing_phone_number: "",
+          stripe_token: '',
+          same_as_shipping_address: '',
+          billing_first_name: '',
+          billing_last_name: '',
+          billing_street_address: '  ',
+          billing_apt_suite: '',
+          billing_city: '',
+          billing_postal_code: '',
+          billing_phone_number: '',
         },
       };
 
@@ -266,7 +272,7 @@ export const user = (state = initialState, action) => {
       return {
         ...state,
         error: false,
-        errorMessage: "",
+        errorMessage: '',
       };
     case userConstants.RESET_USER_LOADING:
       return {
@@ -277,22 +283,22 @@ export const user = (state = initialState, action) => {
       return {
         ...state,
         loading: true,
-        errorMessage: "",
+        errorMessage: '',
       };
     case userConstants.APPLY_COUPON_SUCCESS:
-      localStorage.setItem("couponResponse", JSON.stringify(action.payload));
+      localStorage.setItem('couponResponse', JSON.stringify(action.payload));
 
       return {
         ...state,
         loading: false,
-        errorMessage: "",
+        errorMessage: '',
         couponResponse: action.payload,
       };
     case userConstants.APPLY_COUPON_FAILURE:
-      localStorage.removeItem("couponResponse");
+      localStorage.removeItem('couponResponse');
       return {
         ...state,
-        errorMessage: "Invalid coupon",
+        errorMessage: 'Invalid coupon',
         loading: false,
       };
     case userConstants.SET_USER_LOADING: {

@@ -166,6 +166,7 @@ class EditPlan extends Component {
       data[`${item}_recipe`] = true;
     }
     this.props.getSubscriptionEstimate(data);
+    
   };
 
   handlePrevious = () => {
@@ -311,7 +312,7 @@ class EditPlan extends Component {
               toggleKibble={this.toggleKibble}
               isKibble={this.state.isKibble}
               estimate={
-                !user.estimate ? `$${totalReadable}` : user.estimate.amount
+                !user.estimate ? null : user.estimate.amount
               }
               onConfirm={(e) => this.handleMealUpdate(e)}
             />
@@ -389,11 +390,12 @@ class EditPlan extends Component {
                     <span class="text-green-500 font-bold">
                       {' '}
                       {!user.estimate
-                        ? `$${totalReadable}`
+                        ? null
                         : user.estimate.amount}
                     </span>{' '}
                     every 4 weeks
                   </p>
+
                   <button
                     onClick={() => this.handleMealUpdate()}
                     className="rounded-lg bg-green-700 border border-green-700 hover:border-transparent focus:outline-none text-white text-sm md:text-base font-bold p-3 w-full px-5 rounded mt-2 mb-4"
@@ -472,7 +474,7 @@ class EditPlan extends Component {
                   toggleKibble={this.toggleKibble}
                   isKibble={this.state.isKibble}
                   estimate={
-                    !user.estimate ? `$${totalReadable}` : user.estimate.amount
+                    !user.estimate ? null : user.estimate.amount
                   }
                   onConfirm={(e) => this.handleMealUpdate(e)}
                 />

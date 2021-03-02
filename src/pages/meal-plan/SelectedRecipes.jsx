@@ -1,7 +1,7 @@
-import React, { Component } from "react";
-import LoadingCircle from "../../components/partials/loading";
-import MealPlanSelect from "../../components/meal-plan/meal-plan-select";
-import DisplaySelected from "../../components/meal-plan/display-selected";
+import React, { Component } from 'react';
+import LoadingCircle from '../../components/partials/loading';
+import MealPlanSelect from '../../components/meal-plan/meal-plan-select';
+import DisplaySelected from '../../components/meal-plan/display-selected';
 
 class SelectedRecipes extends Component {
   handleChange = (selectedDog) => {
@@ -20,7 +20,7 @@ class SelectedRecipes extends Component {
       selectedCookedRecipes,
       selectedLength,
       estimate,
-      onConfirm
+      onConfirm,
     } = this.props;
     return (
       <div className="flex flex-col py-9 items-center bg-recipeGray">
@@ -49,16 +49,26 @@ class SelectedRecipes extends Component {
                 selectedLength={selectedLength}
               />
             </div>
-            <div>
-              <p className="font-messina mt-1">
-                Your new subscription price will be{" "}
-                <span className="text-green-500 font-bold"> {estimate} </span> every
-                4 weeks
-              </p>
-            </div>
-            <button onClick={()=>onConfirm()} className="rounded-lg bg-green-700 border border-green-700 hover:border-transparent focus:outline-none text-white text-sm md:text-base font-bold p-3 md:py-2 md:px-5  rounded mt-2 md:mt-0">
-              Save Changes
-            </button>
+            {estimate && (
+              <div>
+                <div>
+                  <p className="font-messina mt-1">
+                    Your new subscription price will be{' '}
+                    <span className="text-green-500 font-bold">
+                      {' '}
+                      {estimate}{' '}
+                    </span>{' '}
+                    every 4 weeks
+                  </p>
+                </div>
+                <button
+                  onClick={() => onConfirm()}
+                  className="rounded-lg bg-green-700 border border-green-700 hover:border-transparent focus:outline-none text-white text-sm md:text-base font-bold p-3 md:py-2 md:px-5  rounded mt-2"
+                >
+                  Save Changes
+                </button>
+              </div>
+            )}
 
             <div className="flex items-center flex-col mb-4">
               <div className="w-full p-6 bg-promptYellow rounded-1lg">
@@ -66,11 +76,11 @@ class SelectedRecipes extends Component {
                   Changes will apply to your March 4 delivery onwards
                 </h4>
                 <p className="text-left text-sm ">
-                  Email{" "}
+                  Email{' '}
                   <a className="font-bold underline" href="mailto:help@kabo.co">
-                    {" "}
-                    help@kabo.co{" "}
-                  </a>{" "}
+                    {' '}
+                    help@kabo.co{' '}
+                  </a>{' '}
                   if you require additional help.
                 </p>
               </div>
