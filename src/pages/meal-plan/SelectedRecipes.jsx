@@ -49,16 +49,26 @@ class SelectedRecipes extends Component {
                 selectedLength={selectedLength}
               />
             </div>
-            <div>
-              <p className="font-messina mt-1">
-                Your new subscription price will be{" "}
-                <span className="text-green-500 font-bold"> {estimate} </span> every
-                4 weeks
-              </p>
-            </div>
-            <button onClick={()=>onConfirm()} className="rounded-lg bg-green-700 border border-green-700 hover:border-transparent focus:outline-none text-white text-sm md:text-base font-bold p-3 md:py-2 md:px-5  rounded mt-2 md:mt-0">
-              Save Changes
-            </button>
+            {estimate && (
+              <div>
+                <div>
+                  <p className="font-messina mt-1">
+                    Your new subscription price will be{" "}
+                    <span className="text-green-500 font-bold">
+                      {" "}
+                      {estimate}{" "}
+                    </span>{" "}
+                    every 4 weeks
+                  </p>
+                </div>
+                <button
+                  onClick={() => onConfirm()}
+                  className="rounded-lg bg-green-700 border border-green-700 hover:border-transparent focus:outline-none text-white text-sm md:text-base font-bold p-3 md:py-2 md:px-5  rounded mt-2"
+                >
+                  Save Changes
+                </button>
+              </div>
+            )}
 
             <div className="flex items-center flex-col mb-4">
               <div className="w-full p-6 bg-promptYellow rounded-1lg">

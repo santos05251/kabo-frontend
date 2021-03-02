@@ -11,7 +11,7 @@ const initialState = {
   error: false,
   loading: true,
   loadingKeys: {},
-
+  estimate: null,
   open_payment_modal: false,
   updating_payment_method: false,
   payment_method_updated: false,
