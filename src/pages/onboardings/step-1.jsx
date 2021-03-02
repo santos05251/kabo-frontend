@@ -22,7 +22,6 @@ class FirstStep extends Component {
 
   render() {
     const { onboarding_starter_data, addDogs } = this.props;
-    console.log("starter",onboarding_starter_data)
     return (
       <>
         <section className="flex flex-col items-center xs:mx-5 xs:pb-5 md:pb-5 xs:pt-4 md:pt-8">

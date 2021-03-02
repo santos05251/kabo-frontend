@@ -1,4 +1,4 @@
-import { userConstants, otherConstants } from '../constants';
+import { userConstants, otherConstants } from "../constants";
 
 const couponResponse = localStorage.getItem("couponResponse")
   ? JSON.parse(localStorage.getItem("couponResponse"))
@@ -20,6 +20,9 @@ const initialState = {
   open_skip_delivery_modal: false,
   skipping_dog_delivery: false,
   couponResponse,
+
+  loading_notifications: false,
+  user_notifications: [],
 };
 
 export const user = (state = initialState, action) => {
@@ -86,37 +89,44 @@ export const user = (state = initialState, action) => {
       return {
         ...state,
         pauseInfo: action.payload,
-        loadingKeys: {...state.loadingKeys, [userConstants.PAUSE_SUBSCRIPTION_REQUESTED]: true},
+        loadingKeys: {
+          ...state.loadingKeys,
+          [userConstants.PAUSE_SUBSCRIPTION_REQUESTED]: true,
+        },
         error: false,
       };
-    case userConstants.PAUSE_SUBSCRIPTION_SUCCESS:
-      let nextState = {...state};
+    case userConstants.PAUSE_SUBSCRIPTION_SUCCESS: {
+      let nextState = { ...state };
       if (action.payload.subscription.id) {
         //setting new state directly in subscriptions object
         nextState.subscriptions[action.payload.subscription.id] = {
           ...nextState.subscriptions[action.payload.subscription.id],
-          ...action.payload.subscription
+          ...action.payload.subscription,
         };
       }
       return {
         ...nextState,
         error: false,
       };
+    }
 
     case userConstants.UNPAUSE_SUBSCRIPTION_REQUESTED:
       return {
         ...state,
         ...action.payload,
-        loadingKeys: {...state.loadingKeys, [userConstants.UNPAUSE_SUBSCRIPTION_REQUESTED]: true},
+        loadingKeys: {
+          ...state.loadingKeys,
+          [userConstants.UNPAUSE_SUBSCRIPTION_REQUESTED]: true,
+        },
         error: false,
       };
     case userConstants.UNPAUSE_SUBSCRIPTION_SUCCESS: {
-      let nextState = {...state};
+      let nextState = { ...state };
       if (action.payload.subscription.id) {
         //setting new state directly in subscriptions object
         nextState.subscriptions[action.payload.subscription.id] = {
           ...nextState.subscriptions[action.payload.subscription.id],
-          ...action.payload.subscription
+          ...action.payload.subscription,
         };
       }
       return {
@@ -158,8 +168,8 @@ export const user = (state = initialState, action) => {
     case userConstants.UPDATE_PWD_ALERT_CLEAR:
       return {
         ...state,
-        pwd_update_success: ' ',
-        pwd_alert: ' ',
+        pwd_update_success: " ",
+        pwd_alert: " ",
       };
     case userConstants.OPEN_UPDATE_PAYMENT_MODAL_SUCCESS:
       return {
@@ -185,15 +195,15 @@ export const user = (state = initialState, action) => {
         open_payment_modal: !state.open_payment_modal,
         payment_method_updated: true,
         payment_billing_address: {
-          stripe_token: '',
-          same_as_shipping_address: '',
-          billing_first_name: '',
-          billing_last_name: '',
-          billing_street_address: '  ',
-          billing_apt_suite: '',
-          billing_city: '',
-          billing_postal_code: '',
-          billing_phone_number: '',
+          stripe_token: "",
+          same_as_shipping_address: "",
+          billing_first_name: "",
+          billing_last_name: "",
+          billing_street_address: "  ",
+          billing_apt_suite: "",
+          billing_city: "",
+          billing_postal_code: "",
+          billing_phone_number: "",
         },
       };
 
@@ -232,16 +242,19 @@ export const user = (state = initialState, action) => {
       return {
         ...state,
         cancelationInfo: action.payload,
-        loadingKeys: {...state.loadingKeys, [userConstants.CANCEL_SUBSCRIPTION_REQUESTED]: true},
+        loadingKeys: {
+          ...state.loadingKeys,
+          [userConstants.CANCEL_SUBSCRIPTION_REQUESTED]: true,
+        },
         error: false,
       };
     }
     case userConstants.CANCEL_SUBSCRIPTION_SUCCESS: {
-      let nextState = {...state};
+      let nextState = { ...state };
       if (action.payload.subscription.id) {
         nextState.subscriptions[action.payload.subscription.id] = {
           ...nextState.subscriptions[action.payload.subscription.id],
-          ...action.payload.subscription
+          ...action.payload.subscription,
         };
       }
       return {
@@ -253,7 +266,7 @@ export const user = (state = initialState, action) => {
       return {
         ...state,
         error: false,
-        errorMessage: '',
+        errorMessage: "",
       };
     case userConstants.RESET_USER_LOADING:
       return {
@@ -264,7 +277,7 @@ export const user = (state = initialState, action) => {
       return {
         ...state,
         loading: true,
-        errorMessage:'',
+        errorMessage: "",
       };
     case userConstants.APPLY_COUPON_SUCCESS:
       localStorage.setItem("couponResponse", JSON.stringify(action.payload));
@@ -272,7 +285,7 @@ export const user = (state = initialState, action) => {
       return {
         ...state,
         loading: false,
-        errorMessage:'',
+        errorMessage: "",
         couponResponse: action.payload,
       };
     case userConstants.APPLY_COUPON_FAILURE:
@@ -286,7 +299,7 @@ export const user = (state = initialState, action) => {
       let newState = state;
       if (action.key) {
         if (!newState.loadingKeys[action.key] && action.value) {
-          newState = {...state}
+          newState = { ...state };
           newState.loadingKeys[action.key] = action.value;
         } else if (
           !action.value &&
@@ -298,6 +311,25 @@ export const user = (state = initialState, action) => {
       }
       return newState;
     }
+
+    case userConstants.GET_USER_NOTIFICATIONS:
+      return {
+        ...state,
+        loading_notifications: true,
+      };
+
+    case userConstants.GET_USER_NOTIFICATIONS_SUCCESS:
+      return {
+        ...state,
+        loading_notifications: false,
+        user_notifications: action.payload,
+      };
+
+    case userConstants.GET_USER_NOTIFICATIONS_FAILED:
+      return {
+        ...state,
+        loading_notifications: false,
+      };
     default:
       return state;
   }

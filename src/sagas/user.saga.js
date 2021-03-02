@@ -1,8 +1,8 @@
-import { takeLatest, call, put, all } from 'redux-saga/effects';
+import { takeLatest, call, put, all } from "redux-saga/effects";
 
-import { userService } from '../services';
-import { userConstants, otherConstants } from '../constants';
-import {userActions} from "../actions/user.action";
+import { userService } from "../services";
+import { userConstants, otherConstants } from "../constants";
+import { userActions } from "../actions/user.action";
 
 function* getAccountDataSaga() {
   try {
@@ -66,12 +66,22 @@ function* cancelSubscriptionSaga(action) {
     const payload = yield call(userService.cancelSubscription, action.payload);
     yield all([
       put({ type: userConstants.CANCEL_SUBSCRIPTION_SUCCESS, payload }),
-      put(userActions.setUserLoading(userConstants.CANCEL_SUBSCRIPTION_REQUESTED, false))
+      put(
+        userActions.setUserLoading(
+          userConstants.CANCEL_SUBSCRIPTION_REQUESTED,
+          false
+        )
+      ),
     ]);
   } catch (e) {
     yield all([
       put({ type: otherConstants.REQUEST_ERROR, payload: e }),
-      put(userActions.setUserLoading(userConstants.CANCEL_SUBSCRIPTION_REQUESTED, false)),
+      put(
+        userActions.setUserLoading(
+          userConstants.CANCEL_SUBSCRIPTION_REQUESTED,
+          false
+        )
+      ),
     ]);
   }
 }
@@ -82,12 +92,22 @@ function* pauseSubscriptionSaga(action) {
     const payload = yield call(userService.pauseSubscription, action.payload);
     yield all([
       put({ type: userConstants.PAUSE_SUBSCRIPTION_SUCCESS, payload }),
-      put(userActions.setUserLoading(userConstants.PAUSE_SUBSCRIPTION_REQUESTED, false))
+      put(
+        userActions.setUserLoading(
+          userConstants.PAUSE_SUBSCRIPTION_REQUESTED,
+          false
+        )
+      ),
     ]);
   } catch (e) {
     yield all([
       put({ type: otherConstants.REQUEST_ERROR, payload: e }),
-      put(userActions.setUserLoading(userConstants.PAUSE_SUBSCRIPTION_REQUESTED, false)),
+      put(
+        userActions.setUserLoading(
+          userConstants.PAUSE_SUBSCRIPTION_REQUESTED,
+          false
+        )
+      ),
     ]);
   }
 }
@@ -97,12 +117,22 @@ function* unpauseSubscriptionSaga(action) {
     const payload = yield call(userService.unpauseSubscription, action.payload);
     yield all([
       put({ type: userConstants.UNPAUSE_SUBSCRIPTION_SUCCESS, payload }),
-      put(userActions.setUserLoading(userConstants.UNPAUSE_SUBSCRIPTION_REQUESTED, false))
+      put(
+        userActions.setUserLoading(
+          userConstants.UNPAUSE_SUBSCRIPTION_REQUESTED,
+          false
+        )
+      ),
     ]);
   } catch (e) {
     yield all([
       put({ type: otherConstants.REQUEST_ERROR, payload: e }),
-      put(userActions.setUserLoading(userConstants.UNPAUSE_SUBSCRIPTION_REQUESTED, false)),
+      put(
+        userActions.setUserLoading(
+          userConstants.UNPAUSE_SUBSCRIPTION_REQUESTED,
+          false
+        )
+      ),
     ]);
   }
 }
@@ -199,12 +229,25 @@ function* skipDogDelivery(action) {
 function* addCoupon(action) {
   try {
     const payload = yield call(userService.applyCoupon, action.payload);
-    payload.coupon =  action.payload.coupon;
+    payload.coupon = action.payload.coupon;
     yield put({ type: userConstants.APPLY_COUPON_SUCCESS, payload });
   } catch (error) {
     yield put({ type: userConstants.APPLY_COUPON_FAILURE, error });
   }
 }
+
+function* getUserNotifications() {
+  try {
+    const payload = yield call(userService.getUserNotifications);
+    yield put({ type: userConstants.GET_USER_NOTIFICATIONS_SUCCESS, payload });
+  } catch (error) {
+    yield put({
+      type: userConstants.GET_USER_NOTIFICATIONS_FAILED,
+      payload: error,
+    });
+  }
+}
+
 export default function* user() {
   yield takeLatest(userConstants.APPLY_COUPON, addCoupon);
   yield takeLatest(userConstants.ACCOUNT_DATA_REQUESTED, getAccountDataSaga);
@@ -236,6 +279,7 @@ export default function* user() {
   );
   yield takeLatest(userConstants.UPDATE_USER_PHONE_EMAIL, updateEmailPhoneSaga);
   yield takeLatest(userConstants.ORDER_DATA_REQUESTED, getOrderDataSaga);
+
   yield takeLatest(userConstants.UPDATE_PWD_REQUESTED, updatePassword);
 
   yield takeLatest(userConstants.SET_BILLING_ADDRESS, setBillingAddress);
@@ -255,4 +299,6 @@ export default function* user() {
   );
 
   yield takeLatest(userConstants.SKIP_DOG_DELIVERY, skipDogDelivery);
+
+  yield takeLatest(userConstants.GET_USER_NOTIFICATIONS, getUserNotifications);
 }

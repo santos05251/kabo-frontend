@@ -21,7 +21,6 @@ class ThirdStep extends Component {
         str += id + ",";
       }
       str = str.replace(/,\s*$/, "");
-      console.log("presentation of ids", str);
       this.props.getDogDietPortion(str);
     }
   }

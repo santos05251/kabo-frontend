@@ -48,7 +48,7 @@ class ProfilePage extends React.Component {
 
     const detailsCard = "container pb-4  shadow-profileBoxes p-10 rounded-xl";
     return (
-      <div className="grid grid-cols-2 gap-7 pb-10">
+      <div className="grid lg:grid-cols-2 md:grid-cols-1 gap-7 pb-10">
         <div className={detailsCard}>
           <AccountDetails user={user} dogs={dogs} />
         </div>

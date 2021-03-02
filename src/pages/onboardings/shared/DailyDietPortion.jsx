@@ -24,7 +24,6 @@ const DailyDietPortion = ({
     );
   };
 
-  // console.log(cookedRecipes,)
   const combinedWrapper =
     "p-5  grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-5";
   const separateWrapper =

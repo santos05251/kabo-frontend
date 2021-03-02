@@ -1,14 +1,15 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { onboardingActions } from "../../../actions";
-import Header from "../../../components/onboardings/header";
-import Steps from "../../../components/onboardings/steps";
-import FirstStep from "../step-1";
-import SecondStep from "../step-2";
-import ThirdStep from "../step-3";
-import FifthStep from "../step-5";
+import { onboardingActions } from "../../actions";
+import Header from "../../components/onboardings/header";
+import Steps from "../../components/onboardings/steps";
+import FirstStep from "./step-1";
+import SecondStep from "./step-2";
+import ThirdStep from "./step-3";
+import FourthStep from "./step-4";
+import FifthStep from "./step-5";
 
-class OnboardingCombinedVersion extends Component {
+class Onboarding extends Component {
   state = {
     step: 1,
     dogs: [],
@@ -231,7 +232,6 @@ class OnboardingCombinedVersion extends Component {
 
   render() {
     const { dogs, step, cookedRecipes, kibble, dietPortions } = this.state;
-
     const {
       onboarding_starter_data,
       getOnboardingDetails,
@@ -273,6 +273,16 @@ class OnboardingCombinedVersion extends Component {
             />
           )}
           {step === 4 && (
+            <FourthStep
+              temp_user={temp_user}
+              getting_diet_portion={this.props.getting_diet_portion}
+              diet_portions={this.props.diet_portions}
+              getDogDietPortion={this.props.getDogDietPortion}
+              dietPortions={dietPortions}
+              handleDietPortion={this.handleDietPortion}
+            />
+          )}
+          {step === 5 && (
             <FifthStep
               handleChange={this.handleChange}
               user={this.state.user}
@@ -379,4 +389,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(OnboardingCombinedVersion);
+export default connect(mapStateToProps, mapDispatchToProps)(Onboarding);

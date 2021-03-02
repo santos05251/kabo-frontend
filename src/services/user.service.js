@@ -58,17 +58,22 @@ const pauseSubscription = (data) => {
 
 const unpauseSubscription = (data) => {
   const requestOptions = request.options(
-    'POST',
+    "POST",
     JSON.stringify({ dog_id: data.dog_id }),
     true,
     true
   );
-  return fetch(data.reactivate ? endpointConstants.REACTIVATE_SUBSCRIPTION : endpointConstants.UNPAUSE_SUBSCRIPTION, requestOptions)
+  return fetch(
+    data.reactivate
+      ? endpointConstants.REACTIVATE_SUBSCRIPTION
+      : endpointConstants.UNPAUSE_SUBSCRIPTION,
+    requestOptions
+  )
     .then(request.handleResponse)
     .then((res) => res);
 };
 
-const cancelSubscription = ({dog_id}) => {
+const cancelSubscription = ({ dog_id }) => {
   const requestOptions = request.options(
     "POST",
     JSON.stringify({ dog_id }),
@@ -194,9 +199,9 @@ const skipDogDelivery = (id) => {
 
 const updatePhoneEmail = (data) => {
   const requestOptions = request.options(
-    "PUT", 
-    JSON.stringify(data), 
-    true, 
+    "PUT",
+    JSON.stringify(data),
+    true,
     true
   );
 
@@ -222,6 +227,15 @@ const applyCoupon = (data) => {
     .then(request.handleResponse)
     .then((res) => res);
 };
+
+const getUserNotifications = () => {
+  const requestOptions = request.options("GET", {}, true, false);
+
+  return fetch(endpointConstants.GET_USER_NOTIFICATIONS, requestOptions)
+    .then(request.handleResponse)
+    .then((res) => res);
+};
+
 export const userService = {
   getAccountData,
   getRecipeData,
@@ -238,5 +252,6 @@ export const userService = {
   updateDeliveryFrequency,
   skipDogDelivery,
   updatePhoneEmail,
-  applyCoupon
+  applyCoupon,
+  getUserNotifications,
 };

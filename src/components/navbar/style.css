@@ -11,6 +11,84 @@
   font-size: 22px;
   line-height: 36px;
 }
+.profile-box-icon {
+  position: relative;
+  margin: 0 0.5rem;
+  height: 2rem;
+  cursor: pointer;
+}
+.profile-box-icon > img {
+  max-height: 90%;
+}
+.profile-box-unread-amount {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  border: none;
+  background-color: #239C6D;
+  font-weight: bold;
+  width: 16px;
+  font-size: 8px;
+  height: 16px;
+  border-radius: 50%;
+  padding: 3px 7px;
+  z-index: -1;
+  transform: scale(0);
+  transition: transform 0.2s ease-in-out;
+}
+.notifications-overlay-triangle {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-left: 18px solid transparent;
+  border-right: 18px solid transparent;
+  border-bottom: 26px solid #F6F6F6;
+  left: 90%;
+  top: -14px;
+  box-sizing: border-box;
+  border-radius: 4px;
+  z-index: 52;
+}
+.notifications-overlay {
+  position: absolute;
+  max-height: 500px;
+  max-width: 550px;
+  min-width: 500px;
+  top: 130%;
+  right: -70%;
+  border-radius: 5px;
+  border: 1px solid #E6E6E6;
+  padding: 20px;
+  background: #F6F6F6;
+  box-sizing: border-box;
+  cursor: auto;
+  z-index: 55;
+}
+
+.profile-box-unread-amount.got-unread {
+  transform: scale(1);
+  transition: transform 0.2s ease-in-out;
+}
+
+@media only screen and (max-width: 620px) {
+  .notifications-overlay {
+    min-width: auto;
+    max-width: initial;
+    width: auto;
+    position: fixed;
+    top: 12%;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+  .notifications-overlay-triangle {
+    display: none;
+  }
+}
 
 .bm-item {
     display: inline-block;

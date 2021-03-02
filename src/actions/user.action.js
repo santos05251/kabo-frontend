@@ -69,7 +69,7 @@ const updatePaymentMethod = (data) => ({
   payload: data,
 });
 
-const  updateUserPhoneEmail = (data) => ({
+const updateUserPhoneEmail = (data) => ({
   type: userConstants.UPDATE_USER_PHONE_EMAIL,
   payload: data,
 });
@@ -91,10 +91,19 @@ const resetUserLoading = () => ({
   type: userConstants.RESET_USER_LOADING,
 });
 
-const setUserLoading = (key, value) => ({type: userConstants.SET_USER_LOADING, key, value})
+const setUserLoading = (key, value) => ({
+  type: userConstants.SET_USER_LOADING,
+  key,
+  value,
+});
 
 const applyCoupon = (data) => ({
   type: userConstants.APPLY_COUPON,
+  payload: data,
+});
+
+const getUserNotifications = (data) => ({
+  type: userConstants.GET_USER_NOTIFICATIONS,
   payload: data,
 });
 
@@ -121,5 +130,6 @@ export const userActions = {
   resetUserError,
   resetUserLoading,
   setUserLoading,
-  applyCoupon
+  applyCoupon,
+  getUserNotifications,
 };
