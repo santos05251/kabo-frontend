@@ -1,14 +1,14 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { mealActions, userActions } from "../../actions";
-import RecipeSelection from "./RecipeSelection";
-import DailyDietPortion from "./DailyDietPortion";
-import SelectedRecipes from "./SelectedRecipes";
-import FreshOrKibble from "../../components/meal-plan/fresh-kibble-selector";
-import Loader from "../../loaders/mealPlan";
-import { ReactComponent as Arrow } from "../../assets/images/Vectorarrow.svg";
-import { ReactComponent as DeliveryBox } from "../../assets/images/delivery-box.svg";
-import { userSelectors } from "../../selectors/user.selectors";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { mealActions, userActions } from '../../actions';
+import RecipeSelection from './RecipeSelection';
+import DailyDietPortion from './DailyDietPortion';
+import SelectedRecipes from './SelectedRecipes';
+import FreshOrKibble from '../../components/meal-plan/fresh-kibble-selector';
+import Loader from '../../loaders/mealPlan';
+import { ReactComponent as Arrow } from '../../assets/images/Vectorarrow.svg';
+import { ReactComponent as DeliveryBox } from '../../assets/images/delivery-box.svg';
+import { userSelectors } from '../../selectors/user.selectors';
 
 class EditPlan extends Component {
   state = {
@@ -48,16 +48,16 @@ class EditPlan extends Component {
       this.setState({ dog: currentdog });
       let loadRecipes = [];
       if (currentdog.chicken_recipe) {
-        loadRecipes.push("chicken");
+        loadRecipes.push('chicken');
       }
       if (currentdog.beef_recipe) {
-        loadRecipes.push("beef");
+        loadRecipes.push('beef');
       }
       if (currentdog.lamb_recipe) {
-        loadRecipes.push("lamb");
+        loadRecipes.push('lamb');
       }
       if (currentdog.turkey_recipe) {
-        loadRecipes.push("turkey");
+        loadRecipes.push('turkey');
       }
       ///again not sure can be more then one kibble recipe
       this.setState({
@@ -100,6 +100,7 @@ class EditPlan extends Component {
       [name]: !this.state[name],
     });
   }
+
   handleSelectedCookedRecipes = (food) => {
     const { cookedRecipes } = this.state;
     if (
@@ -206,7 +207,16 @@ class EditPlan extends Component {
     }
     this.props.updateMealPlan(data);
   };
-
+  componentWillReceiveProps(nextProps) {
+    let { meal } = nextProps;
+    if (
+      meal &&
+      meal.daily_diet_portion_data &&
+      meal.daily_diet_portion_data.portions
+    ) {
+      this.setState({ dietPortion: meal.daily_diet_portion_data.portions[0] });
+    }
+  }
   render() {
     const { user, meal, getDailyDietPortion } = this.props;
     const {
@@ -237,7 +247,7 @@ class EditPlan extends Component {
 
     ////resolved NaN
     let totalReadable =
-      subData && subData.invoice_estimate_total === "N/A"
+      subData && subData.invoice_estimate_total === 'N/A'
         ? 0
         : subData && (subData.invoice_estimate_total / 100).toFixed(2);
 
@@ -246,8 +256,8 @@ class EditPlan extends Component {
         <div className="hidden md:block font-messina text-center font-bold pt-5 text-black bg-recipeGray text-xl">
           What's in {dog && dog.name}'s Box
         </div>
-        <div className={"hidden md:block text-center py-5"}>
-          Choose up to 2 and click Save Changes{" "}
+        <div className={'hidden md:block text-center py-5'}>
+          Choose up to 2 and click Save Changes{' '}
         </div>
         <div className="md:hidden font-messina text-center font-bold py-5 text-black text-xl">
           What's in {dog && dog.name}'s Box
@@ -319,8 +329,8 @@ class EditPlan extends Component {
               className={`flex bg-recipeGray justify-between items-center h-12 text-xl font-light p-3 cursor-pointer 
               ${
                 editRecipiesOpen
-                  ? "rounded-t-xl border-t border-l border-r border-gray-300"
-                  : "rounded-xl"
+                  ? 'rounded-t-xl border-t border-l border-r border-gray-300'
+                  : 'rounded-xl'
               }`}
             >
               <div className="flex justify-between items-center  h-full">
@@ -331,7 +341,7 @@ class EditPlan extends Component {
               <Arrow
                 className="w-8 h-3"
                 style={{
-                  transform: editRecipiesOpen ? "rotateX(180deg)" : null,
+                  transform: editRecipiesOpen ? 'rotateX(180deg)' : null,
                 }}
               />
             </div>
@@ -375,13 +385,13 @@ class EditPlan extends Component {
                   </button>
                   <p className="text-center w-full my-4">or</p>
                   <p className="font-messina mt-1">
-                    Your new subscription price will be{" "}
+                    Your new subscription price will be{' '}
                     <span class="text-green-500 font-bold">
-                      {" "}
+                      {' '}
                       {!user.estimate
                         ? `$${totalReadable}`
                         : user.estimate.amount}
-                    </span>{" "}
+                    </span>{' '}
                     every 4 weeks
                   </p>
                   <button
@@ -396,14 +406,14 @@ class EditPlan extends Component {
                         Changes will apply to your March 4 delivery onwards
                       </h4>
                       <p className="text-left text-sm ">
-                        Email{" "}
+                        Email{' '}
                         <a
                           className="font-bold underline"
                           href="mailto:help@kabo.co"
                         >
-                          {" "}
-                          help@kabo.co{" "}
-                        </a>{" "}
+                          {' '}
+                          help@kabo.co{' '}
+                        </a>{' '}
                         if you require additional help.
                       </p>
                     </div>
@@ -420,8 +430,8 @@ class EditPlan extends Component {
               className={`flex bg-recipeGray justify-between items-center h-12 text-xl font-light p-3 cursor-pointer 
               ${
                 editPortionsOpen
-                  ? "rounded-t-xl border-t border-l border-r border-gray-300"
-                  : "rounded-xl"
+                  ? 'rounded-t-xl border-t border-l border-r border-gray-300'
+                  : 'rounded-xl'
               }`}
             >
               <div className="flex justify-between items-center  h-full">
@@ -432,7 +442,7 @@ class EditPlan extends Component {
               <Arrow
                 className="w-8 h-3"
                 style={{
-                  transform: editPortionsOpen ? "rotateX(180deg)" : null,
+                  transform: editPortionsOpen ? 'rotateX(180deg)' : null,
                 }}
               />
             </div>
