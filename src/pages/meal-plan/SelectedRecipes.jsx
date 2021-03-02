@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import LoadingCircle from '../../components/partials/loading';
-import MealPlanSelect from '../../components/meal-plan/meal-plan-select';
-import DisplaySelected from '../../components/meal-plan/display-selected';
+import React, { Component } from "react";
+import LoadingCircle from "../../components/partials/loading";
+import MealPlanSelect from "../../components/meal-plan/meal-plan-select";
+import DisplaySelected from "../../components/meal-plan/display-selected";
 
 class SelectedRecipes extends Component {
   handleChange = (selectedDog) => {
@@ -20,7 +20,7 @@ class SelectedRecipes extends Component {
       selectedCookedRecipes,
       selectedLength,
       estimate,
-      onConfirm,
+      onConfirm
     } = this.props;
     return (
       <div className="flex flex-col py-9 items-center bg-recipeGray">
@@ -53,11 +53,11 @@ class SelectedRecipes extends Component {
               <div>
                 <div>
                   <p className="font-messina mt-1">
-                    Your new subscription price will be{' '}
+                    Your new subscription price will be{" "}
                     <span className="text-green-500 font-bold">
-                      {' '}
-                      {estimate}{' '}
-                    </span>{' '}
+                      {" "}
+                      {estimate}{" "}
+                    </span>{" "}
                     every 4 weeks
                   </p>
                 </div>
@@ -76,11 +76,11 @@ class SelectedRecipes extends Component {
                   Changes will apply to your March 4 delivery onwards
                 </h4>
                 <p className="text-left text-sm ">
-                  Email{' '}
+                  Email{" "}
                   <a className="font-bold underline" href="mailto:help@kabo.co">
-                    {' '}
-                    help@kabo.co{' '}
-                  </a>{' '}
+                    {" "}
+                    help@kabo.co{" "}
+                  </a>{" "}
                   if you require additional help.
                 </p>
               </div>
