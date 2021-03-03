@@ -52,14 +52,16 @@ class SelectedRecipes extends Component {
             {estimate && (
               <div>
                 <div>
-                  <p className="font-messina mt-1">
-                    Your new subscription price will be{" "}
-                    <span className="text-green-500 font-bold">
-                      {" "}
-                      {estimate}{" "}
-                    </span>{" "}
-                    every 4 weeks
-                  </p>
+                  {user.how_often && (
+                    <p className="font-messina mt-1">
+                      Your new subscription price will be{" "}
+                      <span className="text-green-500 font-bold">
+                        {" "}
+                        {estimate}{" "}
+                      </span>{" "}
+                      every {parseInt(user.how_often)} weeks
+                    </p>
+                  )}
                 </div>
                 <button
                   onClick={() => onConfirm()}
@@ -72,9 +74,7 @@ class SelectedRecipes extends Component {
 
             <div className="flex items-center flex-col mb-4">
               <div className="w-full p-6 bg-promptYellow rounded-1lg">
-                <h4 className="text-left text-base font-semibold mb-1">
-                  Changes will apply to your March 4 delivery onwards
-                </h4>
+              {user.subscription_phase.status === "waiting_for_trial_shipment" ?  "Changes will apply to your trial delivery onwards" : `Changes will apply to your ${user.subscription_phase.changes_applied_delivery_date}`}
                 <p className="text-left text-sm ">
                   Email{" "}
                   <a className="font-bold underline" href="mailto:help@kabo.co">

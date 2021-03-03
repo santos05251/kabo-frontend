@@ -27,7 +27,8 @@ class MealPlanModal extends React.Component {
     const { dogIndex } = this.state;
     const {
       dogs,
-      subscriptions
+      subscriptions,
+      subscription_phase
     } = this.props;
     const dogsLength = dogs.length;
     const currentDog = dogs[dogIndex];
@@ -35,7 +36,7 @@ class MealPlanModal extends React.Component {
 
     let cbID = currentDog.chargebee_subscription_id
     let status = subscriptions[cbID].status
-    let inTrial = status.includes('future') || status.includes('trial')
+    let inTrial = status.includes('future') || status.includes('trial') || subscription_phase.status.includes('waiting')
     let portion = portion_adjustment === 'higher' ? 110 : cooked_portion ? cooked_portion : 0;
 
     return (
@@ -71,10 +72,12 @@ class MealPlanModal extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-  const { dogs } = state.user;
+  const { dogs,subscription_phase } = state.user;
+   
   return {
     subscriptions: userSelectors.selectSubscriptions(state),
     dogs,
+    subscription_phase
   };
 };
 
