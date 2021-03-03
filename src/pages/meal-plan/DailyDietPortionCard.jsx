@@ -14,7 +14,7 @@ const DietPortionCard = ({ item, handleSelect, dietPortion, dog }) => {
       className={
         item.cooked_portion === dietPortion.cooked_portion && item.portion_adjustment == dietPortion.portion_adjustment && item.kibble_portion == dietPortion.kibble_portion
           ? " flex flex-col w-full pt-4 px-4 pb-16 items-center bg-green-100 font-messina relative rounded-lg border border-gray-200"
-          : " flex flex-col w-full  p-2 items-center bg-white font-messina relative rounded-lg border border-gray-200"
+          : " flex flex-col w-full  pt-4 px-4 pb-16 items-center bg-white font-messina relative rounded-lg border border-gray-200"
       }
     >
       <div className="flex w-2/5 relative mb-4">

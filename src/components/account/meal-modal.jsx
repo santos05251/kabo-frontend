@@ -6,7 +6,6 @@ import MealPlanCard from "./mealplan-card";
 import PortionDisplay from "./portion-display";
 import { userSelectors } from "../../selectors/user.selectors";
 
-
 class MealPlanModal extends React.Component {
   constructor(props) {
     super(props);
@@ -14,7 +13,6 @@ class MealPlanModal extends React.Component {
       dogIndex: 0,
     };
     this.setDog = this.setDog.bind(this);
-
   }
 
   setDog(i) {
@@ -25,19 +23,23 @@ class MealPlanModal extends React.Component {
 
   render() {
     const { dogIndex } = this.state;
-    const {
-      dogs,
-      subscriptions,
-      subscription_phase
-    } = this.props;
+    const { dogs, subscriptions, subscription_phase } = this.props;
     const dogsLength = dogs.length;
     const currentDog = dogs[dogIndex];
     const { portion_adjustment, cooked_portion, kibble_portion } = currentDog;
 
-    let cbID = currentDog.chargebee_subscription_id
-    let status = subscriptions[cbID].status
-    let inTrial = status.includes('future') || status.includes('trial') || subscription_phase.status.includes('waiting')
-    let portion = portion_adjustment === 'higher' ? 110 : cooked_portion ? cooked_portion : 0;
+    let cbID = currentDog.chargebee_subscription_id;
+    let status = subscriptions[cbID].status;
+    let inTrial =
+      status.includes("future") ||
+      status.includes("trial") ||
+      subscription_phase.status.includes("waiting");
+    let portion =
+      portion_adjustment === "higher"
+        ? 110
+        : cooked_portion
+        ? cooked_portion
+        : 0;
 
     return (
       <>
@@ -50,21 +52,25 @@ class MealPlanModal extends React.Component {
             <div className="text-primary w-full font-bold">
               <a href={`/edit-plan/${dogIndex}`}>
                 Select a different meal plan
-            </a>
+              </a>
             </div>
           )}
-          {!kibble_portion ? <React.Fragment>
-            <div className="text-lightGrey text-xs text-semibold mt-7">
-              PORTIONS
+          {!kibble_portion ? (
+            <React.Fragment>
+              <div className="text-lightGrey text-xs text-semibold mt-7">
+                PORTIONS
+              </div>
+              <PortionDisplay portion={portion} />
+            </React.Fragment>
+          ) : null}
+          {!inTrial && (
+            <div
+              className="text-primary w-full py-5 font-bold"
+              onClick={() => this.editMealTracking()}
+            >
+              <a href={`/edit-plan/${dogIndex}`}>Edit portions</a>
             </div>
-            <PortionDisplay portion={portion} />
-          </React.Fragment> : null}
-          <div
-            className="text-primary w-full py-5 font-bold"
-            onClick={()=>this.editMealTracking()}
-          >
-            <a href={`/edit-plan/${dogIndex}`}>Edit portions</a>
-          </div>
+          )}
         </div>
       </>
     );
@@ -72,12 +78,12 @@ class MealPlanModal extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-  const { dogs,subscription_phase } = state.user;
-   
+  const { dogs, subscription_phase } = state.user;
+
   return {
     subscriptions: userSelectors.selectSubscriptions(state),
     dogs,
-    subscription_phase
+    subscription_phase,
   };
 };
 
