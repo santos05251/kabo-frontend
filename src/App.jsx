@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { connect } from "react-redux";
 import { history } from "./utils";
-import { PrivateRoute } from "./route";
+import { PrivateRoute, PublicRoute } from "./route";
 import LoginPage from "./pages/login";
 import AccountPage from "./pages/account";
 import AllOrdersPage from "./pages/order";
@@ -25,19 +25,19 @@ function App() {
       <Alert />
       <BrowserRouter>
         <Switch>
-          <Route path="/onboarding/checkout" component={FinalStep} />
-          <Route
+          <PublicRoute path="/onboarding/checkout" component={FinalStep} />
+          <PublicRoute
             path="/a/signup"
             exact
             component={OnboardingCombinedVersion}
           />
-          <Route
+          <PublicRoute
             path="/b/signup"
             exact
             component={OnboardingSeparateVersion}
           />
           <Route path="/redirect" exact component={RedirectRoute} />
-          <Route path="/login" component={LoginPage} />
+          <PublicRoute path="/login" component={LoginPage} />
           <PrivateRoute path="/orders" exact component={AllOrdersPage} />
           <PrivateRoute path="/orders/:id" exact component={OrderDetail} />
           <PrivateRoute path="/edit-plan/:id" component={EditPlan} />
