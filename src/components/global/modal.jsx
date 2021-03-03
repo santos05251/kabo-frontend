@@ -16,7 +16,7 @@ class Modal extends React.Component {
       <div className="">
         <ReactModal
           isOpen={this.props.isOpen}
-          overlayClassName="fixed inset-0 flex justify-center global-modal-overlay items-start z-50 overflow-y-scroll"
+          overlayClassName="bg-black bg-opacity-50 fixed inset-0 flex justify-center global-modal-overlay items-start z-50 overflow-y-scroll"
           className={
             isLarge
               ? "w-full bg-white md:m-24 lg:rounded-xl shadow-modal outline-none"

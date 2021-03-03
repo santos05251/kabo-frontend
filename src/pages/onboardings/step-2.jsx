@@ -96,6 +96,10 @@ const DogDetailsForm = ({
   };
 
   const handleWeight = (weight) => {
+    if(Number(weight) < 0) {
+      setWeight(0);
+      return;
+    }
     setWeight(weight);
     setDog_({ ...dog_, weight });
   };
@@ -117,7 +121,7 @@ const DogDetailsForm = ({
   };
   return (
     <FormWrapper increaseSmallPadding>
-      <div className="flex flex-col xs:pb-5 md:pb-10">
+      <div className="flex flex-col xs:pb-5 md:pb-10 pb-4">
         <label className="font-semibold pb-4">{dog && dog.name} is a</label>
         <div className="flex">
           {onboarding_details_data &&
@@ -138,7 +142,7 @@ const DogDetailsForm = ({
         </div>
       </div>
 
-      <div className="flex flex-col xs:pb-5 md:pb-10">
+      <div className="flex flex-col xs:pb-5 md:pb-10 pb-4">
         <label className="font-semibold pb-4">
           Is {dog && dog.name} spayed?
         </label>
@@ -160,7 +164,7 @@ const DogDetailsForm = ({
         </div>
       </div>
 
-      <div className="flex flex-col xs:pb-5 md:pb-10">
+      <div className="flex flex-col xs:pb-5 md:pb-10 pb-4">
         <label className="font-semibold pb-4">
           How much does {dog && dog.name} weigh?
         </label>
@@ -170,6 +174,7 @@ const DogDetailsForm = ({
             className="border step-input mr-3 md:border-transparent-400 placeholder-black text-black bg-transparent w-20 text-center focus:outline-none rounded-lg py-3"
             placeholder="0"
             value={weight}
+            min="0"
             onChange={(e) => handleWeight(e.target.value)}
           />
 
@@ -183,7 +188,7 @@ const DogDetailsForm = ({
                 className={
                   weightUnit === item.value
                     ? "border step-input mr-3 md:border-green-700-400 placeholder-white text-white bg-green-700 w-20 text-center focus:outline-none rounded-lg py-3"
-                    : "border step-input mr-3 md:border-gray-400-400 placeholder-gray-700 text-gray-700 bg-gray-400 w-20 text-center focus:outline-none rounded-lg py-3"
+                    : "border step-input mr-3 md:border-gray-400-400 placeholder-gray-700 text-gray-700 bg-gray-100 w-20 text-center focus:outline-none rounded-lg py-3"
                 }
               />
             ))}
@@ -196,7 +201,7 @@ const DogDetailsForm = ({
         </div>
       </div>
 
-      <div className="flex flex-col xs:pb-5 md:pb-10">
+      <div className="flex flex-col xs:pb-5 md:pb-10 pb-4">
         <label className="font-semibold pb-4">
           {dog && dog.name}’s body is...
         </label>
@@ -209,7 +214,7 @@ const DogDetailsForm = ({
         </div>
       </div>
 
-      <div className="flex flex-col xs:pb-5 md:pb-10">
+      <div className="flex flex-col xs:pb-5 md:pb-10 pb-4">
         <label className="font-semibold pb-4">
           {dog && dog.name}’s activity level is...
         </label>
@@ -240,7 +245,7 @@ const Steps = ({ steps, value, setValue }) => (
               }
               onClick={() => setValue(item.value)}
             />
-            <p className="absolute xs:-left-1 -left-8 md:mt-5  text-sm md:w-20">
+            <p className="absolute xs:-left-1 -left-4 xs:mt-1 mt-2 text-sm">
               {item.label}
             </p>
           </div>

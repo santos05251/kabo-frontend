@@ -8,7 +8,7 @@ const CancelReason = ({reason, setReason, dogName, lastName}) => {
       <p className="text-lg text-center font-medium text-gray-800">
         Please select a reason why you'd like to cancel your subscription
       </p>
-      <div className="mt-5 grid lg:grid-cols-2 sm:grid-cols-1">
+      <div className="mt-5 grid sm:grid-cols-1">
         <div>
           <Radio
             value="expectations"

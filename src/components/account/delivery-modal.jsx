@@ -154,22 +154,20 @@ const DeliveryModal = ({
               current={deliveryStatus}
             />
           </nav>
-          {User && User.is_trial && (
+          {/* {user && user.user.subscription_phase_status === 'in_trial' && !user.user.skipped_first_box && (
             <button
               className="text-primary mt-7 font-bold focus:outline-none"
               onClick={() => openSkipDeliveryModal(!open_skip_delivery_modal)}
             >
               Skip this delivery
             </button>
-          )}
+          )} */}
           <Modal
             isOpen={open_skip_delivery_modal}
-            onRequestClose={() =>
-              openSkipDeliveryModal(!open_skip_delivery_modal)
-            }
-            // title={`Skip ${portion.name} Meal Plan`}
+            onRequestClose={() => openSkipDeliveryModal(!open_skip_delivery_modal)}
+            title="Skip Upcoming Delivery"
           >
-            <SkipDeliveryModal dogIndex={dogIndex} />
+            <SkipDeliveryModal setDogIndex={setDog} dogIndex={dogIndex} />
           </Modal>
         </>
       )}

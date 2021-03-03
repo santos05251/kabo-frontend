@@ -23,7 +23,7 @@ class RecipeSelection extends Component {
       onConfirm
     } = this.props;
     return (
-      <div className="md:w-3/5 w-full flex flex-col lg:py-9 items-center bg-recipeGray">
+      <div className="md:w-3/5 w-full flex flex-col lg:py-9 items-center bg-white">
         <div className="w-full">
           {showCooked && (
             <div>

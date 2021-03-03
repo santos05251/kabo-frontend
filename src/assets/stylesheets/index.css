@@ -83,8 +83,20 @@
     top: 26px;
 }
 
-.sm-container {
+.padding-container {
   padding: 0px 15px 0px 15px;
+}
+
+@media (min-width: 768px) {
+  .padding-container {
+    padding: 0 2.5%;
+  }
+}
+
+@media (min-width: 1280px) {
+  .padding-container {
+    padding: 0 16px;
+  }
 }
 
 
@@ -142,4 +154,15 @@
 }
 .webkitFillAvalible{
   width: -webkit-fill-available;
+}
+
+/* Onboarding UI Update */
+
+.page-content {
+  background-color: #F2F5F4;
+}
+
+.onboarding-continue {
+  box-shadow: 0px 8px 40px rgba(0, 0, 0, 0.2);
+  height: 75px;
 }

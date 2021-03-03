@@ -70,10 +70,10 @@ class Navbar extends React.Component {
 
     return (
       <nav
-        className="fixed md:relative md:h-28 sm:h-22 bg-white md:bg-none z-50 w-full"
+        className="fixed inset-x-0 top-0 md:px-20 px-4 md:h-20 sm:h-14 h-24 bg-white z-50"
         id="outer-container"
       >
-        <div className="py-3 sm:py-8 pl-3 sm:pl-0 flex items-center sm:justify-between sm:items-stretch">
+        <div className="py-3 md:py-6 pl-0 flex items-center sm:justify-between sm:items-stretch">
           <div className="sm:hidden">
             <Menu
               pageWrapId={"page-wrap"}
@@ -150,7 +150,7 @@ class Navbar extends React.Component {
                     </a>
                     <a
                       href="https://kabo.zendesk.com/hc/en-us"
-                      className={inActive}
+                      className={`hidden md:block ${inActive}`}
                       target="_blank"
                     >
                       Support
@@ -162,28 +162,30 @@ class Navbar extends React.Component {
           </div>
           {loggedIn && (
             <div className="flex flex-row center mr-20 sm:mr-0">
-              <div
-                className="profile-box-icon"
-                onClick={() => this.setState({ notificationsOpen: true })}
-              >
-                <img src={bellImage} />
-                <span
-                  className={
-                    true
-                      ? "profile-box-unread-amount got-unread"
-                      : "profile-box-unread-amount"
-                  }
+              {this.props.user_notifications && this.props.user_notifications.length > 0 &&
+                <div
+                  className="profile-box-icon"
+                  onClick={() => this.setState({ notificationsOpen: true })}
                 >
-                  2
-                </span>
-                {this.state.notificationsOpen && (
-                  <NotificationsList
-                    closeNotifications={this.closeNotifications}
-                    loading_notifications={this.props.loading_notifications}
-                    user_notifications={this.props.user_notifications}
-                  />
-                )}
-              </div>
+                  <img src={bellImage} />
+                  <span
+                    className={
+                      true
+                        ? "profile-box-unread-amount got-unread"
+                        : "profile-box-unread-amount"
+                    }
+                  >
+                    2
+                  </span>
+                  {this.state.notificationsOpen && (
+                    <NotificationsList
+                      closeNotifications={this.closeNotifications}
+                      loading_notifications={this.props.loading_notifications}
+                      user_notifications={this.props.user_notifications}
+                    />
+                  )}
+                </div>
+              }
               <button
                 type="button"
                 onClick={() => this.clickLogout()}

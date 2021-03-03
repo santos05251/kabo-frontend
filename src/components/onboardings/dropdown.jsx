@@ -20,7 +20,7 @@ const DropDown = ({
   };
 
   return (
-    <div className="flex flex-col xs:pb-5 md:pb-10">
+    <div className="flex flex-col xs:pb-3 md:pb-6">
       <label className="font-semibold pb-3">{label}</label>
       <div className="drop-down mb-3 bg-transparent cursor-pointer outline-none text-gray-400 text-sm mt-2 mb-2.5 w-full h-full">
         <div

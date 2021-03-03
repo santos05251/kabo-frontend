@@ -18,9 +18,18 @@ class Onboarding extends Component {
     kibble: [],
     dietPortions: [],
     user: {},
+    couponPercentage: 0
   };
 
   componentDidMount() {
+    if (this.props.location.search.startsWith('?')) {
+      const strQuery = this.props.location.search.slice(1);
+      const queryParams = strQuery.split('&');
+      for (var param of queryParams) {
+        if (param.endsWith('off'))
+          this.setState({ couponPercentage: param.slice(0, param.length - 3) });
+      }
+    }
     this.props.getOnboardingData();
   }
 
@@ -241,9 +250,11 @@ class Onboarding extends Component {
     } = this.props;
     return (
       <React.Fragment>
-        <Header />
+        <Header
+          coupon={this.state.couponPercentage}
+        />
         {4 > step && <Steps completePercent={`${step}/3`} />}
-        <main className="h-full flex flex-col justify-between">
+        <main className="flex flex-col justify-between sm:px-4 sm:py-5 px-3 py-4">
           {step === 1 && (
             <FirstStep
               onboarding_starter_data={onboarding_starter_data}
@@ -285,15 +296,18 @@ class Onboarding extends Component {
               user={this.state.user}
             />
           )}
-          <div className="footer bg-white flex justify-center py-4">
+        </main>
+        <div className="h-20" />
+
+        <div className="fixed inset-x-0 bottom-0 h-20 footer bg-white flex justify-center py-4 z-100">
             {step === 1 && (
               <button
                 disabled={dogs.length <= 0}
                 onClick={this.handleFirstStep}
                 className={
                   dogs.length <= 0
-                    ? "border btn mx-5 border-gray-300 xs:bg-green-600 xs:text-white md:bg-gray-200 md:text-gray-400  focus:outline-none rounded-lg py-3 px-20"
-                    : "border btn mx-5 border-green-600 xs:bg-green-600 xs:text-white md:bg-green-600 md:text-white  focus:outline-none rounded-lg py-3 px-20"
+                    ? "flex justify-center items-center border btn mx-5 border-gray-300 xs:bg-green-600 xs:text-white md:bg-gray-200 md:text-gray-400  focus:outline-none rounded-lg py-3 px-20"
+                    : "flex justify-center items-center border btn mx-5 border-green-600 xs:bg-green-600 xs:text-white md:bg-green-600 md:text-white  focus:outline-none rounded-lg py-3 px-20"
                 }
               >
                 Next+
@@ -303,7 +317,7 @@ class Onboarding extends Component {
               <button
                 onClick={this.handleSecondStep}
                 className={
-                  "border btn mx-5 border-green-600 xs:bg-green-600 xs:text-white md:bg-green-600 md:text-white  focus:outline-none rounded-lg py-3 px-20"
+                  "flex justify-center items-center border btn mx-5 border-green-600 xs:bg-green-600 xs:text-white md:bg-green-600 md:text-white  focus:outline-none rounded-lg py-3 px-20"
                 }
               >
                 Next
@@ -316,8 +330,8 @@ class Onboarding extends Component {
                 onClick={this.handleThirdStep}
                 className={
                   cookedRecipes.length === 0 && kibble.length === 0
-                    ? "border btn mx-5 border-gray-300 xs:bg-green-600 xs:text-white md:bg-gray-200 md:text-gray-400  focus:outline-none rounded-lg py-3 px-20"
-                    : "border btn mx-5 border-green-600 xs:bg-green-600 xs:text-white md:bg-green-600 md:text-white  focus:outline-none rounded-lg py-3 px-20"
+                    ? "flex justify-center items-center border btn mx-5 border-gray-300 xs:bg-green-600 xs:text-white md:bg-gray-200 md:text-gray-400  focus:outline-none rounded-lg py-3 px-20"
+                    : "flex justify-center items-center border btn mx-5 border-green-600 xs:bg-green-600 xs:text-white md:bg-green-600 md:text-white  focus:outline-none rounded-lg py-3 px-20"
                 }
               >
                 Next
@@ -329,8 +343,8 @@ class Onboarding extends Component {
                 onClick={this.handleFourthStep}
                 className={
                   this.state.dietPortions.length <= 0
-                    ? "border btn mx-5 border-gray-300 xs:bg-green-600 xs:text-white md:bg-gray-200 md:text-gray-400  focus:outline-none rounded-lg py-3 px-20"
-                    : "border btn mx-5 border-green-600 xs:bg-green-600 xs:text-white md:bg-green-600 md:text-white  focus:outline-none rounded-lg py-3 px-20"
+                    ? "flex justify-center items-center border btn mx-5 border-gray-300 xs:bg-green-600 xs:text-white md:bg-gray-200 md:text-gray-400  focus:outline-none rounded-lg py-3 px-20"
+                    : "flex justify-center items-center border btn mx-5 border-green-600 xs:bg-green-600 xs:text-white md:bg-green-600 md:text-white  focus:outline-none rounded-lg py-3 px-20"
                 }
               >
                 Next
@@ -343,15 +357,14 @@ class Onboarding extends Component {
                 onClick={this.handleFifthStep}
                 className={
                   Object.keys(this.state.user).length <= 0
-                    ? "border btn mx-5 border-gray-300 xs:bg-green-600 xs:text-white md:bg-gray-200 md:text-gray-400  focus:outline-none rounded-lg py-3 px-20"
-                    : "border btn mx-5 border-green-600 xs:bg-green-600 xs:text-white md:bg-green-600 md:text-white  focus:outline-none rounded-lg py-3 px-20"
+                    ? "flex justify-center items-center border btn mx-5 border-gray-300 xs:bg-green-600 xs:text-white md:bg-gray-200 md:text-gray-400  focus:outline-none rounded-lg py-3 px-20"
+                    : "flex justify-center items-center border btn mx-5 border-green-600 xs:bg-green-600 xs:text-white md:bg-green-600 md:text-white  focus:outline-none rounded-lg py-3 px-20"
                 }
               >
                 Next
               </button>
             )}
           </div>
-        </main>
       </React.Fragment>
     );
   }

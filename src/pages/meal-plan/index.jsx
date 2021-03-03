@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { mealActions, userActions } from '../../actions';
-import RecipeSelection from './RecipeSelection';
-import DailyDietPortion from './DailyDietPortion';
-import SelectedRecipes from './SelectedRecipes';
-import FreshOrKibble from '../../components/meal-plan/fresh-kibble-selector';
-import Loader from '../../loaders/mealPlan';
-import { ReactComponent as Arrow } from '../../assets/images/Vectorarrow.svg';
-import { ReactComponent as DeliveryBox } from '../../assets/images/delivery-box.svg';
-import { userSelectors } from '../../selectors/user.selectors';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { mealActions, userActions } from "../../actions";
+import RecipeSelection from "./RecipeSelection";
+import DailyDietPortion from "./DailyDietPortion";
+import SelectedRecipes from "./SelectedRecipes";
+import FreshOrKibble from "../../components/meal-plan/fresh-kibble-selector";
+import Loader from "../../loaders/mealPlan";
+import { ReactComponent as Arrow } from "../../assets/images/Vectorarrow.svg";
+import { ReactComponent as DeliveryBox } from "../../assets/images/delivery-box.svg";
+import { userSelectors } from "../../selectors/user.selectors";
 
 class EditPlan extends Component {
   state = {
@@ -48,21 +48,26 @@ class EditPlan extends Component {
       this.setState({ dog: currentdog });
       let loadRecipes = [];
       if (currentdog.chicken_recipe) {
-        loadRecipes.push('chicken');
+        loadRecipes.push("chicken");
       }
       if (currentdog.beef_recipe) {
-        loadRecipes.push('beef');
+        loadRecipes.push("beef");
       }
       if (currentdog.lamb_recipe) {
-        loadRecipes.push('lamb');
+        loadRecipes.push("lamb");
       }
       if (currentdog.turkey_recipe) {
-        loadRecipes.push('turkey');
+        loadRecipes.push("turkey");
       }
       ///again not sure can be more then one kibble recipe
       this.setState({
         cookedRecipes: loadRecipes,
         kibbleRecipes: [currentdog.kibble_recipe] || [],
+        dietPortion: {
+          cooked_portion: currentdog.cooked_portion,
+          kibble_portion: currentdog.kibble_portion,
+          portion_adjusment: currentdog.portion_adjusment
+        }
       });
     }
   }
@@ -100,7 +105,6 @@ class EditPlan extends Component {
       [name]: !this.state[name],
     });
   }
-
   handleSelectedCookedRecipes = (food) => {
     const { cookedRecipes } = this.state;
     if (
@@ -166,7 +170,6 @@ class EditPlan extends Component {
       data[`${item}_recipe`] = true;
     }
     this.props.getSubscriptionEstimate(data);
-    
   };
 
   handlePrevious = () => {
@@ -208,16 +211,7 @@ class EditPlan extends Component {
     }
     this.props.updateMealPlan(data);
   };
-  componentWillReceiveProps(nextProps) {
-    let { meal } = nextProps;
-    if (
-      meal &&
-      meal.daily_diet_portion_data &&
-      meal.daily_diet_portion_data.portions
-    ) {
-      this.setState({ dietPortion: meal.daily_diet_portion_data.portions[0] });
-    }
-  }
+
   render() {
     const { user, meal, getDailyDietPortion } = this.props;
     const {
@@ -248,30 +242,22 @@ class EditPlan extends Component {
 
     ////resolved NaN
     let totalReadable =
-      subData && subData.invoice_estimate_total === 'N/A'
+      subData && subData.invoice_estimate_total === "N/A"
         ? 0
         : subData && (subData.invoice_estimate_total / 100).toFixed(2);
 
     return (
-      <div className="md:bg-recipeGray">
-        <div className="hidden md:block font-messina text-center font-bold pt-5 text-black bg-recipeGray text-xl">
+      <div className="md:bg-white">
+        <div className="hidden md:block font-messina text-center font-bold pt-5 text-black bg-white text-2xl">
           What's in {dog && dog.name}'s Box
         </div>
-        <div className={'hidden md:block text-center py-5'}>
-          Choose up to 2 and click Save Changes{' '}
+        <div className={"hidden md:block text-center py-5"}>
+          Choose up to 2 and click Save Changes{" "}
         </div>
-        <div className="md:hidden font-messina text-center font-bold py-5 text-black text-xl">
+        <div className="md:hidden font-messina text-center font-bold py-5 text-black text-2xl">
           What's in {dog && dog.name}'s Box
         </div>
-        <div className="w-1/2 m-auto">
-          <FreshOrKibble
-            extraClasses="hidden lg:flex"
-            showCooked={showCooked}
-            showKibble={showKibble}
-            setKibble={this.displayKibble}
-            setFresh={this.displayCooked}
-          />
-        </div>
+
         {/* Grid visible in desktop views */}
         <div className="hidden md:flex justify-center customContainer mx-auto">
           <RecipeSelection
@@ -327,12 +313,11 @@ class EditPlan extends Component {
               onClick={() =>
                 this.setState({ editRecipiesOpen: !editRecipiesOpen })
               }
-              className={`flex bg-recipeGray justify-between items-center h-12 text-xl font-light p-3 cursor-pointer 
-              ${
-                editRecipiesOpen
-                  ? 'rounded-t-xl border-t border-l border-r border-gray-300'
-                  : 'rounded-xl'
-              }`}
+              className={`flex bg-white justify-between items-center h-12 text-xl font-light p-3 cursor-pointer 
+              ${editRecipiesOpen
+                  ? "rounded-t-xl border-t border-l border-r border-gray-300"
+                  : "rounded-xl"
+                }`}
             >
               <div className="flex justify-between items-center  h-full">
                 <p className="text-base sm:text-xs xl:text-base">
@@ -342,20 +327,20 @@ class EditPlan extends Component {
               <Arrow
                 className="w-8 h-3"
                 style={{
-                  transform: editRecipiesOpen ? 'rotateX(180deg)' : null,
+                  transform: editRecipiesOpen ? "rotateX(180deg)" : null,
                 }}
               />
             </div>
             {editRecipiesOpen && (
               <div>
                 <FreshOrKibble
-                  extraClasses="md:hidden bg-recipeGray"
+                  extraClasses="md:hidden bg-white"
                   showCooked={showCooked}
                   showKibble={showKibble}
                   setKibble={this.displayKibble}
                   setFresh={this.displayCooked}
                 />
-                <div className="font-messina text-center font-bold py-8 text-black bg-recipeGray">
+                <div className="font-messina text-center font-bold py-8 text-black bg-white">
                   Choose 1 or 2 recipes per Order for {dog && dog.name}
                 </div>
                 <RecipeSelection
@@ -372,7 +357,7 @@ class EditPlan extends Component {
                   toggleKibble={this.toggleKibble}
                   isKibble={this.state.isKibble}
                 />
-                <div className="bg-recipeGray p-3">
+                <div className="bg-white p-3">
                   <button
                     onClick={() =>
                       this.setState({
@@ -386,16 +371,15 @@ class EditPlan extends Component {
                   </button>
                   <p className="text-center w-full my-4">or</p>
                   <p className="font-messina mt-1">
-                    Your new subscription price will be{' '}
+                    Your new subscription price will be{" "}
                     <span class="text-green-500 font-bold">
-                      {' '}
+                      {" "}
                       {!user.estimate
                         ? null
                         : user.estimate.amount}
-                    </span>{' '}
+                    </span>{" "}
                     every 4 weeks
                   </p>
-
                   <button
                     onClick={() => this.handleMealUpdate()}
                     className="rounded-lg bg-green-700 border border-green-700 hover:border-transparent focus:outline-none text-white text-sm md:text-base font-bold p-3 w-full px-5 rounded mt-2 mb-4"
@@ -408,14 +392,14 @@ class EditPlan extends Component {
                         Changes will apply to your March 4 delivery onwards
                       </h4>
                       <p className="text-left text-sm ">
-                        Email{' '}
+                        Email{" "}
                         <a
                           className="font-bold underline"
                           href="mailto:help@kabo.co"
                         >
-                          {' '}
-                          help@kabo.co{' '}
-                        </a>{' '}
+                          {" "}
+                          help@kabo.co{" "}
+                        </a>{" "}
                         if you require additional help.
                       </p>
                     </div>
@@ -429,12 +413,11 @@ class EditPlan extends Component {
               onClick={() =>
                 this.setState({ editPortionsOpen: !editPortionsOpen })
               }
-              className={`flex bg-recipeGray justify-between items-center h-12 text-xl font-light p-3 cursor-pointer 
-              ${
-                editPortionsOpen
-                  ? 'rounded-t-xl border-t border-l border-r border-gray-300'
-                  : 'rounded-xl'
-              }`}
+              className={`flex bg-white justify-between items-center h-12 text-xl font-light p-3 cursor-pointer 
+              ${editPortionsOpen
+                  ? "rounded-t-xl border-t border-l border-r border-gray-300"
+                  : "rounded-xl"
+                }`}
             >
               <div className="flex justify-between items-center  h-full">
                 <p className="text-base sm:text-xs xl:text-base">
@@ -444,7 +427,7 @@ class EditPlan extends Component {
               <Arrow
                 className="w-8 h-3"
                 style={{
-                  transform: editPortionsOpen ? 'rotateX(180deg)' : null,
+                  transform: editPortionsOpen ? "rotateX(180deg)" : null,
                 }}
               />
             </div>

@@ -12,7 +12,7 @@ const DietPortionCard = ({ item, handleSelect, dietPortion, dog }) => {
     <button
       onClick={(e) => handleSelect(item)}
       className={
-        item.title === dietPortion.title
+        item.cooked_portion === dietPortion.cooked_portion && item.portion_adjustment == dietPortion.portion_adjustment && item.kibble_portion == dietPortion.kibble_portion
           ? " flex flex-col w-full pt-4 px-4 pb-16 items-center bg-green-100 font-messina relative rounded-lg border border-gray-200"
           : " flex flex-col w-full  p-2 items-center bg-white font-messina relative rounded-lg border border-gray-200"
       }
@@ -24,7 +24,7 @@ const DietPortionCard = ({ item, handleSelect, dietPortion, dog }) => {
         <CircleSVG num={thenum} />
       </div>
       <p className="font-messina mt-1">{item.title}</p>
-      <div>{thenum === 100 ?  <p className="text-xs mt-3">All of {dog?.name}’s daily caloric needs from cooked food</p> :  <p className="text-xs mt-3">Mix our food with 75% of {dog?.name}’s existing food</p>}</div>
+      <div>{thenum === 100 ? <p className="text-xs mt-3">All of {dog?.name}’s daily caloric needs from cooked food</p> : <p className="text-xs mt-3">Mix our food with 75% of {dog?.name}’s existing food</p>}</div>
     </button>
   );
 };

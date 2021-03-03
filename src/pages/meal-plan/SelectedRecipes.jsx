@@ -23,7 +23,7 @@ class SelectedRecipes extends Component {
       onConfirm
     } = this.props;
     return (
-      <div className="flex flex-col py-9 items-center bg-recipeGray">
+      <div className="flex flex-col py-9 items-center bg-white">
         <div className="container flex flex-col  w-11/12 mx-auto lg:w-full">
           <div className=" grid grid-cols-1 w-full w-4/5 md:w-full gap-10">
             <div>
