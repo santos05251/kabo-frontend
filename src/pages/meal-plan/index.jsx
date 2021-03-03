@@ -378,7 +378,7 @@ class EditPlan extends Component {
                         ? null
                         : user.estimate.amount}
                     </span>{" "}
-                    every 4 weeks
+                    every {parseInt(user.how_often)} weeks
                   </p>
                   <button
                     onClick={() => this.handleMealUpdate()}
@@ -389,7 +389,7 @@ class EditPlan extends Component {
                   <div className="flex items-center flex-col mb-4">
                     <div className="w-full p-6 bg-promptYellow rounded-1lg">
                       <h4 className="text-left text-base font-semibold mb-1">
-                        Changes will apply to your March 4 delivery onwards
+                       {user.subscription_phase.status === "waiting_for_trial_shipment" ?  "Changes will apply to your trial delivery onwards" : `Changes will apply to your ${user.subscription_phase.changes_applied_delivery_date}`}
                       </h4>
                       <p className="text-left text-sm ">
                         Email{" "}
