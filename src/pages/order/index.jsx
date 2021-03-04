@@ -16,7 +16,7 @@ class AllOrdersPage extends React.Component {
 
   render() {
     const { orders } = this.props;
-
+  
     return (
       <div className='container pb-40 bg-white'>
         <div className='flex items-center flex-col mt-10'>
