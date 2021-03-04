@@ -70,7 +70,7 @@ class Navbar extends React.Component {
 
     return (
       <nav
-        className="fixed inset-x-0 top-0 md:px-0 px-4 md:h-20 sm:h-14 h-24 bg-white z-50"
+        className="fixed inset-x-0 top-0 md:px-0 px-4 md:h-20 sm:h-14 h-24 bg-white z-50 md:w-11/12 xl:w-full"
         id="outer-container"
       >
         <div className="py-3 md:py-6 pl-0 flex items-center sm:justify-between sm:items-stretch">
