@@ -23,23 +23,19 @@ class MealPlanModal extends React.Component {
 
   render() {
     const { dogIndex } = this.state;
-    const { dogs, subscriptions, subscription_phase } = this.props;
+    const {
+      dogs,
+      subscriptions,
+      subscription_phase
+    } = this.props;
     const dogsLength = dogs.length;
     const currentDog = dogs[dogIndex];
     const { portion_adjustment, cooked_portion, kibble_portion } = currentDog;
-
-    let cbID = currentDog.chargebee_subscription_id;
-    let status = subscriptions[cbID].status;
-    let inTrial =
-      status.includes("future") ||
-      status.includes("trial") ||
-      subscription_phase.status.includes("waiting");
-    let portion =
-      portion_adjustment === "higher"
-        ? 110
-        : cooked_portion
-        ? cooked_portion
-        : 0;
+    
+    let cbID = currentDog.chargebee_subscription_id
+    let status = subscriptions[cbID].status
+    let inTrial = status.includes('future') || status.includes('trial') || subscription_phase.status.includes('waiting')
+    let portion = portion_adjustment === 'higher' ? 110 : cooked_portion ? cooked_portion : 0;
 
     return (
       <>

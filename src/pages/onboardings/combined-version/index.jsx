@@ -32,12 +32,38 @@ class OnboardingCombinedVersion extends Component {
     this.props.getOnboardingData();
   }
 
-  addDogs = (dog) => {
-    this.setState({ dogs: [...this.state.dogs, dog] });
+  updateDog = (dog) => {
+    const { dogs } = this.state;
+    
+    var bNew = true;
+    for (let i in dogs) {
+      if (dogs[i].index == dog.index) {
+        dogs[i] = dog;
+        this.setState({ dogs });
+
+        bNew = false;
+        break;
+      }
+    }
+    if (bNew)
+      this.setState({ dogs: [...dogs, dog] });
   };
 
-  addDogsDetail = (dog) => {
-    this.setState({ dogs_detail: [...this.state.dogs_detail, dog] });
+  updateDogDetail = (dog) => {
+    let dogs = this.state.dogs_detail;
+    
+    var bNew = true;
+    for (let i in dogs) {
+      if (dogs[i].index == dog.index) {
+        dogs[i] = dog;
+        this.setState({ dogs_detail: dogs });
+
+        bNew = false;
+        break;
+      }
+    }
+    if (bNew)
+      this.setState({ dogs_detail: [...dogs, dog] });
   };
 
   handleChange = (key, value) => {
@@ -73,7 +99,7 @@ class OnboardingCombinedVersion extends Component {
     };
     localStorage.setItem("dogs_detail", JSON.stringify(data.details));
     this.props.updateTempUser(data);
-    this.setState({ step: this.state.step + 1 });
+    this.setState({ step: this.state.step + 1, dogs_detail: [] });
   };
 
   // This function is for selecting cooked food recipes
@@ -239,7 +265,7 @@ class OnboardingCombinedVersion extends Component {
   };
 
   render() {
-    const { dogs, step, cookedRecipes, kibble, dietPortions } = this.state;
+    const { dogs, dogs_detail, step, cookedRecipes, kibble, dietPortions } = this.state;
 
     const {
       onboarding_starter_data,
@@ -248,6 +274,7 @@ class OnboardingCombinedVersion extends Component {
       dogs: selectedDogs,
       temp_user,
     } = this.props;
+
     return (
       <React.Fragment>
         <Header
@@ -258,13 +285,13 @@ class OnboardingCombinedVersion extends Component {
           {step === 1 && (
             <FirstStep
               onboarding_starter_data={onboarding_starter_data}
-              addDogs={this.addDogs}
+              updateDog={this.updateDog}
             />
           )}
           {step === 2 && (
             <SecondStep
               selectedDogs={selectedDogs}
-              addDogsDetail={this.addDogsDetail}
+              updateDogDetail={this.updateDogDetail}
               getOnboardingDetails={getOnboardingDetails}
               onboarding_details_data={onboarding_details_data}
             />
@@ -283,7 +310,7 @@ class OnboardingCombinedVersion extends Component {
               handleDietPortion={this.handleDietPortion}
             />
           )}
-          {step === 4 && (
+          {step >= 4 && (
             <FifthStep
               handleChange={this.handleChange}
               user={this.state.user}
@@ -292,13 +319,13 @@ class OnboardingCombinedVersion extends Component {
         </main>
         <div className="h-20" />
 
-        <div className="fixed inset-x-0 bottom-0 h-20 footer bg-white flex justify-center py-4 z-100">
+        <div className="fixed inset-x-0 bottom-0 h-20 footer border-t bg-white flex justify-center py-4 z-100">
           {step === 1 && (
             <button
-              disabled={dogs.length <= 0}
+              disabled={dogs.length <= 0 || !dogs.every(dog => dog.name != undefined && dog.breed != undefined && dog.age_in_months != undefined && dog.name !== '' && dog.breed >= 0 && dog.age_in_months >= 0) }
               onClick={this.handleFirstStep}
               className={
-                dogs.length <= 0
+                dogs.length <= 0 || !dogs.every(dog => dog.name != undefined && dog.breed != undefined && dog.age_in_months != undefined && dog.name !== '' && dog.breed >= 0 && dog.age_in_months >= 0)
                   ? "flex justify-center items-center border btn mx-5 border-gray-300 xs:bg-green-600 xs:text-white md:bg-gray-200 md:text-gray-400  focus:outline-none rounded-lg py-3 px-20"
                   : "flex justify-center items-center border btn mx-5 border-green-600 xs:bg-green-600 xs:text-white md:bg-green-600 md:text-white  focus:outline-none rounded-lg py-3 px-20"
               }
@@ -308,9 +335,12 @@ class OnboardingCombinedVersion extends Component {
           )}
           {step === 2 && (
             <button
+              disabled={dogs_detail.length <= 0 || !dogs_detail.every(dog => dog.gender != undefined && dog.neutered != undefined && dog.weight_unit != undefined && dog.weight != undefined && dog.body_type != undefined && dog.activity_level != undefined && dog.gender !== '' && dog.weight_unit != '' && Number(dog.weight) >= 0 && dog.body_type >= 0 && dog.activity_level >= 0) }
               onClick={this.handleSecondStep}
               className={
-                "flex justify-center items-center border btn mx-5 border-green-600 xs:bg-green-600 xs:text-white md:bg-green-600 md:text-white  focus:outline-none rounded-lg py-3 px-20"
+                dogs_detail.length <= 0 || !dogs_detail.every(dog => dog.gender != undefined && dog.neutered != undefined && dog.weight_unit != undefined && dog.weight != undefined && dog.body_type != undefined && dog.activity_level != undefined && dog.gender !== '' && dog.weight_unit != '' && Number(dog.weight) >= 0 && dog.body_type >= 0 && dog.activity_level >= 0)
+                  ? "flex justify-center items-center border btn mx-5 border-gray-300 xs:bg-green-600 xs:text-white md:bg-gray-200 md:text-gray-400  focus:outline-none rounded-lg py-3 px-20"
+                  : "flex justify-center items-center border btn mx-5 border-green-600 xs:bg-green-600 xs:text-white md:bg-green-600 md:text-white  focus:outline-none rounded-lg py-3 px-20"
               }
             >
               Next
@@ -330,21 +360,8 @@ class OnboardingCombinedVersion extends Component {
               Next
             </button>
           )}
-          {step === 4 && (
-            <button
-              disabled={this.state.dietPortions.length <= 0}
-              onClick={this.handleFourthStep}
-              className={
-                this.state.dietPortions.length <= 0
-                  ? "flex justify-center items-center border btn mx-5 border-gray-300 xs:bg-green-600 xs:text-white md:bg-gray-200 md:text-gray-400  focus:outline-none rounded-lg py-3 px-20"
-                  : "flex justify-center items-center border btn mx-5 border-green-600 xs:bg-green-600 xs:text-white md:bg-green-600 md:text-white  focus:outline-none rounded-lg py-3 px-20"
-              }
-            >
-              Next
-            </button>
-          )}
 
-          {step === 5 && (
+          {step >=4 && (
             <button
               disabled={Object.keys(this.state.user).length <= 0}
               onClick={this.handleFifthStep}

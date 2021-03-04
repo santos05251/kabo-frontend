@@ -35,7 +35,7 @@ class SecondStep extends Component {
   };
 
   render() {
-    const { onboarding_details_data, selectedDogs, addDogsDetail } = this.props;
+    const { onboarding_details_data, selectedDogs, updateDogDetail } = this.props;
     return (
       <React.Fragment>
         <section className="flex flex-col items-center xs:mx-5 xs:pb-5 md:pb-10 xs:pt-4 md:pt-8">
@@ -44,8 +44,8 @@ class SecondStep extends Component {
             selectedDogs.dogs.map((item, idx) => (
               <div className="on-boarding-form-container" key={idx}>
                 <DogDetailsForm
-                  dog={item}
-                  addDogsDetail={addDogsDetail}
+                  dogDetails={item}
+                  updateDog={updateDogDetail}
                   onboarding_details_data={onboarding_details_data}
                   getActivityLevels={this.getActivityLevels}
                   getBodyTypes={this.getBodyTypes}
@@ -61,8 +61,8 @@ class SecondStep extends Component {
 export default SecondStep;
 
 const DogDetailsForm = ({
-  dog,
-  addDogsDetail,
+  dogDetails,
+  updateDog,
   getBodyTypes,
   getActivityLevels,
   onboarding_details_data,
@@ -78,21 +78,25 @@ const DogDetailsForm = ({
 
   const [gender, setGender] = useState("");
   const [neutered, setNeutered] = useState("");
-  const [weightUnit, setWeightUnit] = useState("");
+  const [weightUnit, setWeightUnit] = useState(units[0].value);
   const [weight, setWeight] = useState("");
   const [bodyType, setBodyType] = useState("");
   const [activityLevel, setActivityLevel] = useState("");
-  const [dog_, setDog_] = useState(dog);
+  const [dog, setDog] = useState({ ...dogDetails, weight_unit: units[0].value });
 
   const handleGender = (gender) => {
     gender = gender.toLowerCase();
     setGender(gender);
-    setDog_({ ...dog_, gender });
+    setDog({ ...dog, gender });
+
+    updateDog({ ...dog, gender });
   };
 
   const handleNeutered = (neutered) => {
     setNeutered(neutered);
-    setDog_({ ...dog_, neutered });
+    setDog({ ...dog, neutered });
+
+    updateDog({ ...dog, neutered });
   };
 
   const handleWeight = (weight) => {
@@ -101,24 +105,32 @@ const DogDetailsForm = ({
       return;
     }
     setWeight(weight);
-    setDog_({ ...dog_, weight });
+    setDog({ ...dog, weight });
+
+    updateDog({ ...dog, weight });
   };
 
   const handleWeightUnit = (unit) => {
     setWeightUnit(unit);
-    setDog_({ ...dog_, weight_unit: unit });
+    setDog({ ...dog, weight_unit: unit });
+
+    updateDog({ ...dog, weight_unit: unit });
   };
 
   const handleBodyType = (body_type) => {
     setBodyType(body_type);
-    setDog_({ ...dog_, body_type });
+    setDog({ ...dog, body_type });
+
+    updateDog({ ...dog, body_type });
   };
 
   const handleActivityLevel = (activity_level) => {
     setActivityLevel(activity_level);
-    setDog_({ ...dog_, activity_level });
-    addDogsDetail({ ...dog_, activity_level });
+    setDog({ ...dog, activity_level });
+    
+    updateDog({ ...dog, activity_level });
   };
+
   return (
     <FormWrapper increaseSmallPadding>
       <div className="flex flex-col xs:pb-5 md:pb-10 pb-4">
@@ -134,8 +146,8 @@ const DogDetailsForm = ({
                 onClick={(e) => handleGender(e.target.value)}
                 className={
                   gender === item.label.toLowerCase()
-                    ? "border cursor-pointer mr-3 border-green w-40 bg-green-600 md:text-white font-medium  focus:outline-none rounded-lg py-3"
-                    : "border cursor-pointer mr-3 border-green w-40 bg-white text-green-600 md:text-green-600  focus:outline-none rounded-lg py-3"
+                    ? "border cursor-pointer mr-3 mb-2 border-green w-32 bg-green-600 md:text-white font-medium  focus:outline-none rounded-lg py-3"
+                    : "border cursor-pointer mr-3 mb-2 border-green w-32 bg-white text-green-600 md:text-green-600  focus:outline-none rounded-lg py-3"
                 }
               />
             ))}
@@ -156,8 +168,8 @@ const DogDetailsForm = ({
                 onClick={(e) => handleNeutered(item.value)}
                 className={
                   neutered === item.value
-                    ? "border cursor-pointer mr-3 border-green w-40 bg-green-600 md:text-white font-medium  focus:outline-none rounded-lg py-3"
-                    : "border cursor-pointer mr-3 border-green w-40 bg-white text-green-600 md:text-green-600  focus:outline-none rounded-lg py-3"
+                    ? "border cursor-pointer mr-3 mb-2 border-green w-32 bg-green-600 md:text-white font-medium  focus:outline-none rounded-lg py-3"
+                    : "border cursor-pointer mr-3 mb-2 border-green w-32 bg-white text-green-600 md:text-green-600  focus:outline-none rounded-lg py-3"
                 }
               />
             ))}
@@ -171,7 +183,7 @@ const DogDetailsForm = ({
         <div className="flex">
           <input
             type="number"
-            className="border step-input mr-3 md:border-transparent-400 placeholder-black text-black bg-transparent w-20 text-center focus:outline-none rounded-lg py-3"
+            className="border step-input mr-3 mb-2 md:border-transparent-400 placeholder-black text-black bg-transparent w-20 text-center focus:outline-none rounded-lg py-3"
             placeholder="0"
             value={weight}
             min="0"
@@ -187,8 +199,8 @@ const DogDetailsForm = ({
                 onClick={(e) => handleWeightUnit(item.value)}
                 className={
                   weightUnit === item.value
-                    ? "border step-input mr-3 md:border-green-700-400 placeholder-white text-white bg-green-700 w-20 text-center focus:outline-none rounded-lg py-3"
-                    : "border step-input mr-3 md:border-gray-400-400 placeholder-gray-700 text-gray-700 bg-gray-100 w-20 text-center focus:outline-none rounded-lg py-3"
+                    ? "border step-input mr-3 mb-2 md:border-green-700-400 placeholder-white text-white bg-green-700 w-20 text-center focus:outline-none rounded-lg py-3"
+                    : "border step-input mr-3 mb-2 md:border-gray-400-400 placeholder-gray-700 text-gray-700 bg-gray-400 w-20 text-center focus:outline-none rounded-lg py-3"
                 }
               />
             ))}
@@ -232,23 +244,20 @@ const DogDetailsForm = ({
 
 const Steps = ({ steps, value, setValue }) => (
   <div className="container">
-    <div className="progress-container">
-      <div className="progress" id="progress"></div>
+    <div className="flex flex-wrap">
       {steps &&
         steps.map((item, idx) => (
-          <div className="relative" key={idx}>
-            <div
-              className={
-                value === item.value
-                  ? "circle cursor-pointer active"
-                  : "circle cursor-pointer"
-              }
-              onClick={() => setValue(item.value)}
-            />
-            <p className="absolute xs:-left-1 -left-4 xs:mt-1 mt-2 text-sm">
-              {item.label}
-            </p>
-          </div>
+          <input
+            key={idx}
+            type="button"
+            value={item.label}
+            onClick={() => setValue(item.value)}
+            className={
+              value === item.value
+                ? "w-32 border cursor-pointer mr-3 mb-2 border-green bg-green-600 text-white font-medium  focus:outline-none rounded-lg py-3"
+                : "w-32 border cursor-pointer mr-3 mb-2 border-green bg-white text-green-600 focus:outline-none rounded-lg py-3"
+            }
+          />
         ))}
     </div>
   </div>

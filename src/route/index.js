@@ -1,2 +1,2 @@
-export * from './PrivateRoute';
-export * from './PublicRoute';
+export * from "./PrivateRoute";
+export * from "./NonUserRoute";

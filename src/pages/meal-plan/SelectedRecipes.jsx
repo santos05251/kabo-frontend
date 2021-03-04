@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import moment from 'moment'
 import LoadingCircle from "../../components/partials/loading";
 import MealPlanSelect from "../../components/meal-plan/meal-plan-select";
 import DisplaySelected from "../../components/meal-plan/display-selected";
@@ -74,7 +75,7 @@ class SelectedRecipes extends Component {
 
             <div className="flex items-center flex-col mb-4">
               <div className="w-full p-6 bg-promptYellow rounded-1lg">
-              {user.subscription_phase.status === "waiting_for_trial_shipment" ?  "Changes will apply to your trial delivery onwards" : `Changes will apply to your ${user.subscription_phase.changes_applied_delivery_date}`}
+                {user && user.subscription_phase && user.subscription_phase.status === "waiting_for_trial_shipment" ? "Changes will apply to your trial delivery onwards" : `Changes will apply to your ${user && user.subscription_phase && moment(user.subscription_phase.changes_applied_delivery_date).format("MMM Do")} delivery onwards`}
                 <p className="text-left text-sm ">
                   Email{" "}
                   <a className="font-bold underline" href="mailto:help@kabo.co">

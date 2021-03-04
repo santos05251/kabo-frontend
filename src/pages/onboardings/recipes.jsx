@@ -63,17 +63,28 @@ class Recipes extends Component {
       let recipes = [...kibble];
       const index = recipes.indexOf(food.recipe);
       recipes.splice(index, 1);
-      this.setState({ kibble: recipes });
+      // this.setState({ kibble: recipes });
+      this.setState({ kibble: [] });
       this.props.selectedKibble(this.props.tempDogId, food.recipe);
       return;
     }
-    this.setState({ kibble: [...kibble, food.recipe] });
+    // this.setState({ kibble: [...kibble, food.recipe] });
+    this.setState({ kibble: [food.recipe] });
     this.props.selectedKibble(this.props.tempDogId, food.recipe);
   };
 
   render() {
     const { user, dog_, separateVersion } = this.props;
     const { kibble, cookedRecipes } = this.state;
+
+    let filteredKibble =
+      kibble[0] === null || !kibble ? 0 : kibble.length;
+    let filteredCooked =
+      cookedRecipes[0] === null || !cookedRecipes ? 0 : cookedRecipes.length;
+    ///checking selected plans length.
+    const selectedLength = filteredCooked + filteredKibble;
+
+    // if (selectedLength === 0) this.forceUpdate();
 
     return (
       <React.Fragment>
@@ -83,12 +94,13 @@ class Recipes extends Component {
           selectedDog={this.selectedDog}
           cookedRecipes={cookedRecipes}
           handleSelectedCookedRecipes={this.handleSelectedCookedRecipes}
-          selectedCookedRecipes={this.state.cookedRecipes}
+          selectedCookedRecipes={cookedRecipes}
           handleSelectedKibbleRecipe={this.handleSelectedKibbleRecipe}
           kibble={kibble}
           toggleKibble={this.toggleKibble}
           isKibble={this.state.isKibble}
           separateVersion={separateVersion}
+          selectedLength={selectedLength}
         />
       </React.Fragment>
     );

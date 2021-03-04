@@ -18,23 +18,24 @@ class RecipeSelection extends Component {
       handleSelectedKibbleRecipe,
       handleSelectedCookedRecipes,
       selectedCookedRecipes,
+      selectedLength
     } = this.props;
     return (
       <div className="w-full flex flex-col items-center ">
         <div className="container flex flex-col items-center">
           <div className="w-full">
             <div>
+              <div
+                className={`mb-3 ${
+                  this.props.separateVersion ? "text-center" : "text-left"
+                } text-3xl`}
+              >
+                1. Select recipes
+              </div>
               {!user.cooked_recipes ? (
                 <LoadingCircle />
               ) : (
                 <>
-                  <div
-                    className={`mb-3 ${
-                      this.props.separateVersion ? "text-center" : "text-left"
-                    } text-3xl`}
-                  >
-                    Fresh Food
-                  </div>
                   <div
                     className={`grid ${
                       this.props.separateVersion ? "sm:grid-cols-2 lg:grid-cols-4" : "sm:grid-cols-2 md:grid-cols-3"
@@ -49,6 +50,7 @@ class RecipeSelection extends Component {
                       selectedCookedRecipes={selectedCookedRecipes}
                       selectedKibble={kibble}
                       selectedDog={selectedDog}
+                      selectedLength={selectedLength}
                     />
                   </div>
                 </>
@@ -60,14 +62,7 @@ class RecipeSelection extends Component {
               ) : (
                 <>
                   <div
-                    className={`mb-3 ${
-                      this.props.separateVersion ? "text-center" : "text-left"
-                    } text-3xl`}
-                  >
-                    Kibble
-                  </div>
-                  <div
-                     className={`grid ${
+                    className={`grid ${
                       this.props.separateVersion ? "sm:grid-cols-2 lg:grid-cols-4" : "sm:grid-cols-2 md:grid-cols-3"
                     }  gap-5`}
                   >
@@ -81,6 +76,7 @@ class RecipeSelection extends Component {
                       toggleKibble={toggleKibble}
                       isKibble={isKibble}
                       selectedDog={selectedDog}
+                      selectedLength={selectedLength}
                     />
                   </div>
                 </>

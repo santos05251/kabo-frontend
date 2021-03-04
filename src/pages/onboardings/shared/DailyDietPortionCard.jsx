@@ -52,7 +52,7 @@ const DietPortionCard = ({ item, handleSelect, dietPortion, recipeTypes }) => {
         </div>
       )}
       <p className="font-messina mt-1">{item.title}</p>
-      <p className="font-messina mt-1">{item.description}</p>
+      <p className="font-messina mt-1 text-center">{item.description}</p>
       {/* <button
         className="bg-green-600 focus:bg-green-800 focus:outline-none absolute bottom-3.5 text-white font-medium py-2 px-4 rounded "
         onClick={(e) => handleSelect(item)}

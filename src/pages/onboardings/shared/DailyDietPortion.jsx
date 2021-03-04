@@ -33,7 +33,7 @@ const DailyDietPortion = ({
       <div className="w-full flex flex-col items-center">
         <div className="container flex flex-col">
           <div className="pb-3 text-left text-3xl font-normal p-5 pt-3">
-            Choose {dogName && dogName}'s Daily <br /> portion for Kabo
+            2. Select portions
           </div>
           <div className="flex justify-center">
             <div

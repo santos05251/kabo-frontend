@@ -1,7 +1,7 @@
 import React, { Component, useState } from "react";
 import addEmpty from "../../assets/images/add-empty.png";
 import FormWrapper from "../../components/onboardings/form-wraper";
-import Dropdown from "../../components/onboardings/dropdown";
+import EditableDropdown from "../../components/onboardings/edit-dropdown";
 import DogInput from "../../components/onboardings/input";
 
 class FirstStep extends Component {
@@ -16,27 +16,25 @@ class FirstStep extends Component {
     });
   };
 
-  //   addDogs = (dog) => {
+  //   addDog = (dog) => {
   //     this.setState({ dogs: [...this.state.dogs, dog] });
   //   };
 
+  componentDidMount() {
+    // default form
+    this.addDogForm()
+  }
+
   render() {
-    const { onboarding_starter_data, addDogs } = this.props;
+    const { onboarding_starter_data, updateDog } = this.props;
+
     return (
       <section className="flex flex-col items-center xs:mx-5 md:mx-5 xs:pb-5 md:pb-5 xs:pt-4 md:pt-5 ">
         <div className="on-boarding-form-container">
-          <DogForm
-            breeds={onboarding_starter_data && onboarding_starter_data.breeds}
-            ages={onboarding_starter_data && onboarding_starter_data.ages}
-            unknown_breeds={
-              onboarding_starter_data &&
-              onboarding_starter_data.unknown_breeds
-            }
-            addDogs={addDogs}
-          />
           {this.state.dogForm.map((idx) => (
             <React.Fragment key={idx}>
               <DogForm
+                index={idx}
                 breeds={
                   onboarding_starter_data && onboarding_starter_data.breeds
                 }
@@ -45,7 +43,7 @@ class FirstStep extends Component {
                   onboarding_starter_data &&
                   onboarding_starter_data.unknown_breeds
                 }
-                addDogs={addDogs}
+                updateDog={updateDog}
               />
             </React.Fragment>
           ))}
@@ -64,26 +62,31 @@ class FirstStep extends Component {
 
 export default FirstStep;
 
-const DogForm = ({ breeds, ages, addDogs, unknown_breeds }) => {
+const DogForm = ({ index, breeds, ages, updateDog, unknown_breeds }) => {
   const [dogName, setDogName] = useState("");
   const [breed, setBreed] = useState({ label: "Type or select below" });
   const [age, setAge] = useState({ label: "Type or select below" });
-  const [dog, setDog] = useState("");
 
+  const [dog, setDog] = useState({ index });
   const handleDogName = (name) => {
     setDogName(name);
     setDog({ ...dog, name: name });
+
+    updateDog({ ...dog, name: name });
   };
 
   const handleDogBreed = (breed) => {
     setBreed(breed);
     setDog({ ...dog, breed: breed.value });
+
+    updateDog({ ...dog, breed: breed.value });
   };
 
   const handleDogAge = (age) => {
     setAge(age);
     setDog({ ...dog, age_in_months: age.value });
-    addDogs({ ...dog, age_in_months: age.value });
+    
+    updateDog({ ...dog, age_in_months: age.value });
   };
 
   const getBreedsList = () => {
@@ -115,7 +118,7 @@ const DogForm = ({ breeds, ages, addDogs, unknown_breeds }) => {
         />
       </div>
 
-      <Dropdown
+      <EditableDropdown
         label="What’s their breed?"
         options={getBreedsList()}
         isCheckbox={true}
@@ -123,14 +126,15 @@ const DogForm = ({ breeds, ages, addDogs, unknown_breeds }) => {
         value={breed}
         setValue={handleDogBreed}
         unknown_breeds={unknown_breeds}
+        placeholder="Type or select below"
       />
 
-      <Dropdown
+      <EditableDropdown
         label="How old is your dog?"
         options={getAgesList()}
-        helpText="Breed not listed or unknown mix"
         value={age}
         setValue={handleDogAge}
+        placeholder="Type or select below"
       />
     </FormWrapper>
   );
