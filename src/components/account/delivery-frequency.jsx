@@ -112,7 +112,7 @@ class FrequencyModal extends React.Component {
             name="starting_date" label="How Often"
             component="select"
           >
-            {/* {SelectOptions(delivery_starting_date_options)} */}
+           
             {
               delivery_starting_date_options && delivery_starting_date_options.map((item,i)=>{
                 return(
