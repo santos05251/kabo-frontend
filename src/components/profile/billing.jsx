@@ -3,7 +3,7 @@ import Button from "../global/button.jsx";
 import PaymentCardIcon from "../global/payment-card-icon.jsx";
 import OrderCard from "../global/order-card.jsx";
 import ChangePaymentMethodModal from "./change-payment-method-modal";
-import { Link } from 'react-router-dom'
+import { Link } from "react-router-dom";
 import PauseMealModal from "../account/PauseMealModal";
 import Modal from "../global/modal";
 import CancelMealModal from "../account/cancel-meal-modal";
@@ -15,56 +15,62 @@ class Billing extends React.Component {
     this.state = {
       showManageSubscriptionsBox: false,
       showManageButton: true,
-      firstDogStatus: 'active',
+      firstDogStatus: "active",
     };
     this.toggleCancelBox = this.toggleCancelBox.bind(this);
   }
 
   getFirstDogStatus = (subscriptions) => {
-      let dogSubscription = {};
-      // calculating what subscription of selected dog.
-      if (this.props.user.dogs) {
-          Object.keys(subscriptions).forEach((key) => {
-              if (+subscriptions[key].dog_id === +this.props.user.dogs[0].id) {
-                  dogSubscription = subscriptions[key];
-              }
-          });
-      }
+    let dogSubscription = {};
+    // calculating what subscription of selected dog.
+    if (this.props.user.dogs) {
+      Object.keys(subscriptions).forEach((key) => {
+        if (+subscriptions[key].dog_id === +this.props.user.dogs[0].id) {
+          dogSubscription = subscriptions[key];
+        }
+      });
+    }
     return { status: dogSubscription.status };
   };
 
   getCalculateShowButtons = (subscriptions) => {
     // getting array with subscription statuses
-  let statuses = Object.keys(subscriptions).map(key => subscriptions[key].status);
-  let showPause = statuses.filter(s => s === 'paused').length !== statuses.length;
-  let showCancel = statuses.filter(s => s === 'cancelled').length !== statuses.length;
-  // and return if all of them cancelled or paused
-  return { showPause, showCancel };
-}
+    let statuses = Object.keys(subscriptions).map(
+      (key) => subscriptions[key].status
+    );
+    let showPause =
+      statuses.filter((s) => s === "paused").length !== statuses.length;
+    let showCancel =
+      statuses.filter((s) => s === "cancelled").length !== statuses.length;
+    // and return if all of them cancelled or paused
+    return { showPause, showCancel };
+  };
 
   componentDidMount() {
-      // initially describing if displaying pause button
+    // initially describing if displaying pause button
     const { subscriptions } = this.props.user;
     const { status } = this.getFirstDogStatus(subscriptions);
     const { showPause } = this.getCalculateShowButtons(subscriptions);
-    this.setState({ firstDogStatus: status, showManageButton: showPause})
+    this.setState({ firstDogStatus: status, showManageButton: showPause });
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     const { subscriptions } = this.props.user;
     const { status } = this.getFirstDogStatus(subscriptions);
     const { showPause } = this.getCalculateShowButtons(subscriptions);
-      // describing if displaying pause button with props update
+    // describing if displaying pause button with props update
     if (prevState.firstDogStatus !== status) {
-      this.setState({ firstDogStatus: status })
+      this.setState({ firstDogStatus: status });
     }
     if (prevState.showManageButton !== showPause) {
-      this.setState({ showManageButton: showPause })
+      this.setState({ showManageButton: showPause });
     }
   }
 
   toggleCancelBox() {
-    this.setState({ showManageSubscriptionsBox: !this.state.showManageSubscriptionsBox });
+    this.setState({
+      showManageSubscriptionsBox: !this.state.showManageSubscriptionsBox,
+    });
   }
 
   toggle = () => {
@@ -112,35 +118,45 @@ class Billing extends React.Component {
           onClick={this.toggle}
           styles="focus:outline-none"
         />
-        <div className="flex-auto text-lg font-semibold my-5">
-          Recent Orders
-        </div>
-        <div className="mb-5 ">
-          <OrderTable orders={orders} noTitlePadding />
-        </div>
-        <Link
-          to={`/orders`}
-          className="font-bold mt-3 text-primary border rounded-xl py-2 px-6 text-base font-bold text-primary button-border focus:outline-none"
-        >
-          View All Orders
-        </Link>
+        {orders.length ? (
+          <div>
+            <div className="flex-auto text-lg font-semibold my-5">
+              Recent Orders
+            </div>
+            <div className="mb-5 ">
+              <OrderTable orders={orders} noTitlePadding />
+            </div>
+            <Link
+              to={`/orders`}
+              className="font-bold mt-3 text-primary border rounded-xl py-2 px-6 text-base font-bold text-primary button-border focus:outline-none"
+            >
+              View All Orders
+            </Link>
 
-        <div className="flex justify-between px-7 mt-7">
-          <span> </span>
-          <button
-            type="button"
-            onClick={this.toggleCancelBox}
-            className="text-primary font-bold"
-          >
-            Manage subscription
-          </button>
-        </div>
-
-        <Modal title="Manage subscription"
+            <div className="flex justify-between px-7 mt-7">
+              <span> </span>
+              <button
+                type="button"
+                onClick={this.toggleCancelBox}
+                className="text-primary font-bold"
+              >
+                Manage subscription
+              </button>
+            </div>
+          </div>
+        ) : (
+          <></>
+        )}
+        <Modal
+          title="Manage subscription"
           isOpen={this.state.showManageSubscriptionsBox}
           onRequestClose={this.toggleCancelBox}
         >
-          <PauseMealModal closeModal={() => this.setState({ showManageSubscriptionsBox: false })} />
+          <PauseMealModal
+            closeModal={() =>
+              this.setState({ showManageSubscriptionsBox: false })
+            }
+          />
         </Modal>
 
         <ChangePaymentMethodModal
