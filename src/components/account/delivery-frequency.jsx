@@ -112,7 +112,14 @@ class FrequencyModal extends React.Component {
             name="starting_date" label="How Often"
             component="select"
           >
-            {SelectOptions(delivery_starting_date_options)}
+            {/* {SelectOptions(delivery_starting_date_options)} */}
+            {
+              delivery_starting_date_options && delivery_starting_date_options.map((item,i)=>{
+                return(
+                  <option className="w-full" key={i} value={item.value}> {moment(item.label).format(`MMMM D ${moment().year()}`)}  </option>
+                )
+              })
+            }
           </select>
           <button
             type="submit"
