@@ -3,7 +3,7 @@ import Button from "../global/button.jsx";
 import PaymentCardIcon from "../global/payment-card-icon.jsx";
 import OrderCard from "../global/order-card.jsx";
 import ChangePaymentMethodModal from "./change-payment-method-modal";
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom'
 import PauseMealModal from "../account/PauseMealModal";
 import Modal from "../global/modal";
 import CancelMealModal from "../account/cancel-meal-modal";
@@ -15,62 +15,56 @@ class Billing extends React.Component {
     this.state = {
       showManageSubscriptionsBox: false,
       showManageButton: true,
-      firstDogStatus: "active",
+      firstDogStatus: 'active',
     };
     this.toggleCancelBox = this.toggleCancelBox.bind(this);
   }
 
   getFirstDogStatus = (subscriptions) => {
-    let dogSubscription = {};
-    // calculating what subscription of selected dog.
-    if (this.props.user.dogs) {
-      Object.keys(subscriptions).forEach((key) => {
-        if (+subscriptions[key].dog_id === +this.props.user.dogs[0].id) {
-          dogSubscription = subscriptions[key];
-        }
-      });
-    }
+      let dogSubscription = {};
+      // calculating what subscription of selected dog.
+      if (this.props.user.dogs) {
+          Object.keys(subscriptions).forEach((key) => {
+              if (+subscriptions[key].dog_id === +this.props.user.dogs[0].id) {
+                  dogSubscription = subscriptions[key];
+              }
+          });
+      }
     return { status: dogSubscription.status };
   };
 
   getCalculateShowButtons = (subscriptions) => {
     // getting array with subscription statuses
-    let statuses = Object.keys(subscriptions).map(
-      (key) => subscriptions[key].status
-    );
-    let showPause =
-      statuses.filter((s) => s === "paused").length !== statuses.length;
-    let showCancel =
-      statuses.filter((s) => s === "cancelled").length !== statuses.length;
-    // and return if all of them cancelled or paused
-    return { showPause, showCancel };
-  };
+  let statuses = Object.keys(subscriptions).map(key => subscriptions[key].status);
+  let showPause = statuses.filter(s => s === 'paused').length !== statuses.length;
+  let showCancel = statuses.filter(s => s === 'cancelled').length !== statuses.length;
+  // and return if all of them cancelled or paused
+  return { showPause, showCancel };
+}
 
   componentDidMount() {
-    // initially describing if displaying pause button
+      // initially describing if displaying pause button
     const { subscriptions } = this.props.user;
     const { status } = this.getFirstDogStatus(subscriptions);
     const { showPause } = this.getCalculateShowButtons(subscriptions);
-    this.setState({ firstDogStatus: status, showManageButton: showPause });
+    this.setState({ firstDogStatus: status, showManageButton: showPause})
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     const { subscriptions } = this.props.user;
     const { status } = this.getFirstDogStatus(subscriptions);
     const { showPause } = this.getCalculateShowButtons(subscriptions);
-    // describing if displaying pause button with props update
+      // describing if displaying pause button with props update
     if (prevState.firstDogStatus !== status) {
-      this.setState({ firstDogStatus: status });
+      this.setState({ firstDogStatus: status })
     }
     if (prevState.showManageButton !== showPause) {
-      this.setState({ showManageButton: showPause });
+      this.setState({ showManageButton: showPause })
     }
   }
 
   toggleCancelBox() {
-    this.setState({
-      showManageSubscriptionsBox: !this.state.showManageSubscriptionsBox,
-    });
+    this.setState({ showManageSubscriptionsBox: !this.state.showManageSubscriptionsBox });
   }
 
   toggle = () => {

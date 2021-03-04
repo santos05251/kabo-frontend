@@ -313,6 +313,7 @@ class OnboardingCombinedVersion extends Component {
           {step >= 4 && (
             <FifthStep
               handleChange={this.handleChange}
+              selectedDogs={selectedDogs}
               user={this.state.user}
             />
           )}
@@ -335,10 +336,10 @@ class OnboardingCombinedVersion extends Component {
           )}
           {step === 2 && (
             <button
-              disabled={dogs_detail.length <= 0 || !dogs_detail.every(dog => dog.gender != undefined && dog.neutered != undefined && dog.weight_unit != undefined && dog.weight != undefined && dog.body_type != undefined && dog.activity_level != undefined && dog.gender !== '' && dog.weight_unit != '' && Number(dog.weight) >= 0 && dog.body_type >= 0 && dog.activity_level >= 0) }
+              disabled={dogs_detail.length <= 0 || !dogs_detail.every(dog => dog.gender != undefined && dog.ovary != undefined && dog.weight_unit != undefined && dog.weight != undefined && dog.body_type != undefined && dog.activity_level != undefined && dog.weight_unit != '' && Number(dog.weight) >= 0 && dog.body_type >= 0 && dog.activity_level >= 0) }
               onClick={this.handleSecondStep}
               className={
-                dogs_detail.length <= 0 || !dogs_detail.every(dog => dog.gender != undefined && dog.neutered != undefined && dog.weight_unit != undefined && dog.weight != undefined && dog.body_type != undefined && dog.activity_level != undefined && dog.gender !== '' && dog.weight_unit != '' && Number(dog.weight) >= 0 && dog.body_type >= 0 && dog.activity_level >= 0)
+                dogs_detail.length <= 0 || !dogs_detail.every(dog => dog.gender != undefined && dog.ovary != undefined && dog.weight_unit != undefined && dog.weight != undefined && dog.body_type != undefined && dog.activity_level != undefined && dog.weight_unit != '' && Number(dog.weight) >= 0 && dog.body_type >= 0 && dog.activity_level >= 0)
                   ? "flex justify-center items-center border btn mx-5 border-gray-300 xs:bg-green-600 xs:text-white md:bg-gray-200 md:text-gray-400  focus:outline-none rounded-lg py-3 px-20"
                   : "flex justify-center items-center border btn mx-5 border-green-600 xs:bg-green-600 xs:text-white md:bg-green-600 md:text-white  focus:outline-none rounded-lg py-3 px-20"
               }

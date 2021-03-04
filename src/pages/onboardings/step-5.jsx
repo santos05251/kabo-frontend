@@ -3,7 +3,9 @@ import React, { Component } from "react";
 class FifthStep extends Component {
   state = {};
   render() {
-    const { user, handleChange } = this.props;
+    const { user, handleChange, selectedDogs } = this.props;
+    const bMany = selectedDogs.dogs.length > 1;
+    const strDogNames = this.props.selectedDogs.dogs.map(item => item.name).join(' and ');
 
     return (
       <section className="flex flex-col items-center xs:mx-5 xs:pb-5 md:pb-10 xs:pt-4 md:pt-8">
@@ -30,7 +32,7 @@ class FifthStep extends Component {
         </div>
         <div className="pt-5">
           <h3 className="m-0 font-semibold text-2xl">
-            Let’s make sure Bella’s profile is saved
+            Let’s make sure {strDogNames}’s profile{bMany ? 's' : ''} {bMany ? 'are' : 'is'} saved
           </h3>
         </div>
         <form className="on-boarding-form-container">

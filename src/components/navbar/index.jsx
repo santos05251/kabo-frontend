@@ -70,7 +70,7 @@ class Navbar extends React.Component {
 
     return (
       <nav
-        className="fixed inset-x-0 top-0 md:px-0 px-4 md:h-20 sm:h-14 h-24 bg-white z-50 md:w-11/12 xl:w-full"
+        className="fixed inset-x-0 top-0 md:px-20 px-4 md:h-20 sm:h-14 h-24 bg-white z-50"
         id="outer-container"
       >
         <div className="py-3 md:py-6 pl-0 flex items-center sm:justify-between sm:items-stretch">
@@ -189,7 +189,7 @@ class Navbar extends React.Component {
               <button
                 type="button"
                 onClick={() => this.clickLogout()}
-                className="hidden sm:block font-messina  font-semibold text-base pb-2"
+                className="hidden sm:block font-messina sm:w-24 font-semibold text-base pb-2"
               >
                 Logout
               </button>

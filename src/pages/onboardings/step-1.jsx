@@ -64,8 +64,8 @@ export default FirstStep;
 
 const DogForm = ({ index, breeds, ages, updateDog, unknown_breeds }) => {
   const [dogName, setDogName] = useState("");
-  const [breed, setBreed] = useState({ label: "Type or select below" });
-  const [age, setAge] = useState({ label: "Type or select below" });
+  const [breed, setBreed] = useState({});
+  const [age, setAge] = useState({ });
 
   const [dog, setDog] = useState({ index });
   const handleDogName = (name) => {

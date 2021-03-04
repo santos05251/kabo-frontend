@@ -67,7 +67,12 @@ const DogDetailsForm = ({
   getActivityLevels,
   onboarding_details_data,
 }) => {
-  const neutereds = [
+  const genders = [
+    { label: "Female", value: false },
+    { label: "Male", value: true },
+  ];
+  // neutered or sprayed
+  const ovaries = [
     { label: "Yes", value: true },
     { label: "No", value: false },
   ];
@@ -76,8 +81,8 @@ const DogDetailsForm = ({
     { label: "kg", value: "kg" },
   ];
 
-  const [gender, setGender] = useState("");
-  const [neutered, setNeutered] = useState("");
+  const [gender, setGender] = useState(false);
+  const [ovary, setOvary] = useState("");
   const [weightUnit, setWeightUnit] = useState(units[0].value);
   const [weight, setWeight] = useState("");
   const [bodyType, setBodyType] = useState("");
@@ -85,18 +90,17 @@ const DogDetailsForm = ({
   const [dog, setDog] = useState({ ...dogDetails, weight_unit: units[0].value });
 
   const handleGender = (gender) => {
-    gender = gender.toLowerCase();
     setGender(gender);
     setDog({ ...dog, gender });
 
     updateDog({ ...dog, gender });
   };
 
-  const handleNeutered = (neutered) => {
-    setNeutered(neutered);
-    setDog({ ...dog, neutered });
+  const handleOvary = (ovary) => {
+    setOvary(ovary);
+    setDog({ ...dog, ovary });
 
-    updateDog({ ...dog, neutered });
+    updateDog({ ...dog, ovary });
   };
 
   const handleWeight = (weight) => {
@@ -136,16 +140,15 @@ const DogDetailsForm = ({
       <div className="flex flex-col xs:pb-5 md:pb-10 pb-4">
         <label className="font-semibold pb-4">{dog && dog.name} is a</label>
         <div className="flex">
-          {onboarding_details_data &&
-            onboarding_details_data.genders &&
-            onboarding_details_data.genders.map((item, idx) => (
+          {genders &&
+            genders.map((item, idx) => (
               <input
                 key={idx}
                 type="button"
                 value={item.label}
-                onClick={(e) => handleGender(e.target.value)}
+                onClick={(e) => handleGender(item.value)}
                 className={
-                  gender === item.label.toLowerCase()
+                  gender === item.value
                     ? "border cursor-pointer mr-3 mb-2 border-green w-32 bg-green-600 md:text-white font-medium  focus:outline-none rounded-lg py-3"
                     : "border cursor-pointer mr-3 mb-2 border-green w-32 bg-white text-green-600 md:text-green-600  focus:outline-none rounded-lg py-3"
                 }
@@ -156,18 +159,18 @@ const DogDetailsForm = ({
 
       <div className="flex flex-col xs:pb-5 md:pb-10 pb-4">
         <label className="font-semibold pb-4">
-          Is {dog && dog.name} spayed?
+          Is {dog && dog.name} {gender ? 'neutered' : 'spayed'}?
         </label>
         <div className="flex">
-          {neutereds &&
-            neutereds.map((item, idx) => (
+          {ovaries &&
+            ovaries.map((item, idx) => (
               <input
                 key={idx}
                 type="button"
                 value={item.label}
-                onClick={(e) => handleNeutered(item.value)}
+                onClick={(e) => handleOvary(item.value)}
                 className={
-                  neutered === item.value
+                  ovary === item.value
                     ? "border cursor-pointer mr-3 mb-2 border-green w-32 bg-green-600 md:text-white font-medium  focus:outline-none rounded-lg py-3"
                     : "border cursor-pointer mr-3 mb-2 border-green w-32 bg-white text-green-600 md:text-green-600  focus:outline-none rounded-lg py-3"
                 }
@@ -199,17 +202,11 @@ const DogDetailsForm = ({
                 onClick={(e) => handleWeightUnit(item.value)}
                 className={
                   weightUnit === item.value
-                    ? "border step-input mr-3 mb-2 md:border-green-700-400 placeholder-white text-white bg-green-700 w-20 text-center focus:outline-none rounded-lg py-3"
-                    : "border step-input mr-3 mb-2 md:border-gray-400-400 placeholder-gray-700 text-gray-700 bg-gray-400 w-20 text-center focus:outline-none rounded-lg py-3"
+                    ? "border step-input mr-3 mb-2 md:border-green-700 placeholder-white text-white bg-green-700 border-0 w-20 text-center focus:outline-none rounded-lg py-3"
+                    : "border step-input mr-3 mb-2 md:border-gray-300 placeholder-gray-700 text-gray-700 bg-gray-200 w-20 border-1 text-center focus:outline-none rounded-lg py-3"
                 }
               />
             ))}
-          {/* <button className="border step-input mr-3 md:border-green-700-400 placeholder-white text-white bg-green-700 w-20 text-center focus:outline-none rounded-lg py-3">
-            lbs
-          </button>
-          <button className="border step-input mr-3 md:border-gray-400-400 placeholder-gray-700 text-gray-700 bg-gray-400 w-20 text-center focus:outline-none rounded-lg py-3">
-            kg
-          </button> */}
         </div>
       </div>
 
