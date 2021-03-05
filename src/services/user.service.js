@@ -73,10 +73,10 @@ const unpauseSubscription = (data) => {
     .then((res) => res);
 };
 
-const cancelSubscription = ({ dog_id }) => {
+const cancelSubscription = (data) => {
   const requestOptions = request.options(
     "POST",
-    JSON.stringify({ dog_id }),
+    JSON.stringify(data),
     true,
     true
   );

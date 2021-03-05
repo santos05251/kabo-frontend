@@ -23,6 +23,8 @@ const initialState = {
 
   loading_notifications: false,
   user_notifications: [],
+
+  subscriptionCancel: false,
 };
 
 export const user = (state = initialState, action) => {
@@ -260,6 +262,7 @@ export const user = (state = initialState, action) => {
       return {
         ...nextState,
         error: false,
+        subscriptionCancel: true,
       };
     }
     case userConstants.RESET_ERROR:

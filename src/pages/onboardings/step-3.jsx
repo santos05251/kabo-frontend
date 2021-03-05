@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Recipes from "./recipes";
 import LoadingCircle from "../../components/partials/loading";
-import DailyDietPortion from "./shared/DailyDietPortion";
+import DailyDietPortionNew from "./shared/DailyDietPortionNew";
 
 class ThirdStep extends Component {
   state = {
@@ -14,15 +14,6 @@ class ThirdStep extends Component {
   };
 
   componentDidMount() {
-    if (!this.props.separateVersion) {
-      const { temp_user } = this.props;
-      let str = "";
-      for (let id of temp_user && temp_user.temp_dog_ids) {
-        str += id + ",";
-      }
-      str = str.replace(/,\s*$/, "");
-      this.props.getDogDietPortion(str);
-    }
   }
 
   togglePortion = () => {
@@ -36,14 +27,19 @@ class ThirdStep extends Component {
       selectedCookedRecipes,
       selectedKibble,
       temp_user,
+
+      getDogDietPortion,
+      kibbleRecipes
     } = this.props;
+
     const {
-      getting_diet_portion,
       dietPortions,
       handleDietPortion,
       separateVersion,
     } = this.props;
-    const daily_portions = this?.props.diet_portions?.daily_portions;
+    
+    const daily_portions = this.props.diet_portions;
+
     return (
       <div>
         {selectedDogs &&
@@ -77,11 +73,10 @@ class ThirdStep extends Component {
                 </>
                 {!separateVersion && (
                   <div className="h-full lg:border-l-2 border-gray-300 lg:pl-12">
-                    {getting_diet_portion && <LoadingCircle />}
                     {temp_user &&
                       temp_user.temp_dog_ids &&
                       temp_user.temp_dog_ids.map((dog, idx) => (
-                        <DailyDietPortion
+                        <DailyDietPortionNew
                           key={idx}
                           meal={daily_portions}
                           dog={dog}
@@ -93,6 +88,10 @@ class ThirdStep extends Component {
                           dietPortions={dietPortions}
                           handleDietPortion={handleDietPortion}
                           separateVersion={separateVersion}
+
+                          getDogDietPortion={getDogDietPortion}
+                          kibbleRecipes={kibbleRecipes[dog]}
+                          cookedRecipes={cookedRecipes[dog]}
                         />
                       ))}
                   </div>

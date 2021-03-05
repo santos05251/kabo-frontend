@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import LoadingCircle from "../../components/partials/loading";
-import DailyDietPortion from "./shared/DailyDietPortion";
+import DailyDietPortionNew from "./shared/DailyDietPortionNew";
 
 class FourthStep extends Component {
   state = {
@@ -8,13 +7,6 @@ class FourthStep extends Component {
   };
 
   componentDidMount() {
-    const { temp_user } = this.props;
-    let str = "";
-    for (let id of temp_user && temp_user.temp_dog_ids) {
-      str += id + ",";
-    }
-    str = str.replace(/,\s*$/, "");
-    this.props.getDogDietPortion(str);
   }
 
   togglePortion = () => {
@@ -24,19 +16,23 @@ class FourthStep extends Component {
   render() {
     const {
       temp_user,
-      getting_diet_portion,
       dietPortions,
       handleDietPortion,
       separateVersion,
+
+      getDogDietPortion,
+      cookedRecipes,
+      kibbleRecipes
     } = this.props;
-    const { daily_portions } = this.props.diet_portions;
+
+    const daily_portions = this.props.diet_portions;
+
     return (
       <React.Fragment>
-        {getting_diet_portion && <LoadingCircle />}
         {temp_user &&
           temp_user.temp_dog_ids &&
           temp_user.temp_dog_ids.map((dog, idx) => (
-            <DailyDietPortion
+            <DailyDietPortionNew
               key={idx}
               meal={daily_portions}
               dog={dog}
@@ -47,6 +43,10 @@ class FourthStep extends Component {
               dietPortions={dietPortions}
               handleDietPortion={handleDietPortion}
               separateVersion={separateVersion}
+
+              getDogDietPortion={getDogDietPortion}
+              kibbleRecipes={kibbleRecipes[dog]}
+              cookedRecipes={cookedRecipes[dog]}
             />
           ))}
       </React.Fragment>

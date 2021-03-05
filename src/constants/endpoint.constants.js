@@ -2,6 +2,7 @@
 
 const apiDomain = process.env.REACT_APP_API_DOMAIN;
 const apiVersion = process.env.REACT_APP_API_VERSION;
+const apiVersion2 = process.env.REACT_APP_API_VERSION2;
 
 export const endpointConstants = {
   LOGIN: `${apiDomain}/login`,
@@ -31,4 +32,5 @@ export const endpointConstants = {
   CREATE_TEMP_USER: `${apiDomain}/${apiVersion}/onboarding/users`,
   UPDATE_TEMP_USER: `${apiDomain}/${apiVersion}/onboarding/users`,
   GET_DOG_DIET_PORTION: `${apiDomain}/${apiVersion}/onboarding/portions`,
+  GET_DOG_DIET_PORTION_V2: `${apiDomain}/${apiVersion2}/onboarding/portions`
 };

@@ -13,8 +13,8 @@ class OnboardingCombinedVersion extends Component {
     step: 1,
     dogs: [],
     dogs_detail: [],
-    cookedRecipes: [],
-    kibble: [],
+    cookedRecipes: {},
+    kibble: {},
     dietPortions: [],
     user: {},
     couponPercentage: 0
@@ -105,61 +105,40 @@ class OnboardingCombinedVersion extends Component {
   // This function is for selecting cooked food recipes
   selectedCookedRecipes = (dogId, recipe) => {
     const { cookedRecipes } = this.state;
-    let sub_array = [];
-    if (cookedRecipes && cookedRecipes.length > 0) {
-      for (let i = 0; i < cookedRecipes.length; i++) {
-        if (cookedRecipes[i].includes(dogId)) {
-          sub_array = cookedRecipes[i];
-        }
+    
+    if (cookedRecipes[dogId] != undefined) {
+      let recipes = cookedRecipes[dogId];
+      const recipeIndex = recipes.indexOf(recipe);
+      if (recipeIndex >= 0) {
+        recipes.splice(recipeIndex, 1);
       }
-    }
+      else {
+        recipes.push(recipe);
+      }
+      cookedRecipes[dogId] = recipes;
 
-    if (sub_array.includes(dogId) && sub_array.includes(recipe)) {
-      const array_index = cookedRecipes.indexOf(sub_array);
-      let recipes = [...sub_array];
-      const index = recipes.indexOf(recipe);
-      recipes.splice(index, 1);
-      cookedRecipes[array_index] = recipes;
       this.setState({ cookedRecipes });
       return;
     }
 
-    if (sub_array.includes(dogId) && !sub_array.includes(recipe)) {
-      const array_index = cookedRecipes.indexOf(sub_array);
-      let recipes = [...sub_array];
-      recipes.push(recipe);
-      cookedRecipes[array_index] = recipes;
-      this.setState({ cookedRecipes });
-      return;
-    }
+    cookedRecipes[dogId] = [recipe];
 
-    this.setState({
-      cookedRecipes: [...this.state.cookedRecipes, [dogId, recipe]],
-    });
+    this.setState({ cookedRecipes });
   };
 
   // This step is for selecting Kibble Recipe
   selectedKibble = (dogId, kibble_) => {
     const { kibble } = this.state;
-    let temp = {};
-    if (kibble && kibble.length > 0) {
-      for (let i = 0; i < kibble.length; i++) {
-        if (kibble[i]["id"] === dogId) {
-          temp = kibble[i];
-        }
-      }
-    }
-
-    if (temp["id"] === dogId) {
-      const index = kibble.indexOf(temp);
-      kibble.splice(index, 1);
+    
+    if(kibble[dogId] != undefined) {
+      kibble[dogId] = undefined;
       this.setState({ kibble });
       return;
     }
 
-    this.setState({
-      kibble: [...this.state.kibble, { id: dogId, kibble: kibble_ }],
-    });
+    kibble[dogId] = kibble_;
+
+    this.setState({ kibble });
   };
 
   // This function is for getting diet portions
@@ -195,21 +174,15 @@ class OnboardingCombinedVersion extends Component {
     const { cookedRecipes, kibble } = this.state;
 
     let dogs = [];
-    for (let i = 0; i < cookedRecipes.length; i++) {
-      if (cookedRecipes[i].length === 1) {
-        return;
-      }
-      let [id] = cookedRecipes[i].filter((item) => typeof item === "number");
-      let recipes = cookedRecipes[i].filter((item) => typeof item === "string");
+    for (let i = 0; i < this.props.temp_user.temp_dog_ids.length; i++) {
+      const dogId = this.props.temp_user.temp_dog_ids[i];
       dogs.push({
-        id: id,
-        cooked_recipes: recipes,
-        kibble_recipe:
-          kibble[i] && kibble[i].hasOwnProperty("kibble")
-            ? kibble[i]["kibble"]
-            : null,
+        id: dogId,
+        cooked_recipes: cookedRecipes[dogId] == undefined ? []: cookedRecipes[dogId],
+        kibble_recipe: kibble[dogId] == undefined ? null : kibble[dogId]
       });
     }
+
     const data = {
       id: this.props.temp_user.temp_user_id,
       details: {
@@ -303,11 +276,13 @@ class OnboardingCombinedVersion extends Component {
               selectedDogs={selectedDogs}
               selectedKibble={this.selectedKibble}
               selectedCookedRecipes={this.selectedCookedRecipes}
-              getting_diet_portion={this.props.getting_diet_portion}
               diet_portions={this.props.diet_portions}
               getDogDietPortion={this.props.getDogDietPortion}
               dietPortions={dietPortions}
               handleDietPortion={this.handleDietPortion}
+
+              cookedRecipes={cookedRecipes}
+              kibbleRecipes={kibble}
             />
           )}
           {step >= 4 && (

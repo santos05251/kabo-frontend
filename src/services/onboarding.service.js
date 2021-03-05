@@ -64,17 +64,15 @@ const addDogRecipes = (data) => {
     .then((res) => res);
 };
 
-const getDogDietPortion = (ids) => {
-  console.log(
-    "URL",
-    `${endpointConstants.GET_DOG_DIET_PORTION}?dog_ids=${ids}`
+const getDogDietPortion = async (data) => {
+  const requestOptions = request.options(
+    "POST",
+    JSON.stringify(data),
+    true,
+    true
   );
-  const requestOptions = request.options("GET", {}, true, false);
 
-  return fetch(
-    `${endpointConstants.GET_DOG_DIET_PORTION}?dog_ids=${ids}`,
-    requestOptions
-  )
+  return fetch(endpointConstants.GET_DOG_DIET_PORTION_V2, requestOptions)
     .then(request.handleResponse)
     .then((res) => res);
 };

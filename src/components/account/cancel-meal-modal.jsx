@@ -52,7 +52,10 @@ const CancelMealModal = ({
   const handleStep = () => {
     if (step + 1 === 3) {
       setRequestInitiated(true);
-      cancelSubscription({userId: currentDog.user_id, dog_id: currentDog.id, reason, type: cancelType})
+      cancelSubscription({
+        dog_id: currentDog.id,
+        reason
+      })
     } else {
       setStep(step + 1);
     }
