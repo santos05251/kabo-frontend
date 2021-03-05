@@ -1,10 +1,8 @@
-import { request } from "../utils";
-import { endpointConstants } from "../constants";
-import { alertActions } from "../actions";
-// import { useDispatch } from "react-redux";
+import { request } from '../utils';
+import { endpointConstants } from '../constants';
 
 const getAccountData = () => {
-  const requestOptions = request.options("GET", {}, true, false);
+  const requestOptions = request.options('GET', {}, true, false);
 
   return fetch(endpointConstants.GET_ACCOUNT_DATA, requestOptions)
     .then(request.handleResponse)
@@ -12,7 +10,7 @@ const getAccountData = () => {
 };
 
 const getSubscriptionData = () => {
-  const requestOptions = request.options("GET", {}, true, false);
+  const requestOptions = request.options('GET', {}, true, false);
 
   return fetch(endpointConstants.GET_SUBSCRIPTION_DATA, requestOptions)
     .then(request.handleResponse)
@@ -20,7 +18,7 @@ const getSubscriptionData = () => {
 };
 
 const getBreedData = () => {
-  const requestOptions = request.options("GET", {}, true, false);
+  const requestOptions = request.options('GET', {}, true, false);
 
   return fetch(endpointConstants.GET_BREEDS, requestOptions)
     .then(request.handleResponse)
@@ -28,7 +26,7 @@ const getBreedData = () => {
 };
 
 const getRecipeData = () => {
-  const requestOptions = request.options("GET", {}, true, false);
+  const requestOptions = request.options('GET', {}, true, false);
 
   return fetch(endpointConstants.GET_RECIPE_DATA, requestOptions)
     .then(request.handleResponse)
@@ -36,7 +34,7 @@ const getRecipeData = () => {
 };
 
 const getOrderData = () => {
-  const requestOptions = request.options("GET", {}, true, false);
+  const requestOptions = request.options('GET', {}, true, false);
 
   return fetch(endpointConstants.GET_ORDER_DATA, requestOptions)
     .then(request.handleResponse)
@@ -44,12 +42,7 @@ const getOrderData = () => {
 };
 
 const pauseSubscription = (data) => {
-  const requestOptions = request.options(
-    "POST",
-    JSON.stringify(data),
-    true,
-    true
-  );
+  const requestOptions = request.options('POST', JSON.stringify(data), true, true);
 
   return fetch(endpointConstants.PAUSE_SUBSCRIPTION, requestOptions)
     .then(request.handleResponse)
@@ -58,40 +51,30 @@ const pauseSubscription = (data) => {
 
 const unpauseSubscription = (data) => {
   const requestOptions = request.options(
-    "POST",
+    'POST',
     JSON.stringify({ dog_id: data.dog_id }),
     true,
-    true
+    true,
   );
   return fetch(
     data.reactivate
       ? endpointConstants.REACTIVATE_SUBSCRIPTION
       : endpointConstants.UNPAUSE_SUBSCRIPTION,
-    requestOptions
+    requestOptions,
   )
     .then(request.handleResponse)
     .then((res) => res);
 };
 
 const cancelSubscription = (data) => {
-  const requestOptions = request.options(
-    "POST",
-    JSON.stringify(data),
-    true,
-    true
-  );
+  const requestOptions = request.options('POST', JSON.stringify(data), true, true);
   return fetch(endpointConstants.CANCEL_SUBSCRIPTION, requestOptions)
     .then(request.handleResponse)
     .then((res) => res);
 };
 
 const getSubscriptionEstimate = (data) => {
-  const requestOptions = request.options(
-    "POST",
-    JSON.stringify(data),
-    true,
-    true
-  );
+  const requestOptions = request.options('POST', JSON.stringify(data), true, true);
 
   return fetch(endpointConstants.GET_SUBSCRIPTION_ESTIMATE, requestOptions)
     .then(request.handleResponse)
@@ -99,12 +82,7 @@ const getSubscriptionEstimate = (data) => {
 };
 
 const updateDeliveryFrequency = (data) => {
-  const requestOptions = request.options(
-    "PUT",
-    JSON.stringify(data),
-    true,
-    true
-  );
+  const requestOptions = request.options('PUT', JSON.stringify(data), true, true);
 
   return fetch(endpointConstants.UPDATE_DELIVERY_FREQUENCY, requestOptions)
     .then(request.handleResponse)
@@ -112,12 +90,7 @@ const updateDeliveryFrequency = (data) => {
 };
 
 const updateDeliveryAddress = (data) => {
-  const requestOptions = request.options(
-    "PUT",
-    JSON.stringify(data),
-    true,
-    true
-  );
+  const requestOptions = request.options('PUT', JSON.stringify(data), true, true);
 
   return fetch(endpointConstants.UPDATE_DELIVERY_ADDRESS, requestOptions)
     .then(request.handleResponse)
@@ -126,13 +99,13 @@ const updateDeliveryAddress = (data) => {
 
 const updatePwd = (data) => {
   const requestOptions = request.options(
-    "PUT",
+    'PUT',
     JSON.stringify({
       password: data.password,
       password_confirmation: data.password_confirmation,
     }),
     true,
-    true
+    true,
   );
 
   return fetch(endpointConstants.UPDATE_PASSWORD, requestOptions)
@@ -141,42 +114,29 @@ const updatePwd = (data) => {
       // login successful if there's a jwt token in the response
       if (res.token) {
         // store user details and jwt token in local storage
-        const oldUser = localStorage.getItem("user");
+        const oldUser = localStorage.getItem('user');
         const newUser = { ...oldUser };
         newUser.token = res.token;
-        console.log("ewuser data after update pwd: ", newUser);
-        localStorage.setItem("user", JSON.stringify(newUser));
+        localStorage.setItem('user', JSON.stringify(newUser));
 
         return {
           pwd_update_success: true,
-          pwd_alert: "Successfully updated",
-        };
-      } else {
-        return {
-          pwd_update_success: false,
-          pwd_alert: "Failed to update password",
+          pwd_alert: 'Successfully updated',
         };
       }
-    })
-    .catch((ex) => {
-      console.error(ex);
       return {
         pwd_update_success: false,
-        pwd_alert:
-          ex.message && ex.message.length > 0
-            ? ex.message[0]
-            : "Failed to update",
+        pwd_alert: 'Failed to update password',
       };
-    });
+    })
+    .catch((ex) => ({
+      pwd_update_success: false,
+      pwd_alert: ex.message && ex.message.length > 0 ? ex.message[0] : 'Failed to update',
+    }));
 };
 
 const updatePaymentMethod = (data) => {
-  const requestOptions = request.options(
-    "PUT",
-    JSON.stringify(data),
-    true,
-    true
-  );
+  const requestOptions = request.options('PUT', JSON.stringify(data), true, true);
 
   return fetch(endpointConstants.UPDATE_PAYMENT_METHOD, requestOptions)
     .then(request.handleResponse)
@@ -184,13 +144,7 @@ const updatePaymentMethod = (data) => {
 };
 
 const skipDogDelivery = (id) => {
-  console.log("from service", id);
-  const requestOptions = request.options(
-    "POST",
-    JSON.stringify({ dog_id: id }),
-    true,
-    true
-  );
+  const requestOptions = request.options('POST', JSON.stringify({ dog_id: id }), true, true);
 
   return fetch(endpointConstants.SKIP_DOG_DELIVERY, requestOptions)
     .then(request.handleResponse)
@@ -198,12 +152,7 @@ const skipDogDelivery = (id) => {
 };
 
 const updatePhoneEmail = (data) => {
-  const requestOptions = request.options(
-    "PUT",
-    JSON.stringify(data),
-    true,
-    true
-  );
+  const requestOptions = request.options('PUT', JSON.stringify(data), true, true);
 
   return fetch(endpointConstants.UPDATE_PHONE_EMAIL, requestOptions)
     .then(request.handleResponse)
@@ -216,12 +165,7 @@ const updatePhoneEmail = (data) => {
     });
 };
 const applyCoupon = (data) => {
-  const requestOptions = request.options(
-    "POST",
-    JSON.stringify(data),
-    true,
-    true
-  );
+  const requestOptions = request.options('POST', JSON.stringify(data), true, true);
 
   return fetch(endpointConstants.APPLY_COUPON, requestOptions)
     .then(request.handleResponse)
@@ -229,13 +173,14 @@ const applyCoupon = (data) => {
 };
 
 const getUserNotifications = () => {
-  const requestOptions = request.options("GET", {}, true, false);
+  const requestOptions = request.options('GET', {}, true, false);
 
   return fetch(endpointConstants.GET_USER_NOTIFICATIONS, requestOptions)
     .then(request.handleResponse)
     .then((res) => res);
 };
 
+//  eslint-disable-next-line import/prefer-default-export
 export const userService = {
   getAccountData,
   getRecipeData,

@@ -14,6 +14,7 @@ module.exports = {
   plugins: ['react', 'only-warn'],
   rules: {
     'prettier/prettier': 0,
+    'import/prefer-default-export': 0,
     semi: 0,
     'jsx-a11y/label-has-associated-control': ['error', {
       required: {
