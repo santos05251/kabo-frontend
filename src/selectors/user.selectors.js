@@ -3,15 +3,17 @@ const selectSubscriptions = (state) => (state.user.subscriptions ? state.user.su
 const selectSubscriptionByDogId = (state, dogId) => {
   const subscriptions = selectSubscriptions(state);
   let subscription = null;
-
-  subscriptions.forEach((key, index) => {
+  //  eslint-disable-next-line  no-restricted-syntax
+  for (const key in subscriptions) {
     if (
-      subscriptions[index]
-      && +subscriptions[index].dog_id === +dogId
+    //  eslint-disable-next-line  no-prototype-builtins
+      subscriptions.hasOwnProperty(key)
+      && subscriptions[key]
+      && +subscriptions[key].dog_id === +dogId
     ) {
-      subscription = subscriptions[index];
+      subscription = subscriptions[key];
     }
-  });
+  }
   return subscription;
 };
 
