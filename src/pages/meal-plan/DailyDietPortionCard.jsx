@@ -7,7 +7,7 @@ const DietPortionCard = ({ item, handleSelect, dietPortion, dog }) => {
   if (thenum < 24) {
     thenum = 101
   }
-console.log(item,"check itmmmmmmmmmmmmmmmmmmmmmmmm")
+
   return (
     <button
       onClick={(e) => handleSelect(item)}
