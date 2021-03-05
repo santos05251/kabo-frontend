@@ -27,7 +27,6 @@
     "react-final-form": "^6.5.2",
     "react-hamburger-menu": "^1.2.1",
     "react-modal": "^3.12.1",
-    "react-phone-number-input": "^3.1.16",
     "react-redux": "^7.2.2",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
@@ -45,9 +44,11 @@
   "scripts": {
     "start": "craco start",
     "build": "craco build",
+    "chromatic": "npx chromatic --project-token a66d3a90e0f9",
     "test": "craco test",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 6006 -s public",
+    "snapshot": "build-storybook && percy-storybook --widths=320,1280",
     "build-storybook": "build-storybook -s public"
   },
   "eslintConfig": {
@@ -69,17 +70,20 @@
     ]
   },
   "devDependencies": {
+    "@percy/storybook": "^3.3.1",
     "@storybook/addon-actions": "^6.1.17",
     "@storybook/addon-essentials": "^6.1.17",
     "@storybook/addon-links": "^6.1.17",
     "@storybook/node-logger": "^6.1.17",
     "@storybook/preset-create-react-app": "^3.1.5",
     "@storybook/react": "^6.1.17",
+    "chromatic": "^5.6.3",
     "eslint": "^7.18.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-react": "^7.22.0",
-    "eslint-plugin-react-hooks": "^4.2.0"
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "storybook-react-router": "^1.0.8"
   }
 }

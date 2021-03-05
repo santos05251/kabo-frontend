@@ -1,5 +1,4 @@
 import React from "react";
-import PhoneInput from 'react-phone-number-input/input'
 
 class Input extends React.Component {
   constructor(props) {
@@ -17,7 +16,6 @@ class Input extends React.Component {
       disabled,
       onChange,
       required,
-      
     } = this.props;
 
     return (
@@ -32,7 +30,6 @@ class Input extends React.Component {
 
             <br />
             <input
-            
               required
               type={inputType}
               disabled={disabled}
@@ -56,31 +53,9 @@ class Input extends React.Component {
               required
               id='input'
               defaultValue={inputValue}
+              style={{ width: '95%' }}
               className='outline-none text-grey-darkest ml-2.5 h-11 mb-2.5 text-sm resize-none'
             ></textarea>
-          </div>
-        )}
-        {type == "tel" && (
-          <div
-            className={`border rounded h-14 ${size} ${styles} inline-block relative`}
-          >
-            <label htmlFor={name} className='m-1 ml-2.5 text-xs'>
-              {name}
-            </label>
-
-            <br />
-            <PhoneInput
-              country="US"
-              required
-              disabled={disabled}
-              onChange={onChange}
-              id={name}
-              value={inputValue}
-              className='outline-none w-4/5 text-grey-darkest text-sm h-5 mb-2.5 ml-2.5'
-            />
-            {required && (
-              <div className=' rounded-full bg-red-500 w-1 h-1 absolute top-2 right-2'></div>
-            )}
           </div>
         )}
       </>

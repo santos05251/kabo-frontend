@@ -44,7 +44,7 @@ const PauseMealModal = ({
       pauseType === "forever"
         ? pauseType
         : moment(pauseUntil).format("YYYY-MM-DD");
-    // set local state to listen loading props.
+    //set local state to listen loading props.
     setPauseProcessing(true);
     if (pauseType !== "cancel") {
       pauseSubscription({
@@ -221,11 +221,15 @@ const PauseMealModal = ({
                 loading ? "opacity-50" : ""
               } text-base font-bold bg-primary text-white`}
               onClick={() =>
-                pauseType === "cancel" ? setPauseBoxType("REASON") : pauseMeal()
+                pauseType === "cancel" || pauseType === "forever"
+                  ? setPauseBoxType("REASON")
+                  : pauseMeal()
               }
               disabled={loading}
             >
-              {pauseType === "cancel" ? "Next" : "Confirm"}
+              {pauseType === "cancel" || pauseType === "forever"
+                ? "Next"
+                : "Confirm"}
             </button>
           </div>
         </>

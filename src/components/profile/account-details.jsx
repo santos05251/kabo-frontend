@@ -37,7 +37,7 @@ const AccountDetails = ({ user = null, dogs = null, updateUserPhoneEmail,logout}
     <div>
       <div className="flex-auto text-2xl font-cooper mb-3 md:mb-6">Account Details</div>
       <Input inputValue={user.user.email} name="EMAIL ADDRESS" size="md:w-2/5 w-full mb-2" styles="mr-2.5" onChange={(e) => setEmail(e.target.value)}/>
-      <Input type="tel" inputValue={phoneNumber} name="PHONE NUMBER" size="w-full md:w-2/5" onChange={setPhoneNumber} />
+      <Input inputValue={phoneNumber} name="PHONE NUMBER" size="w-full md:w-2/5" onChange={(e) => setPhoneNumber(e.target.value)} />
       <Button
         text="Save Phone Number"
         styles="mt-6 sm:mb-6"

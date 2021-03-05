@@ -24,11 +24,7 @@ const DietPortionCard = ({ item, handleSelect, dietPortion, dog }) => {
         <CircleSVG num={thenum} />
       </div>
       <p className="font-messina mt-1">{item.title}</p>
-      {
-        item.description &&
-        <div> <p className="text-xs mt-3">{item.description}</p> </div>
-      }
-      
+      <div>{thenum === 100 ? <p className="text-xs mt-3">All of {dog?.name}’s daily caloric needs from cooked food</p> : <p className="text-xs mt-3">Mix our food with 75% of {dog?.name}’s existing food</p>}</div>
     </button>
   );
 };

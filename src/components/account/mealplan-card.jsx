@@ -11,7 +11,7 @@ const MealIcon = ({ source, notFirst }) => (
 );
 
 const MealPlanCard = ({ noPrice, cooked_recipes, kibble_recipes, subscription, currentDog, nextDelivery ,amountOfFood}) => {
-  
+
   if (!cooked_recipes || !kibble_recipes) return null;
 
   let recipeArray = [];
@@ -100,7 +100,7 @@ const MealPlanCard = ({ noPrice, cooked_recipes, kibble_recipes, subscription, c
           </div>
           <div className="flex justify-between mt-6">
             {" "}
-            <p className="font-normal text-gray-800 pr-4">{portion}</p> {!noPrice && <span className="font-medium">${price}</span>}
+            <p className="font-normal text-gray-800 pr-4">{portion}</p> {!noPrice && <span className="font-medium">${price.toFixed(2)}</span>}
           </div>
         </div>
       </div>

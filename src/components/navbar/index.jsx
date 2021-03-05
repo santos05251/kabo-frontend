@@ -49,7 +49,7 @@ class Navbar extends React.Component {
     } else {
       this.setNav(1);
     }
-    this.props.getUserNotifications();
+    // this.props.getUserNotifications();
   }
 
   clickLogout() {

@@ -46,7 +46,7 @@ const getOrderData = () => {
 const pauseSubscription = (data) => {
   const requestOptions = request.options(
     "POST",
-    JSON.stringify({ dog_id: data.dogId, pause_until: data.pauseUntil }),
+    JSON.stringify(data),
     true,
     true
   );
