@@ -1,8 +1,9 @@
-import { takeLatest, call, put, all } from "redux-saga/effects";
-
-import { userService } from "../services";
-import { userConstants, otherConstants } from "../constants";
-import { userActions } from "../actions/user.action";
+import {
+  takeLatest, call, put, all,
+} from 'redux-saga/effects';
+import { userService } from '../services';
+import { userConstants, otherConstants } from '../constants';
+import { userActions } from '../actions/user.action';
 
 function* getAccountDataSaga() {
   try {
@@ -24,10 +25,7 @@ function* getSubscriptionDataSaga() {
 
 function* getSubscriptionEstimateSaga(action) {
   try {
-    const payload = yield call(
-      userService.getSubscriptionEstimate,
-      action.payload
-    );
+    const payload = yield call(userService.getSubscriptionEstimate, action.payload);
     yield put({ type: userConstants.ESTIMATE_LOADED, payload });
   } catch (e) {
     yield put({ type: otherConstants.REQUEST_ERROR, payload: e });
@@ -66,22 +64,12 @@ function* cancelSubscriptionSaga(action) {
     const payload = yield call(userService.cancelSubscription, action.payload);
     yield all([
       put({ type: userConstants.CANCEL_SUBSCRIPTION_SUCCESS, payload }),
-      put(
-        userActions.setUserLoading(
-          userConstants.CANCEL_SUBSCRIPTION_REQUESTED,
-          false
-        )
-      ),
+      put(userActions.setUserLoading(userConstants.CANCEL_SUBSCRIPTION_REQUESTED, false)),
     ]);
   } catch (e) {
     yield all([
       put({ type: otherConstants.REQUEST_ERROR, payload: e }),
-      put(
-        userActions.setUserLoading(
-          userConstants.CANCEL_SUBSCRIPTION_REQUESTED,
-          false
-        )
-      ),
+      put(userActions.setUserLoading(userConstants.CANCEL_SUBSCRIPTION_REQUESTED, false)),
     ]);
   }
 }
@@ -92,22 +80,12 @@ function* pauseSubscriptionSaga(action) {
     const payload = yield call(userService.pauseSubscription, action.payload);
     yield all([
       put({ type: userConstants.PAUSE_SUBSCRIPTION_SUCCESS, payload }),
-      put(
-        userActions.setUserLoading(
-          userConstants.PAUSE_SUBSCRIPTION_REQUESTED,
-          false
-        )
-      ),
+      put(userActions.setUserLoading(userConstants.PAUSE_SUBSCRIPTION_REQUESTED, false)),
     ]);
   } catch (e) {
     yield all([
       put({ type: otherConstants.REQUEST_ERROR, payload: e }),
-      put(
-        userActions.setUserLoading(
-          userConstants.PAUSE_SUBSCRIPTION_REQUESTED,
-          false
-        )
-      ),
+      put(userActions.setUserLoading(userConstants.PAUSE_SUBSCRIPTION_REQUESTED, false)),
     ]);
   }
 }
@@ -117,32 +95,19 @@ function* unpauseSubscriptionSaga(action) {
     const payload = yield call(userService.unpauseSubscription, action.payload);
     yield all([
       put({ type: userConstants.UNPAUSE_SUBSCRIPTION_SUCCESS, payload }),
-      put(
-        userActions.setUserLoading(
-          userConstants.UNPAUSE_SUBSCRIPTION_REQUESTED,
-          false
-        )
-      ),
+      put(userActions.setUserLoading(userConstants.UNPAUSE_SUBSCRIPTION_REQUESTED, false)),
     ]);
   } catch (e) {
     yield all([
       put({ type: otherConstants.REQUEST_ERROR, payload: e }),
-      put(
-        userActions.setUserLoading(
-          userConstants.UNPAUSE_SUBSCRIPTION_REQUESTED,
-          false
-        )
-      ),
+      put(userActions.setUserLoading(userConstants.UNPAUSE_SUBSCRIPTION_REQUESTED, false)),
     ]);
   }
 }
 
 function* updateDeliveryAddressSaga(action) {
   try {
-    const payload = yield call(
-      userService.updateDeliveryAddress,
-      action.payload
-    );
+    const payload = yield call(userService.updateDeliveryAddress, action.payload);
     yield put({ type: userConstants.DELIVERY_UPDATE_SUCCESS, payload });
   } catch (e) {
     yield put({ type: userConstants.DELIVERY_UPDATE_FAILURE, payload: e });
@@ -163,10 +128,7 @@ function* updateEmailPhoneSaga(action) {
 
 function* updateDeliveryFrequencySaga(action) {
   try {
-    const payload = yield call(
-      userService.updateDeliveryFrequency,
-      action.payload
-    );
+    const payload = yield call(userService.updateDeliveryFrequency, action.payload);
     yield put({
       type: userConstants.UPDATE_DELIVERY_FREQUENCY_SUCCESS,
       payload,
@@ -253,50 +215,23 @@ export default function* user() {
   yield takeLatest(userConstants.ACCOUNT_DATA_REQUESTED, getAccountDataSaga);
   yield takeLatest(userConstants.RECIPE_DATA_REQUESTED, getRecipeDataSaga);
   yield takeLatest(userConstants.BREED_DATA_REQUESTED, getBreedDataSaga);
-  yield takeLatest(
-    userConstants.SUBSCRIPTION_DATA_REQUESTED,
-    getSubscriptionDataSaga
-  );
-  yield takeLatest(
-    userConstants.ESTIMATE_REQUESTED,
-    getSubscriptionEstimateSaga
-  );
-  yield takeLatest(
-    userConstants.CANCEL_SUBSCRIPTION_REQUESTED,
-    cancelSubscriptionSaga
-  );
-  yield takeLatest(
-    userConstants.PAUSE_SUBSCRIPTION_REQUESTED,
-    pauseSubscriptionSaga
-  );
-  yield takeLatest(
-    userConstants.UNPAUSE_SUBSCRIPTION_REQUESTED,
-    unpauseSubscriptionSaga
-  );
-  yield takeLatest(
-    userConstants.DELIVERY_UPDATE_REQUESTED,
-    updateDeliveryAddressSaga
-  );
+  yield takeLatest(userConstants.SUBSCRIPTION_DATA_REQUESTED, getSubscriptionDataSaga);
+  yield takeLatest(userConstants.ESTIMATE_REQUESTED, getSubscriptionEstimateSaga);
+  yield takeLatest(userConstants.CANCEL_SUBSCRIPTION_REQUESTED, cancelSubscriptionSaga);
+  yield takeLatest(userConstants.PAUSE_SUBSCRIPTION_REQUESTED, pauseSubscriptionSaga);
+  yield takeLatest(userConstants.UNPAUSE_SUBSCRIPTION_REQUESTED, unpauseSubscriptionSaga);
+  yield takeLatest(userConstants.DELIVERY_UPDATE_REQUESTED, updateDeliveryAddressSaga);
   yield takeLatest(userConstants.UPDATE_USER_PHONE_EMAIL, updateEmailPhoneSaga);
   yield takeLatest(userConstants.ORDER_DATA_REQUESTED, getOrderDataSaga);
 
   yield takeLatest(userConstants.UPDATE_PWD_REQUESTED, updatePassword);
 
   yield takeLatest(userConstants.SET_BILLING_ADDRESS, setBillingAddress);
-  yield takeLatest(
-    userConstants.OPEN_UPDATE_PAYMENT_MODAL,
-    openUpdatePaymentModal
-  );
+  yield takeLatest(userConstants.OPEN_UPDATE_PAYMENT_MODAL, openUpdatePaymentModal);
   yield takeLatest(userConstants.UPDATE_PAYMENT_METHOD, updatePaymentMethod);
-  yield takeLatest(
-    userConstants.UPDATE_DELIVERY_FREQUENCY_REQUESTED,
-    updateDeliveryFrequencySaga
-  );
+  yield takeLatest(userConstants.UPDATE_DELIVERY_FREQUENCY_REQUESTED, updateDeliveryFrequencySaga);
 
-  yield takeLatest(
-    userConstants.OPEN_SKIP_DELIVERY_MODAL,
-    openSkipDeliveryModal
-  );
+  yield takeLatest(userConstants.OPEN_SKIP_DELIVERY_MODAL, openSkipDeliveryModal);
 
   yield takeLatest(userConstants.SKIP_DOG_DELIVERY, skipDogDelivery);
 
