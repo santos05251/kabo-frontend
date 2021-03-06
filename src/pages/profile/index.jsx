@@ -62,6 +62,10 @@ class ProfilePage extends React.Component {
             payment_method_updated={user.payment_method_updated}
             updatePaymentMethod={updatePaymentMethod}
             updating_payment_method={user.updating_payment_method}
+            showManageSubscriptionsBox={this.props.showManageSubscriptionsBox}
+            openSubscriptionManagementModal={
+              this.props.openSubscriptionManagementModal
+            }
           />
         </div>
         <div className={detailsCard}>
@@ -94,19 +98,27 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(userActions.setBillingAddress(payload)),
   updatePaymentMethod: (payload) =>
     dispatch(userActions.updatePaymentMethod(payload)),
-    addCoupon: (payload) =>
-    dispatch(userActions.applyCoupon(payload)),
+  addCoupon: (payload) => dispatch(userActions.applyCoupon(payload)),
+  openSubscriptionManagementModal: (payload) =>
+    dispatch(userActions.openSubscriptionManagementModal(payload)),
 });
 
 const mapStateToProps = (state) => {
   const { user } = state;
-  const { subscriptions, dogs,couponResponse,errorMessage} = state.user;
+  const {
+    subscriptions,
+    dogs,
+    couponResponse,
+    errorMessage,
+    showManageSubscriptionsBox,
+  } = state.user;
   return {
     user,
     subscriptions,
     dogs,
     couponResponse,
-    userError:errorMessage
+    userError: errorMessage,
+    showManageSubscriptionsBox,
   };
 };
 

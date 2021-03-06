@@ -68,9 +68,11 @@ class Billing extends React.Component {
   }
 
   toggleCancelBox() {
-    this.setState({
-      showManageSubscriptionsBox: !this.state.showManageSubscriptionsBox,
-    });
+    const {
+      showManageSubscriptionsBox,
+      openSubscriptionManagementModal,
+    } = this.props;
+    openSubscriptionManagementModal(!showManageSubscriptionsBox);
   }
 
   toggle = () => {
@@ -149,12 +151,14 @@ class Billing extends React.Component {
         )}
         <Modal
           title="Manage subscription"
-          isOpen={this.state.showManageSubscriptionsBox}
+          isOpen={this.props.showManageSubscriptionsBox}
           onRequestClose={this.toggleCancelBox}
         >
           <PauseMealModal
             closeModal={() =>
-              this.setState({ showManageSubscriptionsBox: false })
+              this.props.openSubscriptionManagementModal(
+                !this.props.showManageSubscriptionsBox
+              )
             }
           />
         </Modal>

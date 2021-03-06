@@ -107,6 +107,11 @@ const getUserNotifications = (data) => ({
   payload: data,
 });
 
+const openSubscriptionManagementModal = (isOpen) => ({
+  type: userConstants.OPEN_SUBSCRIPTION_MANAGEMENT_MODAL,
+  payload: isOpen,
+});
+
 export const userActions = {
   getAccountData,
   pauseSubscription,
@@ -132,4 +137,5 @@ export const userActions = {
   setUserLoading,
   applyCoupon,
   getUserNotifications,
+  openSubscriptionManagementModal,
 };

@@ -129,7 +129,7 @@ class UnpauseMealPlanModal extends React.Component {
                 </div>
               </UnpauseCard>
               <UnpauseCard title="BILLING INFO" styles="bg-account">
-                <input
+                {/* <input
                   defaultValue={discountCode}
                   className="p-3.5 w-full rounded"
                 />
@@ -140,7 +140,7 @@ class UnpauseMealPlanModal extends React.Component {
                 <br />
                 <span className="text-sm my-2">
                   You will be charged {nextCharge} on October 13
-                </span>
+                </span> */}
                 <div className="flex my-6">
                   <PaymentCardIcon icon="visa" />
                   <span className="inline-block ml-3">

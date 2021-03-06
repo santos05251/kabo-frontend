@@ -25,6 +25,10 @@ const initialState = {
   user_notifications: [],
 
   subscriptionCancel: false,
+  pausing_subscription: false,
+  isSubscriptionPaused: false,
+
+  showManageSubscriptionsBox: false,
 };
 
 export const user = (state = initialState, action) => {
@@ -90,27 +94,21 @@ export const user = (state = initialState, action) => {
     case userConstants.PAUSE_SUBSCRIPTION_REQUESTED:
       return {
         ...state,
-        pauseInfo: action.payload,
-        loadingKeys: {
-          ...state.loadingKeys,
-          [userConstants.PAUSE_SUBSCRIPTION_REQUESTED]: true,
-        },
-        error: false,
+        pausing_subscription: true,
       };
-    case userConstants.PAUSE_SUBSCRIPTION_SUCCESS: {
-      let nextState = { ...state };
-      if (action.payload.subscription.id) {
-        //setting new state directly in subscriptions object
-        nextState.subscriptions[action.payload.subscription.id] = {
-          ...nextState.subscriptions[action.payload.subscription.id],
-          ...action.payload.subscription,
-        };
-      }
+
+    case userConstants.PAUSE_SUBSCRIPTION_SUCCESS:
       return {
-        ...nextState,
-        error: false,
+        ...state,
+        pausing_subscription: false,
+        isSubscriptionPaused: true,
       };
-    }
+
+    case userConstants.PAUSE_SUBSCRIPTION_FAILURE:
+      return {
+        ...state,
+        pausing_subscription: false,
+      };
 
     case userConstants.UNPAUSE_SUBSCRIPTION_REQUESTED:
       return {
@@ -332,6 +330,13 @@ export const user = (state = initialState, action) => {
       return {
         ...state,
         loading_notifications: false,
+      };
+
+    case userConstants.OPEN_SUBSCRIPTION_MANAGEMENT_MODAL_SUCCESS:
+      return {
+        ...state,
+        showManageSubscriptionsBox: !state.showManageSubscriptionsBox,
+        isSubscriptionPaused: false,
       };
     default:
       return state;

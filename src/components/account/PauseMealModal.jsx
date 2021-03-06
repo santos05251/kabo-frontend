@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import moment from "moment";
 import DatePicker from "react-datepicker";
 import { connect } from "react-redux";
@@ -19,21 +19,19 @@ const PauseMealModal = ({
   error,
   errorMessage,
   loading,
-  resetUserError,
   userName,
   pauseSubscription,
   cancelSubscription,
   closeModal,
   subscriptionCancel,
+  isSubscriptionPaused,
 }) => {
   const [currentDogIndex, setCurrentDogIndex] = useState(dogIndex || 0);
   const [pauseBoxType, setPauseBoxType] = useState("MAIN");
   const [pauseType, setPauseType] = useState("1_delivery");
   const [pauseDisplay, setPauseDisplay] = useState("");
   const [pauseUntil, setPauseUntil] = useState(null);
-  const [pauseProcessing, setPauseProcessing] = useState(null);
   const [reason, setReason] = useState("");
-
   const currentDog = dogs[currentDogIndex] ? dogs[currentDogIndex] : {};
 
   const pauseMeal = () => {
@@ -44,13 +42,17 @@ const PauseMealModal = ({
       pauseType === "forever"
         ? pauseType
         : moment(pauseUntil).format("YYYY-MM-DD");
-    //set local state to listen loading props.
-    setPauseProcessing(true);
     if (pauseType !== "cancel") {
-      pauseSubscription({
-        dogId,
-        pauseUntil: pauseUntilToSend,
-      });
+      pauseType === "forever"
+        ? pauseSubscription({
+            dog_id: dogId,
+            pause_until: pauseUntilToSend,
+            reason: reason.value,
+          })
+        : pauseSubscription({
+            dog_id: dogId,
+            pause_until: pauseUntilToSend,
+          });
     }
   };
 
@@ -61,31 +63,10 @@ const PauseMealModal = ({
     });
   };
 
-  useEffect(() => {
-    /// resetting error if it exists on initial rendering
-    if (error) {
-      resetUserError();
-    }
-  }, []);
-
-  useEffect(() => {
-    /// listning loading props if local processing state true to display success message
-    if (pauseProcessing) {
-      if (!error && !loading && pauseProcessing) {
-        setPauseBoxType("SUCCESS");
-      }
-    }
-  }, [loading]);
-
-  let dogSubscription = {};
-
-  Object.keys(subscriptions).forEach((key) => {
-    if (+subscriptions[key].dog_id === +currentDog.id) {
-      dogSubscription = subscriptions[key];
-    }
-  });
-
-  const isPaused = dogSubscription.status !== "active";
+  const isPaused =
+    subscriptions[dogs[currentDogIndex]["chargebee_subscription_id"]][
+      "status"
+    ] !== "active";
 
   const options = [
     {
@@ -140,198 +121,210 @@ const PauseMealModal = ({
     },
   ];
 
-  return pauseBoxType === "MAIN" ? (
-    <div className="p-6">
-      {isPaused ? (
-        <UnpauseMealPlanModal
-          dogs={dogs}
-          setDog={setCurrentDogIndex}
-          dogIndex={currentDogIndex}
-          isCancelled={dogSubscription.status === "cancelled"}
-        />
-      ) : (
-        <>
-          <div className="p-6">
-            {dogs.length > 1 && (
-              <DogSelector
-                dogs={dogs}
-                setDog={setCurrentDogIndex}
-                dogIndex={currentDogIndex}
-              />
-            )}
-          </div>
-          <div className="lg:flex justify-between lg:mb-12 mb-8">
-            <div className="lg:w-96">
-              <MealPlanCard noPrice dogIndex={currentDogIndex} />
-            </div>
-            <div className="mt-6 sm:mt-0">
-              <a
-                className="text-sm font-semibold text-primary lg:mr-2 cursor-pointer"
-                href={`/edit-plan/${currentDogIndex}`}
-              >
-                Select a different meal plan
-              </a>
+  return (
+    <React.Fragment>
+      {isSubscriptionPaused ? (
+        <div className="py-6 px-16">
+          <div className="flex items-center flex-col mb-4">
+            <FilledCircle className="rounded-full h-7.3 w-7.3 mb-6" />
+            <h2 className="text-xl font-bold mb-4">
+              Your account has been successfully paused
+            </h2>
+            <p className="text-sm mb-5 text-center">
+              Your account is paused {pauseDisplay}
+            </p>
+            <div className="w-full p-6 bg-promptYellow rounded-1lg">
+              <h4 className="text-center text-base font-semibold mb-1">
+                You can unpause anytime
+              </h4>
+              <p className="text-center text-sm">
+                Keep in mind you can pause your account at anytime
+              </p>
             </div>
           </div>
-          <div className="lg:flex justify-between lg:mb-9">
-            <div className="lg:w-80">
-              {options.map((opt, i) => (
-                <Radio
-                  key={opt.value + i}
-                  value={opt.value}
-                  text={opt.text}
-                  onChange={() => {
-                    if (opt.value === "specific") {
-                      if (pauseUntil === null) {
-                        setPauseBoxType("TIME");
-                      } else {
-                        setPauseType("specific");
-                      }
-                    } else {
-                      setPauseType(opt.value);
-                      setPauseDisplay(opt.displayText);
-                    }
-                  }}
-                  selected={pauseType === opt.value}
-                  className={i === options.length - 1 ? "" : "mb-7"}
-                />
-              ))}
-            </div>
-            <div className="mt-7 mb-6 sm:m-0">
-              <div className="lg:w-72 p-6 bg-promptYellow rounded-1lg">
-                <h3 className="text-base font-semibold mb-1.3">
-                  You can unpause anytime
-                </h3>
-                <p className="text-sm">
-                  Keep in mind you can pause your account at anytime
-                </p>
-              </div>
-            </div>
-          </div>
-          <div>
-            {error || isPaused ? (
-              <div className="text-red-500 text-s mt-1">
-                {isPaused
-                  ? "This subscription already paused"
-                  : "An error occured please try again later"}
-              </div>
-            ) : null}
+          <div className="flex justify-center">
             <button
-              className={`rounded-xl py-3 px-8 ${
-                loading ? "opacity-50" : ""
-              } text-base font-bold bg-primary text-white`}
-              onClick={() =>
-                pauseType === "cancel" || pauseType === "forever"
-                  ? setPauseBoxType("REASON")
-                  : pauseMeal()
-              }
-              disabled={loading}
+              className="rounded-xl py-3 px-8 text-base font-bold bg-primary text-white"
+              onClick={closeModal}
             >
-              {pauseType === "cancel" || pauseType === "forever"
-                ? "Next"
-                : "Confirm"}
+              Done
             </button>
           </div>
+        </div>
+      ) : (
+        <>
+          {pauseBoxType === "MAIN" ? (
+            <div className="p-6">
+              {isPaused ? (
+                <UnpauseMealPlanModal
+                  dogs={dogs}
+                  setDog={setCurrentDogIndex}
+                  dogIndex={currentDogIndex}
+                  isCancelled={
+                    subscriptions[
+                      dogs[currentDogIndex]["chargebee_subscription_id"]
+                    ]["status"] === "cancelled"
+                  }
+                />
+              ) : (
+                <>
+                  <div className="p-6">
+                    {dogs.length > 1 && (
+                      <DogSelector
+                        dogs={dogs}
+                        setDog={setCurrentDogIndex}
+                        dogIndex={currentDogIndex}
+                      />
+                    )}
+                  </div>
+                  <div className="lg:flex justify-between lg:mb-12 mb-8">
+                    <div className="lg:w-96">
+                      <MealPlanCard noPrice dogIndex={currentDogIndex} />
+                    </div>
+                    <div className="mt-6 sm:mt-0">
+                      <a
+                        className="text-sm font-semibold text-primary lg:mr-2 cursor-pointer"
+                        href={`/edit-plan/${currentDogIndex}`}
+                      >
+                        Select a different meal plan
+                      </a>
+                    </div>
+                  </div>
+                  <div className="lg:flex justify-between lg:mb-9">
+                    <div className="lg:w-80">
+                      {options.map((opt, i) => (
+                        <Radio
+                          key={opt.value + i}
+                          value={opt.value}
+                          text={opt.text}
+                          onChange={() => {
+                            if (opt.value === "specific") {
+                              if (pauseUntil === null) {
+                                setPauseBoxType("TIME");
+                              } else {
+                                setPauseType("specific");
+                              }
+                            } else {
+                              setPauseType(opt.value);
+                              setPauseDisplay(opt.displayText);
+                            }
+                          }}
+                          selected={pauseType === opt.value}
+                          className={i === options.length - 1 ? "" : "mb-7"}
+                        />
+                      ))}
+                    </div>
+                    <div className="mt-7 mb-6 sm:m-0">
+                      <div className="lg:w-72 p-6 bg-promptYellow rounded-1lg">
+                        <h3 className="text-base font-semibold mb-1.3">
+                          You can unpause anytime
+                        </h3>
+                        <p className="text-sm">
+                          Keep in mind you can pause your account at anytime
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    {error || isPaused ? (
+                      <div className="text-red-500 text-s mt-1">
+                        {isPaused
+                          ? "This subscription already paused"
+                          : "An error occured please try again later"}
+                      </div>
+                    ) : null}
+                    <button
+                      className={`rounded-xl py-3 px-8 ${
+                        loading ? "opacity-50" : ""
+                      } text-base font-bold bg-primary text-white`}
+                      onClick={() =>
+                        pauseType === "cancel" || pauseType === "forever"
+                          ? setPauseBoxType("REASON")
+                          : pauseMeal()
+                      }
+                      disabled={loading}
+                    >
+                      {pauseType === "cancel" || pauseType === "forever"
+                        ? "Next"
+                        : "Confirm"}
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
+          ) : pauseBoxType === "TIME" ? (
+            <div className="p-6">
+              <h2 className="ml-0 sm:ml-8 text-xl font-bold">
+                Choose the date you'd like to pause until
+              </h2>
+              <div className="flex justify-center mt-6 mb-4">
+                <DatePicker
+                  dateFormat="YYYY-MM-DD"
+                  startDate
+                  selected={pauseUntil === null ? new Date() : pauseUntil}
+                  onChange={(date) => setPauseUntil(date)}
+                  inline
+                  useWeekdaysShort
+                />
+              </div>
+              <div className="flex justify-center">
+                <button
+                  className="rounded-xl py-3 px-8 text-base font-bold bg-primary text-white"
+                  onClick={() => {
+                    setPauseType("specific");
+                    setPauseBoxType("MAIN");
+                  }}
+                >
+                  Pick Date
+                </button>
+              </div>
+            </div>
+          ) : pauseBoxType === "REASON" ? (
+            <div className="p-6">
+              {!subscriptionCancel ? (
+                <CancelReason
+                  reason={reason}
+                  setReason={setReason}
+                  dogName={currentDog.name}
+                  lastName={userName}
+                />
+              ) : (
+                <div className="text-center">
+                  <h3 className="text-xl font-medium mb-2">
+                    We've sent you confirmation email
+                  </h3>
+                  <div className="text-center mt-5">
+                    <p>
+                      We’re sorry to see you go. We’ve sent you a confirmation
+                      email to cancel your subscription.
+                    </p>
+                  </div>
+                </div>
+              )}
+              {error ? (
+                <div className="text-red-500 text-xs mt-1">
+                  {errorMessage && errorMessage.message
+                    ? errorMessage.message
+                    : "An error occured please try again later"}
+                </div>
+              ) : null}
+              {!subscriptionCancel && (
+                <button
+                  className={`rounded-xl py-3 px-8 ${
+                    !reason ? "opacity-50" : ""
+                  } text-base font-bold bg-primary text-white`}
+                  onClick={pauseType === "forever" ? pauseMeal : cancelMeal}
+                  disabled={!reason || loading}
+                >
+                  Confirm
+                </button>
+              )}
+            </div>
+          ) : null}
         </>
       )}
-    </div>
-  ) : pauseBoxType === "TIME" ? (
-    <div className="p-6">
-      <h2 className="ml-0 sm:ml-8 text-xl font-bold">
-        Choose the date you'd like to pause until
-      </h2>
-      <div className="flex justify-center mt-6 mb-4">
-        <DatePicker
-          dateFormat="YYYY-MM-DD"
-          startDate
-          selected={pauseUntil === null ? new Date() : pauseUntil}
-          onChange={(date) => setPauseUntil(date)}
-          inline
-          useWeekdaysShort
-        />
-      </div>
-      <div className="flex justify-center">
-        <button
-          className="rounded-xl py-3 px-8 text-base font-bold bg-primary text-white"
-          onClick={() => {
-            setPauseType("specific");
-            setPauseBoxType("MAIN");
-          }}
-        >
-          Pick Date
-        </button>
-      </div>
-    </div>
-  ) : pauseBoxType === "REASON" ? (
-    <div className="p-6">
-      {!subscriptionCancel ? (
-        <CancelReason
-          reason={reason}
-          setReason={setReason}
-          dogName={currentDog.name}
-          lastName={userName}
-        />
-      ) : (
-        <div className="text-center">
-          <h3 className="text-xl font-medium mb-2">
-            We've sent you confirmation email
-          </h3>
-          <div className="text-center mt-5">
-            <p>
-              We’re sorry to see you go. We’ve sent you a confirmation email to
-              cancel your subscription.
-            </p>
-          </div>
-        </div>
-      )}
-      {error ? (
-        <div className="text-red-500 text-xs mt-1">
-          {errorMessage && errorMessage.message
-            ? errorMessage.message
-            : "An error occured please try again later"}
-        </div>
-      ) : null}
-      {!subscriptionCancel && (
-        <button
-          className={`rounded-xl py-3 px-8 ${
-            !reason ? "opacity-50" : ""
-          } text-base font-bold bg-primary text-white`}
-          onClick={cancelMeal}
-          disabled={!reason || loading}
-        >
-          Confirm
-        </button>
-      )}
-    </div>
-  ) : pauseBoxType === "SUCCESS" ? (
-    <div className="py-6 px-16">
-      <div className="flex items-center flex-col mb-4">
-        <FilledCircle className="rounded-full h-7.3 w-7.3 mb-6" />
-        <h2 className="text-xl font-bold mb-4">
-          Your account has been successfully paused
-        </h2>
-        <p className="text-sm mb-5 text-center">
-          Your account is paused {pauseDisplay}
-        </p>
-        <div className="w-full p-6 bg-promptYellow rounded-1lg">
-          <h4 className="text-center text-base font-semibold mb-1">
-            You can unpause anytime
-          </h4>
-          <p className="text-center text-sm">
-            Keep in mind you can pause your account at anytime
-          </p>
-        </div>
-      </div>
-      <div className="flex justify-center">
-        <button
-          className="rounded-xl py-3 px-8 text-base font-bold bg-primary text-white"
-          onClick={closeModal}
-        >
-          Done
-        </button>
-      </div>
-    </div>
-  ) : null;
+    </React.Fragment>
+  );
 };
 
 const mapDispatchToProps = (dispatch) => ({
@@ -350,6 +343,7 @@ const mapStateToProps = (state) => {
     user,
     errorMessage,
     subscriptionCancel,
+    isSubscriptionPaused,
   } = state.user;
   return {
     dogs,
@@ -357,6 +351,7 @@ const mapStateToProps = (state) => {
     error,
     errorMessage,
     subscriptionCancel,
+    isSubscriptionPaused,
     userName: user.last_name
       ? user.last_name
       : user.first_name
