@@ -30,7 +30,7 @@ class Dropdown extends React.Component {
         <select id="input" class={`outline-none text-grey-darkest text-sm h-5 mb-2.5 ml-2.5 ${(size == "small") ? "w-2/5" : "w-3/5"}`}
           style={{ "webkitAppearance": "none", "MozAppearance": "none" }}>
           <option key="0" selected={true} defaultValue={inputValue}>{inputValue}</option>
-          {items}
+         
         </select>
         <img src={chevron} className="float-right mr-3.5 w-4" />
       </div>

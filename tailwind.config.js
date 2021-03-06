@@ -78,6 +78,10 @@ module.exports = {
         7.3: '1.875rem',
         13: '3.25rem',
       },
+      maxWidth: {
+        23: '23rem',
+       
+      },
     },
     fontFamily: {
       messina: ['Messinasans, sans-serif'],

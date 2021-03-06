@@ -11,7 +11,7 @@ class Modal extends React.Component {
   }
 
   render() {
-    const { isAppend, isLarge } = this.props;
+    const { isAppend, isLarge,isSmall } = this.props;
     return (
       <div className="">
         <ReactModal
@@ -20,11 +20,11 @@ class Modal extends React.Component {
           className={
             isLarge
               ? "w-full bg-white md:m-24 lg:rounded-xl shadow-modal outline-none"
-              : "w-full max-w-2xl bg-white md:m-24 lg:rounded-xl shadow-modal outline-none"
+              : `w-full ${isSmall ? 'max-w-23' : 'max-w-2xl' }  bg-white md:m-24 lg:rounded-xl shadow-modal outline-none`
           }
           onRequestClose={() => this.props.onRequestClose()}
         >
-          <div className="p-4 border-b border-gray-200 flex justify-between">
+          <div className={`p-4  flex justify-between ${this.props.bgColor ? this.props.bgColor : ''}`}>
             <h3 className="text-xl">{this.props.title}</h3>
             <img
               className="cursor-pointer"

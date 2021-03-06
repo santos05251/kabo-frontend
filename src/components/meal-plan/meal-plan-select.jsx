@@ -16,6 +16,9 @@ const MealPlanSelect = ({
   handleSelectedCookedRecipes,
   toggleKibble,
   selectedLength,
+  dog,
+  user,
+  handleKibbleChange
 }) => {
   let icons = {
     chicken: chickenIcon,
@@ -29,6 +32,7 @@ const MealPlanSelect = ({
       {recipes &&
         recipes.map((food, idx) => (
           <FoodCard
+          handleKibbleChange={handleKibbleChange}
             key={idx}
             type={type}
             index={index}
@@ -45,6 +49,8 @@ const MealPlanSelect = ({
             kibble={selectedKibble}
             toggleKibble={toggleKibble}
             recipe={food.recipe}
+            dog={dog}
+            user={user}
           />
         ))}
     </React.Fragment>

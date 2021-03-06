@@ -183,3 +183,6 @@ nav{
   max-width: 1440px;
   width: 100%;
 }
+.foodCardDesc{
+  min-height: 100px;
+}
