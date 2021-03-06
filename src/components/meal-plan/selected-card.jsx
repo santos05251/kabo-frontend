@@ -16,7 +16,7 @@ const SelectedCard = ({
   if (!selectedCookedRecipes && !kibble) return null
   if (!selected) return null
   return (
-    <div className=" w-full flex flex-row overflow-hidden justify-between">
+    <div className="w-full md:w-4/12 mb-4 flex flex-row overflow-hidden justify-between">
       <div className="font-cooper text-black text-center messina text-base text font-semibold">
         {food.name} {type === 'kibble' && 'Kibble'}
       </div>

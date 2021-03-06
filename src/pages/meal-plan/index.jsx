@@ -246,20 +246,13 @@ class EditPlan extends Component {
         ? 0
         : subData && (subData.invoice_estimate_total / 100).toFixed(2);
 
-    return (
-      <div className="md:bg-white">
-        <div className="hidden md:block font-messina text-center font-bold pt-5 text-black bg-white text-2xl">
-          What's in {dog && dog.name}'s Box
-        </div>
-        <div className={"hidden md:block text-center py-5"}>
-          Choose up to 2 and click Save Changes{" "}
-        </div>
-        <div className="md:hidden font-messina text-center font-bold py-5 text-black text-2xl">
-          What's in {dog && dog.name}'s Box
-        </div>
-
-        {/* Grid visible in desktop views */}
-        <div className="hidden md:flex justify-center customContainer mx-auto">
+    return ( 
+      <div className="md:bg-white px-4 xl:px-0">
+        
+        
+      
+        <div className="justify-center customContainer mx-auto">
+        
           <RecipeSelection
             user={user}
             showCooked={showCooked}
@@ -273,8 +266,9 @@ class EditPlan extends Component {
             selectedLength={selectedLength}
             toggleKibble={this.toggleKibble}
             isKibble={this.state.isKibble}
+            dog={dog}
           />
-          <div className="md:w-2/6 md:pl-16">
+         
             <DailyDietPortion
               meal={meal}
               dog={dog}
@@ -287,6 +281,7 @@ class EditPlan extends Component {
               kibbleRecipes={kibbleRecipes}
             />
             <SelectedRecipes
+            dog={dog}
               user={user}
               index={this.props.match.params.id}
               selectedDog={this.selectedDog}
@@ -302,169 +297,8 @@ class EditPlan extends Component {
               }
               onConfirm={(e) => this.handleMealUpdate(e)}
             />
-          </div>
-        </div>
-
-        {/* ------------- */}
-
-        <div className="md:hidden grid grid-cols-1">
-          <div>
-            <div
-              onClick={() =>
-                this.setState({ editRecipiesOpen: !editRecipiesOpen })
-              }
-              className={`flex bg-white justify-between items-center h-12 text-xl font-light p-3 cursor-pointer 
-              ${editRecipiesOpen
-                  ? "rounded-t-xl border-t border-l border-r border-gray-300"
-                  : "rounded-xl"
-                }`}
-            >
-              <div className="flex justify-between items-center  h-full">
-                <p className="text-base sm:text-xs xl:text-base">
-                  Edit Recipies
-                </p>
-              </div>
-              <Arrow
-                className="w-8 h-3"
-                style={{
-                  transform: editRecipiesOpen ? "rotateX(180deg)" : null,
-                }}
-              />
-            </div>
-            {editRecipiesOpen && (
-              <div>
-                <FreshOrKibble
-                  extraClasses="md:hidden bg-white"
-                  showCooked={showCooked}
-                  showKibble={showKibble}
-                  setKibble={this.displayKibble}
-                  setFresh={this.displayCooked}
-                />
-                <div className="font-messina text-center font-bold py-8 text-black bg-white">
-                  Choose 1 or 2 recipes per Order for {dog && dog.name}
-                </div>
-                <RecipeSelection
-                  user={user}
-                  showCooked={showCooked}
-                  showKibble={showKibble}
-                  index={this.props.match.params.id}
-                  selectedDog={this.selectedDog}
-                  handleSelectedCookedRecipes={this.handleSelectedCookedRecipes}
-                  selectedCookedRecipes={cookedRecipes}
-                  handleSelectedKibbleRecipe={this.handleSelectedKibbleRecipe}
-                  selectedKibble={kibbleRecipes}
-                  selectedLength={selectedLength}
-                  toggleKibble={this.toggleKibble}
-                  isKibble={this.state.isKibble}
-                />
-                <div className="bg-white p-3">
-                  <button
-                    onClick={() =>
-                      this.setState({
-                        editRecipiesOpen: false,
-                        editPortionsOpen: true,
-                      })
-                    }
-                    class="bg-white border border-green-700 hover:border-transparent focus:outline-none hover:bg-green-700 text-primary hover:text-white font-bold text-sm md:text-base  p-3 px-5 rounded-md border-green  mt-2 md:mt-0 w-full"
-                  >
-                    Edit Portions
-                  </button>
-                  <p className="text-center w-full my-4">or</p>
-                  <p className="font-messina mt-1">
-                    Your new subscription price will be{" "}
-                    <span class="text-green-500 font-bold">
-                      {" "}
-                      {!user.estimate
-                        ? null
-                        : user.estimate.amount}
-                    </span>{" "}
-                    every {parseInt(user.how_often)} weeks
-                  </p>
-                  <button
-                    onClick={() => this.handleMealUpdate()}
-                    className="rounded-lg bg-green-700 border border-green-700 hover:border-transparent focus:outline-none text-white text-sm md:text-base font-bold p-3 w-full px-5 rounded mt-2 mb-4"
-                  >
-                    Save Changes
-                  </button>
-                  <div className="flex items-center flex-col mb-4">
-                    <div className="w-full p-6 bg-promptYellow rounded-1lg">
-                      <h4 className="text-left text-base font-semibold mb-1">
-                       {user.subscription_phase.status === "waiting_for_trial_shipment" ?  "Changes will apply to your trial delivery onwards" : `Changes will apply to your ${user.subscription_phase.changes_applied_delivery_date}`}
-                      </h4>
-                      <p className="text-left text-sm ">
-                        Email{" "}
-                        <a
-                          className="font-bold underline"
-                          href="mailto:help@kabo.co"
-                        >
-                          {" "}
-                          help@kabo.co{" "}
-                        </a>{" "}
-                        if you require additional help.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-          <div className="mt-4">
-            <div
-              onClick={() =>
-                this.setState({ editPortionsOpen: !editPortionsOpen })
-              }
-              className={`flex bg-white justify-between items-center h-12 text-xl font-light p-3 cursor-pointer 
-              ${editPortionsOpen
-                  ? "rounded-t-xl border-t border-l border-r border-gray-300"
-                  : "rounded-xl"
-                }`}
-            >
-              <div className="flex justify-between items-center  h-full">
-                <p className="text-base sm:text-xs xl:text-base">
-                  Edit Portions
-                </p>
-              </div>
-              <Arrow
-                className="w-8 h-3"
-                style={{
-                  transform: editPortionsOpen ? "rotateX(180deg)" : null,
-                }}
-              />
-            </div>
-            {editPortionsOpen && (
-              <div>
-                <DailyDietPortion
-                  meal={meal}
-                  dog={dog}
-                  cookedRecipes={cookedRecipes}
-                  dietPortion={this.state.dietPortion}
-                  selectedPortion={this.state.selectedPortion}
-                  togglePortion={this.togglePortion}
-                  selectedDietPortion={this.selectedDietPortion}
-                  getDailyDietPortion={getDailyDietPortion}
-                  kibbleRecipes={kibbleRecipes}
-                />
-
-                <SelectedRecipes
-                  user={user}
-                  index={this.props.match.params.id}
-                  selectedDog={this.selectedDog}
-                  handleSelectedCookedRecipes={this.handleSelectedCookedRecipes}
-                  selectedCookedRecipes={cookedRecipes}
-                  handleSelectedKibbleRecipe={this.handleSelectedKibbleRecipe}
-                  selectedKibble={kibbleRecipes}
-                  selectedLength={selectedLength}
-                  toggleKibble={this.toggleKibble}
-                  isKibble={this.state.isKibble}
-                  estimate={
-                    !user.estimate ? null : user.estimate.amount
-                  }
-                  onConfirm={(e) => this.handleMealUpdate(e)}
-                />
-              </div>
-            )}
-          </div>
-        </div>
+          
+        </div>     
       </div>
     );
   }
