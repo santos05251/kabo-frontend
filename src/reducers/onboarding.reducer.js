@@ -1,4 +1,4 @@
-import { onboardingContstants } from "../constants";
+import { onboardingContstants } from '../constants';
 
 const initialState = {
   loading_onboarding_starter_data: false,
@@ -109,7 +109,6 @@ export const onboarding = (state = initialState, action) => {
       };
 
     case onboardingContstants.ADD_DOG_RECIPES_SUCCESS:
-      console.log("Dog Recipes", action.payload);
       return {
         ...state,
         adding_dog_recipes: false,
@@ -128,7 +127,6 @@ export const onboarding = (state = initialState, action) => {
       };
 
     case onboardingContstants.GET_DOG_DIET_PORTION_SUCCESS:
-      console.log("from reducer", action.payload);
       return {
         ...state,
         getting_diet_portion: false,

@@ -1,4 +1,4 @@
-import { mealConstants } from "../constants";
+import { mealConstants } from '../constants';
 
 const initialState = {
   updating_meal_plan: false,
@@ -15,7 +15,6 @@ export const meal = (state = initialState, action) => {
         updating_meal_plan: true,
       };
     case mealConstants.UPDATE_MEAL_PLAN_SUCCESS:
-      console.log("from reducer", action.payload);
       return {
         ...state,
         updating_meal_plan: false,
