@@ -57,3 +57,29 @@
     border-width: 0 2px 2px 0;
     transform: rotate(45deg);
 }
+
+.close-icon::before {
+  content: "";
+  width: 20px;
+  height: 2px;
+  background-color: #fff;
+  position: relative;
+  top: 14px;
+  right: -5px;
+  border-radius: 2px;
+  transform: rotate(45deg);
+  display: block;
+}
+
+.close-icon::after {
+  content: "";
+  width: 20px;
+  height: 2px;
+  background-color: #fff;
+  position: relative;
+  top: 12px;
+  right: -5px;
+  border-radius: 2px;
+  transform: rotate(-45deg);
+  display: block;
+}

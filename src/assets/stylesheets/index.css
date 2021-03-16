@@ -134,13 +134,39 @@
   font-family: 'Cooper';
   font-style: 'sans serif';
   font-weight: 600;
-  src: url('../../fonts/Bitstream-Cooper-Lt-BT-Bold.ttf'); /* IE9 Compat Modes */
+  src: url('../../fonts/CooperBoldBT.ttf'); /* IE9 Compat Modes */
   src: local('Cooper Lt BT Bold'), local('Cooper Lt Bt Bold'),
-       url('../../fonts/Bitstream-Cooper-Lt-BT-Bold.ttf') format('embedded-opentype'), /* IE6-IE8 */
-       url('../../fonts/Bitstream-Cooper-Lt-BT-Bold.ttf') format('truetype'), /* Super Modern Browsers */
-       url('../../fonts/Bitstream-Cooper-Lt-BT-Bold.ttf') format('truetype'), /* Modern Browsers */
-       url('../../fonts/Bitstream-Cooper-Lt-BT-Bold.ttf') format('truetype'), /* Safari, Android, iOS */
-       url('../../fonts/Bitstream-Cooper-Lt-BT-Bold.ttf') format('svg'); /* Legacy iOS */
+       url('../../fonts/CooperBoldBT.ttf') format('embedded-opentype'), /* IE6-IE8 */
+       url('../../fonts/CooperBoldBT.ttf') format('truetype'), /* Super Modern Browsers */
+       url('../../fonts/CooperBoldBT.ttf') format('truetype'), /* Modern Browsers */
+       url('../../fonts/CooperBoldBT.ttf') format('truetype'), /* Safari, Android, iOS */
+       url('../../fonts/CooperBoldBT.ttf') format('svg'); /* Legacy iOS */
+}
+
+@font-face {
+  font-family: 'Cooper';
+  font-style: 'sans serif';
+  font-weight: 400;
+  src: url('../../fonts/CooperLightBT.ttf'); /* IE9 Compat Modes */
+  src: local('Cooper Lt BT Light'), local('Cooper Lt Bt Light'),
+       url('../../fonts/CooperLightBT.ttf') format('embedded-opentype'), /* IE6-IE8 */
+       url('../../fonts/CooperLightBT.ttf') format('truetype'), /* Super Modern Browsers */
+       url('../../fonts/CooperLightBT.ttf') format('truetype'), /* Modern Browsers */
+       url('../../fonts/CooperLightBT.ttf') format('truetype'), /* Safari, Android, iOS */
+       url('../../fonts/CooperLightBT.ttf') format('svg'); /* Legacy iOS */
+}
+
+@font-face {
+  font-family: 'Recoleta';
+  font-style: 'sans serif';
+  font-weight: 600;
+  src: url('../../fonts/RecoletaAltBold.otf'); /* IE9 Compat Modes */ 
+  src: local('Recoleta Alt Bold'), local('Recoleta Alt Bold'),
+       url('../../fonts/RecoletaAltBold.otf') format('embedded-opentype'), /* IE6-IE8 */
+       url('../../fonts/RecoletaAltBold.otf') format('truetype'), /* Super Modern Browsers */
+       url('../../fonts/RecoletaAltBold.otf') format('truetype'), /* Modern Browsers */
+       url('../../fonts/RecoletaAltBold.otf') format('truetype'), /* Safari, Android, iOS */
+       url('../../fonts/RecoletaAltBold.otf') format('svg'); /* Legacy iOS */
 }
 /* css animations for loaders */
 

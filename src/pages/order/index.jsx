@@ -10,13 +10,11 @@ class AllOrdersPage extends React.Component {
   }
 
   componentDidMount() {
-    console.log("order component mounted:");
     this.props.getOrderData();
   }
 
   render() {
-    const { orders } = this.props;
-  
+    const { orders, loading } = this.props;
     return (
       <div className='container pb-40 bg-white'>
         <div className='flex items-center flex-col mt-10'>
@@ -26,12 +24,12 @@ class AllOrdersPage extends React.Component {
               You will receive an email confirmation shortly.
             </div>
           </div>
-          {orders.length !== 0 ? (
+          {loading ? (
+              <Loader />
+            ) : (
             <div>
               <OrderTable orders={orders} background="bg-lightGray" />
             </div>
-          ) : (
-            <Loader />
           )}
         </div>
       </div>
@@ -45,7 +43,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 const mapStateToProps = (state) => {
   const {
-    user: { subscriptions, dogs, orders },
+    user: { subscriptions, dogs, orders, loading },
     user,
   } = state;
 
@@ -53,6 +51,7 @@ const mapStateToProps = (state) => {
     subscriptions,
     user,
     orders,
+    loading,
   };
 };
 

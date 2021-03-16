@@ -1,8 +1,8 @@
-import { request } from "../utils";
-import { endpointConstants } from "../constants";
+import { request } from '../utils';
+import { endpointConstants } from '../constants';
 
 const getOnboardingData = () => {
-  const requestOptions = request.options("GET", {}, true, false);
+  const requestOptions = request.options('GET', {}, true, false);
 
   return fetch(endpointConstants.ONBOARDING_STARTER_STEP, requestOptions)
     .then(request.handleResponse)
@@ -10,7 +10,7 @@ const getOnboardingData = () => {
 };
 
 const getOnboardingDetails = () => {
-  const requestOptions = request.options("GET", {}, true, false);
+  const requestOptions = request.options('GET', {}, true, false);
 
   return fetch(endpointConstants.ONBOARDING_DETAILS_STEP, requestOptions)
     .then(request.handleResponse)
@@ -18,12 +18,7 @@ const getOnboardingDetails = () => {
 };
 
 const createTempUser = (data) => {
-  const requestOptions = request.options(
-    "POST",
-    JSON.stringify(data),
-    true,
-    true
-  );
+  const requestOptions = request.options('POST', JSON.stringify(data), true, true);
 
   return fetch(endpointConstants.CREATE_TEMP_USER, requestOptions)
     .then(request.handleResponse)
@@ -31,52 +26,62 @@ const createTempUser = (data) => {
 };
 
 const updateTempUser = (data) => {
-  console.log("user details", data);
-  const requestOptions = request.options(
-    "PUT",
-    JSON.stringify(data.details),
-    true,
-    true
-  );
+  const requestOptions = request.options('PUT', JSON.stringify(data.details), true, true);
 
-  return fetch(
-    `${endpointConstants.UPDATE_TEMP_USER}/${data.id}`,
-    requestOptions
-  )
+  return fetch(`${endpointConstants.UPDATE_TEMP_USER}/${data.id}`, requestOptions)
     .then(request.handleResponse)
     .then((res) => res);
 };
 
 const addDogRecipes = (data) => {
-  console.log("dog recipes", data);
-  const requestOptions = request.options(
-    "PUT",
-    JSON.stringify(data.details),
-    true,
-    true
-  );
+  const requestOptions = request.options('PUT', JSON.stringify(data.details), true, true);
 
-  return fetch(
-    `${endpointConstants.UPDATE_TEMP_USER}/${data.userId}`,
-    requestOptions
-  )
+  return fetch(`${endpointConstants.UPDATE_TEMP_USER}/${data.userId}`, requestOptions)
     .then(request.handleResponse)
     .then((res) => res);
 };
 
 const getDogDietPortion = async (data) => {
-  const requestOptions = request.options(
-    "POST",
-    JSON.stringify(data),
-    true,
-    true
-  );
+  const requestOptions = request.options('POST', JSON.stringify(data), true, true);
 
   return fetch(endpointConstants.GET_DOG_DIET_PORTION_V2, requestOptions)
     .then(request.handleResponse)
     .then((res) => res);
 };
 
+const validatePostalCode = async (data) => {
+  const requestOptions = request.options('POST', JSON.stringify(data), true, true);
+
+  return fetch(endpointConstants.VALIDATE_POSTAL_CODE, requestOptions)
+    .then(request.handleResponse)
+    .then((res) => res);
+};
+
+const getPaypalRedirect = async (data) => {
+  const requestOptions = request.options('GET', {}, true, false);
+
+  return fetch(`${endpointConstants.GET_PAYPAL_REDIRECT_URL}?checkout_token=${data.checkout_token}`, requestOptions)
+    .then(request.handleResponse)
+    .then((res) => res);
+};
+
+const getPaymentMethodDetails = async (data) => {
+  const requestOptions = request.options('GET', {}, true, false);
+
+  return fetch(`${endpointConstants.GET_PAYMENT_METHOD}?token=${data.token}`, requestOptions)
+    .then(request.handleResponse)
+    .then((res) => res);
+};
+
+const postCheckout = async (data) => {
+  const requestOptions = request.options('POST', JSON.stringify(data.details), true, true);
+
+  return fetch(`${endpointConstants.CHECKOUT}/${data.checkout_token}`, requestOptions)
+    .then(request.handleResponse)
+    .then((res) => res);
+};
+
+//  eslint-disable-next-line import/prefer-default-export
 export const onboardingService = {
   getOnboardingData,
   getOnboardingDetails,
@@ -84,4 +89,8 @@ export const onboardingService = {
   updateTempUser,
   addDogRecipes,
   getDogDietPortion,
+  validatePostalCode,
+  getPaypalRedirect,
+  getPaymentMethodDetails,
+  postCheckout,
 };

@@ -6,6 +6,8 @@ import { ReactComponent as SelectDown } from '../../assets/images/select-down.sv
 import { connect } from 'react-redux';
 import { userActions } from '../../actions/index.js';
 import moment from 'moment'
+import ConfirmModal from "./confirm-modal.jsx";
+import Modal from "../global/modal";
 
 class FrequencyModal extends React.Component {
   constructor(props) {
@@ -18,6 +20,8 @@ class FrequencyModal extends React.Component {
         starting_date: false
       },
       submitted: false,
+      open_confirm_modal: false,
+      submitFormData: {}
     };
     this.setDog = this.setDog.bind(this)
   }
@@ -30,15 +34,17 @@ class FrequencyModal extends React.Component {
 
   handleSubmit = (event) => {
     event.preventDefault()
-    this.setState({
-      submitted: true
-    })
     let submitData = {
       amount_of_food: event.target[0].value,
       how_often: event.target[1].value,
       starting_date: moment.unix(event.target[2].value).format('YYYY-MM-DD')
     }
     this.props.updateDelivery(submitData)
+    this.setState({
+      submitted: true,
+      open_confirm_modal: true,
+      submitFormData: submitData
+    })
   }
 
   handleChange = (event) => {
@@ -54,7 +60,7 @@ class FrequencyModal extends React.Component {
   }
 
   render() {
-    const { dogIndex, submitted, changed } = this.state
+    const { dogIndex, submitted, changed, open_confirm_modal } = this.state
     const { dogs, user } = this.props
     const { amount_of_food_options, amount_of_food, how_often_options, delivery_starting_date_options, how_often, error, loading } = user
     const currentDog = dogs[dogIndex]
@@ -71,8 +77,8 @@ class FrequencyModal extends React.Component {
           <div className="text-black text-sm font-normal mt-3">
             Keep in mind, changes made to your account will be reflected in your
             next delivery date{" "}
-            {user.next_occurrencies && user.next_occurrencies.length && (
-              <b>{user.next_occurrencies[0]}</b>
+            {delivery_starting_date_options && delivery_starting_date_options.length && (
+              <b>{moment(delivery_starting_date_options[0].label).format('MMMM D')}</b>
             )}
           </div>
         </div>
@@ -113,8 +119,8 @@ class FrequencyModal extends React.Component {
             component="select"
           >
             {
-              delivery_starting_date_options && delivery_starting_date_options.map((item,i)=>{
-                return(
+              delivery_starting_date_options && delivery_starting_date_options.map((item, i) => {
+                return (
                   <option className="w-full" key={i} value={item.value}> {moment(item.label).format(`MMMM D ${moment().year()}`)}  </option>
                 )
               })
@@ -138,6 +144,14 @@ class FrequencyModal extends React.Component {
             An error occured please try again later
           </div>
         )}
+
+        <Modal
+          isOpen={open_confirm_modal}
+          onRequestClose={() => this.setState({ open_confirm_modal: false })}
+          title="Delivery Updates Confirmed"
+        >
+          <ConfirmModal setDogIndex={this.setDog} dogIndex={dogIndex} frequencyData={this.state.submitFormData} close={() => this.setState({ open_confirm_modal: false })} />
+        </Modal>
       </div>
     );
   }
@@ -145,12 +159,11 @@ class FrequencyModal extends React.Component {
 
 function mapStateToProps(state) {
   const { user } = state
-  const { subscriptions, dogs, next_occurrencies, error, loading } = state.user
+  const { subscriptions, dogs, error, loading } = state.user
   return {
     user,
     subscriptions,
     dogs,
-    next_occurrencies,
   }
 }
 

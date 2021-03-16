@@ -58,8 +58,8 @@ class UnpauseMealPlanModal extends React.Component {
     const dogId = this.props.dogs[this.state.dogIndex].id;
     const unpauseDate =
       this.state.unpauseType === "1_week" ||
-      this.state.unpauseType === "2_week" ||
-      this.state.unpauseType === "immediately"
+        this.state.unpauseType === "2_week" ||
+        this.state.unpauseType === "immediately"
         ? this.state.unpauseType
         : this.state.pauseUntil;
 
@@ -98,7 +98,7 @@ class UnpauseMealPlanModal extends React.Component {
     const address1 = user.subscription.shipping_address.line1;
     const address2 = `${user.subscription.shipping_address.city}, ${user.subscription.shipping_address.country} ${user.subscription.shipping_address.zip}`;
 
-    const nextDeliveries = user.next_occurrencies;
+    const nextDeliveries = user.delivery_starting_date_options;
 
     return (
       <div className="p-7">
@@ -172,7 +172,7 @@ class UnpauseMealPlanModal extends React.Component {
                 <div className="mb-4">
                   <Radio
                     value="next-delivery-1"
-                    text={nextDeliveries[0]}
+                    text={nextDeliveries[0].label}
                     onChange={() =>
                       this.setState({ unpauseType: "next-delivery-1" })
                     }
@@ -182,7 +182,7 @@ class UnpauseMealPlanModal extends React.Component {
                 <div className="mb-4">
                   <Radio
                     value="next-delivery-2"
-                    text={nextDeliveries[1]}
+                    text={nextDeliveries[1].label}
                     onChange={() =>
                       this.setState({ unpauseType: "next-delivery-2" })
                     }
@@ -192,7 +192,7 @@ class UnpauseMealPlanModal extends React.Component {
                 <div className="mb-4">
                   <Radio
                     value="next-delivery-3"
-                    text={nextDeliveries[2]}
+                    text={nextDeliveries[2].label}
                     onChange={() =>
                       this.setState({ unpauseType: "next-delivery-3" })
                     }

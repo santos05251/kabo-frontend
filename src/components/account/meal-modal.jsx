@@ -31,7 +31,7 @@ class MealPlanModal extends React.Component {
     const dogsLength = dogs.length;
     const currentDog = dogs[dogIndex];
     const { portion_adjustment, cooked_portion, kibble_portion } = currentDog;
-    
+
     let cbID = currentDog.chargebee_subscription_id
     let status = subscriptions[cbID].status
     let inTrial = status.includes('future') || status.includes('trial') || subscription_phase.status.includes('waiting')
@@ -39,13 +39,15 @@ class MealPlanModal extends React.Component {
 
     return (
       <>
-        <div className="py-8 px-5 relative border-r border-l rounded-b-xl border-b border-gray-300">
+        <div data-cy="mealplan-expanded" className="py-8 px-5 relative border-r border-l rounded-b-xl border-b border-gray-300">
           {dogsLength > 1 && (
             <DogSelector dogs={dogs} setDog={this.setDog} dogIndex={dogIndex} />
           )}
           <MealPlanCard dogIndex={dogIndex} portion={portion} />
           {!inTrial && (
-            <div className="text-primary w-full font-bold">
+            <div
+              data-cy="edit-recipes-link"
+              className="text-primary w-full font-bold">
               <a href={`/edit-plan/${dogIndex}`}>
                 Select a different meal plan
               </a>
@@ -61,6 +63,7 @@ class MealPlanModal extends React.Component {
           ) : null}
           {!inTrial && (
             <div
+              data-cy="edit-portions-link"
               className="text-primary w-full py-5 font-bold"
               onClick={() => this.editMealTracking()}
             >

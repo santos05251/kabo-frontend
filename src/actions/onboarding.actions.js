@@ -1,4 +1,4 @@
-import { onboardingContstants } from "../constants";
+import { onboardingContstants } from '../constants';
 
 const getOnboardingData = () => ({
   type: onboardingContstants.GET_ONBOARDING_DATA,
@@ -28,8 +28,18 @@ const addDogRecipes = (data) => ({
   payload: data,
 });
 
+const updateRecipeSelection = (data) => ({
+  type: onboardingContstants.UPDATE_RECIPES_SELECTION,
+  payload: data,
+})
+
 const getDogDietPortion = (data) => ({
   type: onboardingContstants.GET_DOG_DIET_PORTION,
+  payload: data,
+});
+
+const postCheckout = (data) => ({
+  type: onboardingContstants.POST_CHECKOUT,
   payload: data,
 });
 
@@ -40,5 +50,7 @@ export const onboardingActions = {
   createTempUser,
   updateTempUser,
   addDogRecipes,
+  updateRecipeSelection,
   getDogDietPortion,
+  postCheckout,
 };

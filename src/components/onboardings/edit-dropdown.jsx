@@ -18,29 +18,26 @@ const EditableDropdown = ({
 
   const handleIsChecked = () => {
     setIsChecked(!isChecked);
-    setValue(unknown_breeds[0]);
+    setValue(unknown_breeds && unknown_breeds.length > 0 ? unknown_breeds[0]: {value: -1, label: ''});
   };
 
-  const handleInputValue = (inputVal) => {
-    setInputVal(inputVal);
-
-    setValue({value: 10000, label: inputVal})
+  const handleInputValue = (inputV) => {
+    setInputVal(inputV);
+    setValue({value: inputV === '' ? -1 : 10000, label: inputV});
   };
 
   return (
-    <div className="flex flex-col xs:pb-3 md:pb-6">
-      <label className="font-semibold pb-3">{label}</label>
-      <div className="drop-down mb-3 bg-transparent cursor-pointer outline-none text-gray-400 mt-2 mb-2.5 w-full h-full">
+    <div className="flex flex-col pb-3 md:pb-6">
+      <label className="font-semibold pb-2">{label}</label>
+      <div className="drop-down mb-3 bg-transparent cursor-pointer outline-none text-gray-400 w-full h-full">
         <div
           className="selected flex justify-between border py-3 border-gray-400 rounded-lg px-2"
           onClick={() => setIsOpen(!isOpen)}
         >
-          {/* <span>{value && value.label}</span> */}
-
           <input
             type="text"
             className="placeholder-gray text-black w-full h-full px-2"
-            value={value && value.label}
+            value={inputVal}
             placeholder={placeholder}
             onChange={(e) => handleInputValue(e.target.value)}
           />
@@ -54,10 +51,11 @@ const EditableDropdown = ({
                 <li
                   key={idx}
                   onClick={() => {
+                    setInputVal(item.label);
                     setValue(item);
                     setIsOpen(!isOpen);
                   }}
-                  className={`border-b  border-gray-400 py-3 pl-2 ${inputVal == '' || item.label.includes(inputVal) ? "block" : "hidden"}`}
+                  className={`border-b  border-gray-400 py-3 pl-2 ${inputVal == '' || item.label.toLowerCase().includes(inputVal.toLowerCase()) ? "block" : "hidden"}`}
                 >
                   <a className="rounded-lg text-dark">{item.label}</a>
                 </li>
@@ -75,10 +73,10 @@ const EditableDropdown = ({
             />
           </div>
         ) : (
-          <div className="flex items-center mt-2">
-            <p className="text-labelGray font-medium text-xs">{helpText}</p>
-          </div>
-        )}
+            <div className="flex items-center mt-2">
+              <p className="text-labelGray font-medium text-xs">{helpText}</p>
+            </div>
+          )}
       </div>
     </div>
   );

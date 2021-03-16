@@ -3,45 +3,50 @@ import { connect } from "react-redux";
 import { onboardingActions } from "../../../actions";
 import Header from "../../../components/onboardings/header";
 import Steps from "../../../components/onboardings/steps";
-import FirstStep from "../step-1";
-import SecondStep from "../step-2";
-import ThirdStep from "../step-3";
-import FourthStep from "../step-4";
-import FifthStep from "../step-5";
+import StartStep from "../steps/start";
+import DetailStep from "../steps/details";
+import RecipeStep from "../steps/recipe";
+import PortionStep from "../steps/portion";
+import UserStep from "../steps/user";
+import LoadingCircle from "../../../components/partials/loading";
+import qs from 'qs';
 
-class Onboarding extends Component {
+class OnboardingSeparateVersion extends Component {
   state = {
     step: 1,
     dogs: [],
-    dogs_detail: [],
     cookedRecipes: {},
     kibble: {},
-    dietPortions: [],
+    dietPortions: {},
     user: {},
     couponPercentage: 0
   };
 
   componentDidMount() {
-    if (this.props.location.search.startsWith('?')) {
-      const strQuery = this.props.location.search.slice(1);
-      const queryParams = strQuery.split('&');
-      for (var param of queryParams) {
-        if (param.endsWith('off'))
-          this.setState({ couponPercentage: param.slice(0, param.length - 3) });
+    const params = qs.parse(this.props.location.search.slice(1));
+    for (let key in params) {
+      if (key.endsWith('off')) {
+        this.setState({ couponPercentage: key.slice(0, key.length - 3) });
+        break;
       }
     }
     this.props.getOnboardingData();
   }
 
+  componentWillReceiveProps(newProps) {
+    const { temp_user } = newProps;
+    if (temp_user.checkout_token) {
+      this.props.history.push("/checkout/" + temp_user.checkout_token);
+    }
+  }
+
   updateDog = (dog) => {
     const { dogs } = this.state;
-    
     var bNew = true;
     for (let i in dogs) {
       if (dogs[i].index == dog.index) {
         dogs[i] = dog;
-        this.setState({ dogs })
-
+        this.setState({ dogs });
         bNew = false;
         break;
       }
@@ -50,63 +55,66 @@ class Onboarding extends Component {
       this.setState({ dogs: [...dogs, dog] });
   };
 
+  removeDog = (index) => {
+    let { dogs } = this.state;
+    for (let i in dogs) {
+      if (dogs[i].index === index) {
+        dogs.splice(i, 1);
+        this.setState({dogs});
+        break;
+      }
+    }
+  };
+
+  handleStartStep = () => {
+    const data = {
+      step: "start",
+      dogs: this.state.dogs
+    };
+    localStorage.setItem("dogs", JSON.stringify(data.dogs));
+    this.props.getDogsFromForm(data);
+    this.props.createTempUser(data);
+    this.setState({ step: this.state.step + 1, dogs: [] });
+    this.props.getOnboardingDetails();
+  };
+
   updateDogDetail = (dog) => {
-    let dogs = this.state.dogs_detail;
-    
+    let { dogs } = this.state;
     var bNew = true;
     for (let i in dogs) {
       if (dogs[i].index == dog.index) {
         dogs[i] = dog;
-        this.setState({ dogs_detail: dogs });
-
+        this.setState({ dogs });
         bNew = false;
         break;
       }
     }
     if (bNew)
-      this.setState({ dogs_detail: [...dogs, dog] });
+      this.setState({ dogs: [...dogs, dog] });
   };
 
-  handleChange = (key, value) => {
-    let user = { ...this.state.user };
-    user[key] = value;
-    this.setState({ user });
-  };
-
-  // This function is for step 1
-  handleFirstStep = () => {
-    const data = {
-      step: "start",
-      dogs: this.state.dogs,
-    };
-    localStorage.setItem("dogs", JSON.stringify(data));
-    this.props.getDogsFromForm(data);
-    this.props.creatingTempUser(data);
-    this.setState({ step: this.state.step + 1, dogs: [] });
-  };
-
-  // This function is for step 2
-  handleSecondStep = () => {
-    let dogs = this.state.dogs_detail;
+  handleDetailStep = () => {
+    let { dogs } = this.state;
     dogs.map((item, idx) => {
-      return (item["id"] = this.props.temp_user.temp_dog_ids[idx]);
+      item["id"] = this.props.temp_user.temp_dog_ids[idx];
+      item["neutered"] = item["ovary"];
+      item["gender"] = item.gender ? "male" : "female";
+      return item;
     });
     const data = {
       id: this.props.temp_user.temp_user_id,
       details: {
         step: "detail",
-        dogs,
-      },
+        dogs
+      }
     };
-    localStorage.setItem("dogs_detail", JSON.stringify(data.details));
+    localStorage.setItem("dogs", JSON.stringify(data.details));
     this.props.updateTempUser(data);
-    this.setState({ step: this.state.step + 1, dogs_detail: [] });
+    this.setState({ step: this.state.step + 1, dogs: [] });
   };
 
-  // This function is for selecting cooked food recipes
-  selectedCookedRecipes = (dogId, recipe) => {
+  handleSelectedCookedRecipes = (dogId, recipe) => {
     const { cookedRecipes } = this.state;
-    
     if (cookedRecipes[dogId] != undefined) {
       let recipes = cookedRecipes[dogId];
       const recipeIndex = recipes.indexOf(recipe);
@@ -117,183 +125,152 @@ class Onboarding extends Component {
         recipes.push(recipe);
       }
       cookedRecipes[dogId] = recipes;
-
       this.setState({ cookedRecipes });
       return;
     }
-
     cookedRecipes[dogId] = [recipe];
-
     this.setState({ cookedRecipes });
   };
 
-  // This step is for selecting Kibble Recipe
-  selectedKibble = (dogId, kibble_) => {
-    const { kibble } = this.state;
-    
+  handleSelectedKibbleRecipe = (dogId, _kibble) => {
+    let { kibble } = this.state;
     if(kibble[dogId] != undefined) {
       kibble[dogId] = undefined;
       this.setState({ kibble });
       return;
     }
-
-    kibble[dogId] = kibble_;
-
+    kibble[dogId] = _kibble;
     this.setState({ kibble });
   };
 
-  // This function is for getting diet portions
   handleDietPortion = (dogId, diet_portion) => {
     const { dietPortions } = this.state;
-    let temp = {};
-    if (dietPortions && dietPortions.length > 0) {
-      for (let i = 0; i < dietPortions.length; i++) {
-        if (dietPortions[i]["id"] === dogId) {
-          temp = dietPortions[i];
-        }
-      }
-    }
-
-    if (temp["id"] === dogId) {
-      const index = dietPortions.indexOf(temp);
-      temp["diet"] = diet_portion;
-      dietPortions[index] = temp;
-      this.setState({ dietPortions });
-      return;
-    }
-
-    this.setState({
-      dietPortions: [
-        ...this.state.dietPortions,
-        { id: dogId, diet: diet_portion },
-      ],
-    });
+    dietPortions[dogId] = diet_portion;
+    this.setState({ dietPortions });
   };
 
-  // This function for Third Step (Recipes Selection)
-  handleThirdStep = () => {
+  // Separate version: Recipe
+  handleRecipeStep = () => {
     const { cookedRecipes, kibble } = this.state;
-
     let dogs = [];
-    for (let i = 0; i < this.props.temp_user.temp_dog_ids.length; i++) {
-      const dogId = this.props.temp_user.temp_dog_ids[i];
+    this.props.temp_user.temp_dog_ids.map(dogId => {
       dogs.push({
         id: dogId,
         cooked_recipes: cookedRecipes[dogId] == undefined ? []: cookedRecipes[dogId],
         kibble_recipe: kibble[dogId] == undefined ? null : kibble[dogId]
       });
-    }
-
+    });
     const data = {
       id: this.props.temp_user.temp_user_id,
       details: {
         step: "recipes",
-        dogs: dogs,
-      },
+        dogs: dogs
+      }
     };
-
     this.props.updateTempUser(data);
     this.setState({ step: this.state.step + 1 });
   };
 
-  handleFourthStep = () => {
+  handlePortionStep = () => {
     const { dietPortions } = this.state;
+
     let dogs = [];
-    for (let i = 0; i < dietPortions.length; i++) {
-      dogs.push({ id: dietPortions[i]["id"], diet: dietPortions[i]["diet"] });
-    }
-    let data = {
+    this.props.temp_user.temp_dog_ids.map(dogId => {
+      let dog = { id: dogId };
+      if (dietPortions[dogId].kibble_portion)
+        dog["kibble_portion"] = dietPortions[dogId].kibble_portion;
+      if (dietPortions[dogId].cooked_portion)
+        dog["cooked_portion"] = dietPortions[dogId].cooked_portion;
+      dogs.push(dog)
+    });
+
+    const data = {
       id: this.props.temp_user.temp_user_id,
       details: {
         step: "portions",
-        plan_interval: 2,
-        dogs: [],
-      },
-    };
-    for (let i = 0; i < dogs.length; i++) {
-      let obj = {
-        id: dogs[i]["id"],
-        cooked_portion: dogs[i]["diet"]["cooked_portion"],
-      };
-      if (dogs[i]["diet"] && dogs[i]["diet"]["kibble_portion"]) {
-        obj["kibble_portion"] = dogs[i]["diet"]["kibble_portion"];
+        dogs
       }
-      data.details.dogs.push(obj);
-    }
+    };
     this.props.updateTempUser(data);
-    this.setState({ step: this.state.step + 1 });
+    this.setState({ step: this.state.step + 1, dietPortions: [] });
   };
 
-  handleFifthStep = () => {
-    const { user } = this.state;
+  handleUserChange = (key, value) => {
+    let user = { ...this.state.user };
+    user[key] = value;
+    this.setState({ user });
+  };
+
+  handleUserStep = () => {
+    const { user, couponPercentage } = this.state;
     const data = {
       id: this.props.temp_user.temp_user_id,
       details: {
         step: "account",
-        first_name: user.first_name,
-        email: user.email,
-      },
+        first_name: user.first_name ? user.first_name: '',
+        email: user.email ? user.email : '',
+        referral_code: Number(couponPercentage) <= 0 ? null : '40off'
+      }
     };
+    localStorage.setItem("account", JSON.stringify(data));
     this.props.updateTempUser(data);
-    this.props.history.push("/onboarding/checkout");
   };
 
   render() {
-    const { dogs, dogs_detail, step, cookedRecipes, kibble, dietPortions } = this.state;
+    const { dogs, step, cookedRecipes, kibble, dietPortions } = this.state;
     const {
       onboarding_starter_data,
-      getOnboardingDetails,
       onboarding_details_data,
       dogs: selectedDogs,
       temp_user,
+      updating_temp_user
     } = this.props;
+
     return (
       <React.Fragment>
         <Header
           coupon={this.state.couponPercentage}
         />
-        {4 > step && <Steps completePercent={`${step}/3`} />}
+        <Steps completePercent={`${step}/5`} />
         <main className="flex flex-col justify-between sm:px-4 sm:py-5 px-3 py-4">
+          { temp_user &&
+            updating_temp_user &&
+            <LoadingCircle />
+          }
           {step === 1 && (
-            <FirstStep
+            <StartStep
               onboarding_starter_data={onboarding_starter_data}
               updateDog={this.updateDog}
+              removeDog={this.removeDog}
             />
           )}
           {step === 2 && (
-            <SecondStep
+            <DetailStep
               selectedDogs={selectedDogs}
               updateDogDetail={this.updateDogDetail}
-              getOnboardingDetails={getOnboardingDetails}
               onboarding_details_data={onboarding_details_data}
             />
           )}
 
           {step === 3 && (
-            <ThirdStep
-              temp_user={temp_user}
+            <RecipeStep
               selectedDogs={selectedDogs}
-              selectedKibble={this.selectedKibble}
-              selectedCookedRecipes={this.selectedCookedRecipes}
+              handleSelectedKibbleRecipe={this.handleSelectedKibbleRecipe}
+              handleSelectedCookedRecipes={this.handleSelectedCookedRecipes}
               separateVersion
             />
           )}
           {step === 4 && (
-            <FourthStep
-              temp_user={temp_user}
-              diet_portions={this.props.diet_portions}
-              getDogDietPortion={this.props.getDogDietPortion}
-              dietPortions={dietPortions}
-              handleDietPortion={this.handleDietPortion}
-              separateVersion
-              
+            <PortionStep
               cookedRecipes={cookedRecipes}
               kibbleRecipes={kibble}
+              handleDietPortion={this.handleDietPortion}
+              separateVersion
             />
           )}
           {step === 5 && (
-            <FifthStep
-              handleChange={this.handleChange}
+            <UserStep
+              handleUserChange={this.handleUserChange}
               selectedDogs={selectedDogs}
               user={this.state.user}
             />
@@ -304,12 +281,12 @@ class Onboarding extends Component {
         <div className="fixed inset-x-0 bottom-0 h-20 footer border-t bg-white flex justify-center py-4 z-100">
             {step === 1 && (
               <button
-                disabled={dogs.length <= 0 || !dogs.every(dog => dog.name != undefined && dog.breed != undefined && dog.age_in_months != undefined && dog.name !== '' && dog.breed >= 0 && dog.age_in_months >= 0) }
-                onClick={this.handleFirstStep}
+                disabled={ dogs.length <= 0 || !dogs.every(dog => dog.name != undefined && dog.breed != undefined && dog.age_in_months != undefined && dog.name !== '' && dog.breed != '' && dog.age_in_months >= 0) }
+                onClick={this.handleStartStep}
                 className={
-                  dogs.length <= 0 || !dogs.every(dog => dog.name != undefined && dog.breed != undefined && dog.age_in_months != undefined && dog.name !== '' && dog.breed >= 0 && dog.age_in_months >= 0)
-                    ? "flex justify-center items-center border btn mx-5 border-gray-300 xs:bg-green-600 xs:text-white md:bg-gray-200 md:text-gray-400  focus:outline-none rounded-lg py-3 px-20"
-                    : "flex justify-center items-center border btn mx-5 border-green-600 xs:bg-green-600 xs:text-white md:bg-green-600 md:text-white  focus:outline-none rounded-lg py-3 px-20"
+                  dogs.length <= 0 || !dogs.every(dog => dog.name != undefined && dog.breed != undefined && dog.age_in_months != undefined && dog.name !== '' && dog.breed != '' && dog.age_in_months >= 0)
+                    ? "flex justify-center items-center border btn mx-5 border-gray-300 bg-gray-200 text-gray-400 focus:outline-none rounded-lg py-3 px-20"
+                    : "flex justify-center items-center border btn mx-5 border-green-600 bg-green-600 text-white focus:outline-none rounded-lg py-3 px-20"
                 }
               >
                 Next
@@ -317,12 +294,12 @@ class Onboarding extends Component {
             )}
             {step === 2 && (
               <button
-                disabled={dogs_detail.length <= 0 || !dogs_detail.every(dog => dog.gender != undefined && dog.ovary != undefined && dog.weight_unit != undefined && dog.weight != undefined && dog.body_type != undefined && dog.activity_level != undefined && dog.weight_unit != '' && Number(dog.weight) >= 0 && dog.body_type >= 0 && dog.activity_level >= 0) }
-                onClick={this.handleSecondStep}
+                disabled={ dogs.length <= 0 || !dogs.every(dog => dog.gender != undefined && dog.ovary != undefined && dog.weight_unit != undefined && dog.weight != undefined && dog.body_type != undefined && dog.activity_level != undefined && dog.weight_unit != '' && Number(dog.weight) > 0 && dog.body_type >= 0 && dog.activity_level >= 0) }
+                onClick={this.handleDetailStep}
                 className={
-                  dogs_detail.length <= 0 || !dogs_detail.every(dog => dog.gender != undefined && dog.ovary != undefined && dog.weight_unit != undefined && dog.weight != undefined && dog.body_type != undefined && dog.activity_level != undefined && dog.weight_unit != '' && Number(dog.weight) >= 0 && dog.body_type >= 0 && dog.activity_level >= 0)
-                    ? "flex justify-center items-center border btn mx-5 border-gray-300 xs:bg-green-600 xs:text-white md:bg-gray-200 md:text-gray-400  focus:outline-none rounded-lg py-3 px-20"
-                    : "flex justify-center items-center border btn mx-5 border-green-600 xs:bg-green-600 xs:text-white md:bg-green-600 md:text-white  focus:outline-none rounded-lg py-3 px-20"
+                  dogs.length <= 0 || !dogs.every(dog => dog.gender != undefined && dog.ovary != undefined && dog.weight_unit != undefined && dog.weight != undefined && dog.body_type != undefined && dog.activity_level != undefined && dog.weight_unit != '' && Number(dog.weight) > 0 && dog.body_type >= 0 && dog.activity_level >= 0)
+                    ? "flex justify-center items-center border btn mx-5 border-gray-300 bg-gray-200 text-gray-400 focus:outline-none rounded-lg py-3 px-20"
+                    : "flex justify-center items-center border btn mx-5 border-green-600 bg-green-600 text-white focus:outline-none rounded-lg py-3 px-20"
                 }
               >
                 Next
@@ -331,12 +308,12 @@ class Onboarding extends Component {
 
             {step === 3 && (
               <button
-                disabled={cookedRecipes.length === 0 && kibble.length === 0}
-                onClick={this.handleThirdStep}
+                disabled={!temp_user.temp_dog_ids.every(dogId => (cookedRecipes[dogId] != undefined ? cookedRecipes[dogId].length : 0) + (kibble[dogId] != undefined ? 1 : 0) > 0)}
+                onClick={this.handleRecipeStep}
                 className={
-                  cookedRecipes.length === 0 && kibble.length === 0
-                    ? "flex justify-center items-center border btn mx-5 border-gray-300 xs:bg-green-600 xs:text-white md:bg-gray-200 md:text-gray-400  focus:outline-none rounded-lg py-3 px-20"
-                    : "flex justify-center items-center border btn mx-5 border-green-600 xs:bg-green-600 xs:text-white md:bg-green-600 md:text-white  focus:outline-none rounded-lg py-3 px-20"
+                  !temp_user.temp_dog_ids.every(dogId => (cookedRecipes[dogId] != undefined ? cookedRecipes[dogId].length : 0) + (kibble[dogId] != undefined ? 1 : 0) > 0)
+                    ? "flex justify-center items-center border btn mx-5 border-gray-300 bg-gray-200 text-gray-400 focus:outline-none rounded-lg py-3 px-20"
+                    : "flex justify-center items-center border btn mx-5 border-green-600 bg-green-600 text-white focus:outline-none rounded-lg py-3 px-20"
                 }
               >
                 Next
@@ -344,12 +321,12 @@ class Onboarding extends Component {
             )}
             {step === 4 && (
               <button
-                disabled={this.state.dietPortions.length <= 0}
-                onClick={this.handleFourthStep}
+                disabled= {!temp_user.temp_dog_ids.every(dogId => dietPortions[dogId] != undefined)}
+                onClick={this.handlePortionStep}
                 className={
-                  this.state.dietPortions.length <= 0
-                    ? "flex justify-center items-center border btn mx-5 border-gray-300 xs:bg-green-600 xs:text-white md:bg-gray-200 md:text-gray-400  focus:outline-none rounded-lg py-3 px-20"
-                    : "flex justify-center items-center border btn mx-5 border-green-600 xs:bg-green-600 xs:text-white md:bg-green-600 md:text-white  focus:outline-none rounded-lg py-3 px-20"
+                  !temp_user.temp_dog_ids.every(dogId => dietPortions[dogId] != undefined)
+                    ? "flex justify-center items-center border btn mx-5 border-gray-300 bg-gray-200 text-gray-400 focus:outline-none rounded-lg py-3 px-20"
+                    : "flex justify-center items-center border btn mx-5 border-green-600 bg-green-600 text-white focus:outline-none rounded-lg py-3 px-20"
                 }
               >
                 Next
@@ -358,13 +335,8 @@ class Onboarding extends Component {
 
             {step === 5 && (
               <button
-                disabled={Object.keys(this.state.user).length <= 0}
-                onClick={this.handleFifthStep}
-                className={
-                  Object.keys(this.state.user).length <= 0
-                    ? "flex justify-center items-center border btn mx-5 border-gray-300 xs:bg-green-600 xs:text-white md:bg-gray-200 md:text-gray-400  focus:outline-none rounded-lg py-3 px-20"
-                    : "flex justify-center items-center border btn mx-5 border-green-600 xs:bg-green-600 xs:text-white md:bg-green-600 md:text-white  focus:outline-none rounded-lg py-3 px-20"
-                }
+                onClick={this.handleUserStep}
+                className="flex justify-center items-center border btn mx-5 border-green-600 bg-green-600 text-white focus:outline-none rounded-lg py-3 px-20"
               >
                 Next
               </button>
@@ -381,16 +353,10 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(onboardingActions.getDogsFromForm(payload)),
   getOnboardingDetails: () =>
     dispatch(onboardingActions.getOnboardingDetails()),
-  creatingTempUser: (payload) =>
+  createTempUser: (payload) =>
     dispatch(onboardingActions.createTempUser(payload)),
   updateTempUser: (payload) =>
-    dispatch(onboardingActions.updateTempUser(payload)),
-
-  addDogRecipes: (payload) =>
-    dispatch(onboardingActions.addDogRecipes(payload)),
-
-  getDogDietPortion: (payload) =>
-    dispatch(onboardingActions.getDogDietPortion(payload)),
+    dispatch(onboardingActions.updateTempUser(payload))
 });
 
 function mapStateToProps(state) {
@@ -399,9 +365,8 @@ function mapStateToProps(state) {
     onboarding_details_data: state.onboarding.onboarding_details_data,
     dogs: state.onboarding.dogs,
     temp_user: state.onboarding.temp_user,
-    getting_diet_portion: state.onboarding.getting_diet_portion,
-    diet_portions: state.onboarding.diet_portions,
+    updating_temp_user: state.onboarding.updating_temp_user
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Onboarding);
+export default connect(mapStateToProps, mapDispatchToProps)(OnboardingSeparateVersion);

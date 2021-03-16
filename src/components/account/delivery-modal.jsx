@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import moment from 'moment'
 import MealPlanCard from "./mealplan-card.jsx";
 import DogSelector from "./dog-selector.jsx";
 import { userActions } from "../../actions";
@@ -65,7 +66,7 @@ const DeliveryModal = ({
   const CANCELLED = dogSubscription.status == "cancelled";
 
   let deliveryStatus;
-  const nextDelivery = user.next_occurrencies[0];
+  const nextDelivery = moment(user.delivery_starting_date_options[0].label).format(`MMMM D`)
   const amountOfFood = user.amount_of_food;
   if (
     user.subscription_phase &&
@@ -86,7 +87,7 @@ const DeliveryModal = ({
   if (dogsLength === 0) return null;
 
   return (
-    <div className="py-8 px-5 relative border-r border-l rounded-b-xl border-b border-gray-300">
+    <div data-cy="next-delivery-expanded" className="py-8 px-5 relative border-r border-l rounded-b-xl border-b border-gray-300">
       {PAUSED || CANCELLED ? (
         <>
           {dogsLength > 1 && (
@@ -144,7 +145,7 @@ const DeliveryModal = ({
             nextDelivery={nextDelivery}
             amountOfFood={amountOfFood}
           />
-          <nav aria-label="Progress">
+          <nav data-cy="delivery-stepper" aria-label="Progress">
             <Stepper
               labels={[
                 { main: "Scheduled", sub: "We have your order" },

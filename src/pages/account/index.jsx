@@ -66,12 +66,13 @@ class AccountPage extends React.Component {
       dogSubscription.status === "cancelled" ||
       dogSubscription.status === "paused";
 
-    const sectionHeader = (stateValue, Icon, text, Modal) => {
+    const sectionHeader = (stateValue, Icon, text, Modal, cypressTag) => {
       let expanded = this.state[stateValue];
 
       return (
         <div>
           <div
+            data-cy={cypressTag}
             onClick={() => this.openModal(stateValue, isCardDisable)}
             className={`flex bg-account justify-between items-center h-12 text-xl font-light p-3 cursor-pointer 
               ${expanded
@@ -108,7 +109,7 @@ class AccountPage extends React.Component {
 
     return (
       <div className="pb-40 bg-white px-3 md:px-0 md:w-11/12 mx-auto xl:w-full">
-        <div className="account-dashboard w-full bg-account flex items-center md:justify-start justify-center md:h-28 rounded-xl p-5 md:p-8 text-5x1 font-bold mb-6 font-messina">
+        <div data-cy="dashboard-header" className="account-dashboard w-full bg-account flex items-center md:justify-start justify-center md:h-28 rounded-xl p-5 md:p-8 text-5x1 font-bold mb-6 font-messina">
           <div className="flex justify-center items-center flex-col md:flex-row">
             <div className="flex justify-around w-3/4 md:w-auto md:justify-center">
               {profileImages}
@@ -120,17 +121,24 @@ class AccountPage extends React.Component {
         </div>
         <div className="grid md:grid-cols-3 gap-5 md:gap-4 xl:gap-10 grid-cols-1">
           {sectionHeader(
-            "nextExpanded",
-              MealBox,
-            "Next Delivery",
-            DeliveryModal
+            'nextExpanded',
+            MealBox,
+            'Next Delivery',
+            DeliveryModal,
+            'delivery-modal-header'
           )}
-          {sectionHeader("mealExpanded", BowlIcon, "Meal Plan", MealPlanModal)}
           {sectionHeader(
-            "frequencyExpanded",
+            'mealExpanded',
+            BowlIcon,
+            'Meal Plan',
+            MealPlanModal,
+            'meal-modal-header')}
+          {sectionHeader(
+            'frequencyExpanded',
             DeliveryBox,
-            "Delivery Frequency",
-            FrequencyModal
+            'Delivery Frequency',
+            FrequencyModal,
+            'frequency-modal-header'
           )}
         </div>
       </div>

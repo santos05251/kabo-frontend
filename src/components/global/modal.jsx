@@ -1,8 +1,6 @@
 import React from "react";
 import ReactModal from "react-modal";
 
-import imgClose from "../../assets/images/modal-close.svg";
-
 ReactModal.setAppElement("#root");
 
 class Modal extends React.Component {
@@ -26,11 +24,8 @@ class Modal extends React.Component {
         >
           <div className={`p-4  flex justify-between ${this.props.bgColor ? this.props.bgColor : ''}`}>
             <h3 className="text-xl">{this.props.title}</h3>
-            <img
-              className="cursor-pointer"
-              src={imgClose}
-              onClick={() => this.props.onRequestClose()}
-            />
+            <a href="#close-modal" className="close-icon" onClick={() => this.props.onRequestClose()}>
+            </a>
           </div>
           <div>{this.props.children}</div>
         </ReactModal>

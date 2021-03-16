@@ -1,8 +1,9 @@
-import { takeLatest, call, put, all } from "redux-saga/effects";
-
-import { userService } from "../services";
-import { userConstants, otherConstants } from "../constants";
-import { userActions } from "../actions/user.action";
+import {
+  takeLatest, call, put, all,
+} from 'redux-saga/effects';
+import { userService } from '../services';
+import { userConstants, otherConstants } from '../constants';
+import { userActions } from '../actions/user.action';
 
 function* getAccountDataSaga() {
   try {
@@ -26,7 +27,7 @@ function* getSubscriptionEstimateSaga(action) {
   try {
     const payload = yield call(
       userService.getSubscriptionEstimate,
-      action.payload
+      action.payload,
     );
     yield put({ type: userConstants.ESTIMATE_LOADED, payload });
   } catch (e) {
@@ -69,8 +70,8 @@ function* cancelSubscriptionSaga(action) {
       put(
         userActions.setUserLoading(
           userConstants.CANCEL_SUBSCRIPTION_REQUESTED,
-          false
-        )
+          false,
+        ),
       ),
     ]);
   } catch (e) {
@@ -79,8 +80,8 @@ function* cancelSubscriptionSaga(action) {
       put(
         userActions.setUserLoading(
           userConstants.CANCEL_SUBSCRIPTION_REQUESTED,
-          false
-        )
+          false,
+        ),
       ),
     ]);
   }
@@ -110,7 +111,7 @@ function* updateDeliveryAddressSaga(action) {
   try {
     const payload = yield call(
       userService.updateDeliveryAddress,
-      action.payload
+      action.payload,
     );
     yield put({ type: userConstants.DELIVERY_UPDATE_SUCCESS, payload });
   } catch (e) {
@@ -134,7 +135,7 @@ function* updateDeliveryFrequencySaga(action) {
   try {
     const payload = yield call(
       userService.updateDeliveryFrequency,
-      action.payload
+      action.payload,
     );
     yield put({
       type: userConstants.UPDATE_DELIVERY_FREQUENCY_SUCCESS,
@@ -231,27 +232,27 @@ export default function* user() {
   yield takeLatest(userConstants.BREED_DATA_REQUESTED, getBreedDataSaga);
   yield takeLatest(
     userConstants.SUBSCRIPTION_DATA_REQUESTED,
-    getSubscriptionDataSaga
+    getSubscriptionDataSaga,
   );
   yield takeLatest(
     userConstants.ESTIMATE_REQUESTED,
-    getSubscriptionEstimateSaga
+    getSubscriptionEstimateSaga,
   );
   yield takeLatest(
     userConstants.CANCEL_SUBSCRIPTION_REQUESTED,
-    cancelSubscriptionSaga
+    cancelSubscriptionSaga,
   );
   yield takeLatest(
     userConstants.PAUSE_SUBSCRIPTION_REQUESTED,
-    pauseSubscriptionSaga
+    pauseSubscriptionSaga,
   );
   yield takeLatest(
     userConstants.UNPAUSE_SUBSCRIPTION_REQUESTED,
-    unpauseSubscriptionSaga
+    unpauseSubscriptionSaga,
   );
   yield takeLatest(
     userConstants.DELIVERY_UPDATE_REQUESTED,
-    updateDeliveryAddressSaga
+    updateDeliveryAddressSaga,
   );
   yield takeLatest(userConstants.UPDATE_USER_PHONE_EMAIL, updateEmailPhoneSaga);
   yield takeLatest(userConstants.ORDER_DATA_REQUESTED, getOrderDataSaga);
@@ -261,17 +262,17 @@ export default function* user() {
   yield takeLatest(userConstants.SET_BILLING_ADDRESS, setBillingAddress);
   yield takeLatest(
     userConstants.OPEN_UPDATE_PAYMENT_MODAL,
-    openUpdatePaymentModal
+    openUpdatePaymentModal,
   );
   yield takeLatest(userConstants.UPDATE_PAYMENT_METHOD, updatePaymentMethod);
   yield takeLatest(
     userConstants.UPDATE_DELIVERY_FREQUENCY_REQUESTED,
-    updateDeliveryFrequencySaga
+    updateDeliveryFrequencySaga,
   );
 
   yield takeLatest(
     userConstants.OPEN_SKIP_DELIVERY_MODAL,
-    openSkipDeliveryModal
+    openSkipDeliveryModal,
   );
 
   yield takeLatest(userConstants.SKIP_DOG_DELIVERY, skipDogDelivery);
@@ -279,6 +280,6 @@ export default function* user() {
   yield takeLatest(userConstants.GET_USER_NOTIFICATIONS, getUserNotifications);
   yield takeLatest(
     userConstants.OPEN_SUBSCRIPTION_MANAGEMENT_MODAL,
-    openSubscriptionManagementModal
+    openSubscriptionManagementModal,
   );
 }

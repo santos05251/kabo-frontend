@@ -91,3 +91,49 @@
   outline: none;
   border: 0px;
 }
+
+.mealplan-meal-image {
+  height: 200px;
+}
+.foodcard {
+  height: 540px;
+  position: relative;
+}
+
+.foodcard-add-button {
+  color: #239c6d;
+  display: block;
+  border: 1px solid #239c6d;
+  border-radius: 4px;
+  text-align: center;
+  padding: 1rem 0.5rem;
+  margin: 1rem;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+@media screen and (min-width: 1024px) {
+  .foodcard-add-button {
+    position: absolute;
+    bottom: 0.5rem;
+  }
+}
+
+.meal-name {
+  font-size: 0.8rem;
+  padding-bottom: 0rem;
+  text-align: left;
+}
+
+@media screen and (max-width: 576px) {
+  .foodcard-add-button {
+    font-size: 14px;
+    font-weight: normal;
+    margin-left: 0;
+    padding: 10px;
+    margin-top: 10px;
+  }
+  .margin-bottom-4{
+    margin-bottom: 20px;
+  }
+}

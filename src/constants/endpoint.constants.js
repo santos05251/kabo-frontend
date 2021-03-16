@@ -32,5 +32,9 @@ export const endpointConstants = {
   CREATE_TEMP_USER: `${apiDomain}/${apiVersion}/onboarding/users`,
   UPDATE_TEMP_USER: `${apiDomain}/${apiVersion}/onboarding/users`,
   GET_DOG_DIET_PORTION: `${apiDomain}/${apiVersion}/onboarding/portions`,
-  GET_DOG_DIET_PORTION_V2: `${apiDomain}/${apiVersion2}/onboarding/portions`
+  GET_DOG_DIET_PORTION_V2: `${apiDomain}/${apiVersion2}/onboarding/portions`,
+  GET_PAYPAL_REDIRECT_URL: `${apiDomain}/${apiVersion}/onboarding/paypal/authorization`,
+  GET_PAYMENT_METHOD: `${apiDomain}/${apiVersion}/onboarding/payment_method`,
+  VALIDATE_POSTAL_CODE: `${apiDomain}/${apiVersion}/checkout/validate/postal_code`,
+  CHECKOUT: `${apiDomain}/${apiVersion}/checkout`,
 };

@@ -1,14 +1,14 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { mealActions, userActions } from "../../actions";
-import RecipeSelection from "./RecipeSelection";
-import DailyDietPortion from "./DailyDietPortion";
-import SelectedRecipes from "./SelectedRecipes";
-import FreshOrKibble from "../../components/meal-plan/fresh-kibble-selector";
-import Loader from "../../loaders/mealPlan";
-import { ReactComponent as Arrow } from "../../assets/images/Vectorarrow.svg";
-import { ReactComponent as DeliveryBox } from "../../assets/images/delivery-box.svg";
-import { userSelectors } from "../../selectors/user.selectors";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { mealActions, userActions } from '../../actions';
+import RecipeSelection from './RecipeSelection';
+import DailyDietPortion from './DailyDietPortion';
+import SelectedRecipes from './SelectedRecipes';
+import FreshOrKibble from '../../components/meal-plan/fresh-kibble-selector';
+import Loader from '../../loaders/mealPlan';
+import { ReactComponent as Arrow } from '../../assets/images/Vectorarrow.svg';
+import { ReactComponent as DeliveryBox } from '../../assets/images/delivery-box.svg';
+import { userSelectors } from '../../selectors/user.selectors';
 
 class EditPlan extends Component {
   state = {
@@ -48,16 +48,16 @@ class EditPlan extends Component {
       this.setState({ dog: currentdog });
       let loadRecipes = [];
       if (currentdog.chicken_recipe) {
-        loadRecipes.push("chicken");
+        loadRecipes.push('chicken');
       }
       if (currentdog.beef_recipe) {
-        loadRecipes.push("beef");
+        loadRecipes.push('beef');
       }
       if (currentdog.lamb_recipe) {
-        loadRecipes.push("lamb");
+        loadRecipes.push('lamb');
       }
       if (currentdog.turkey_recipe) {
-        loadRecipes.push("turkey");
+        loadRecipes.push('turkey');
       }
       ///again not sure can be more then one kibble recipe
       this.setState({
@@ -66,8 +66,8 @@ class EditPlan extends Component {
         dietPortion: {
           cooked_portion: currentdog.cooked_portion,
           kibble_portion: currentdog.kibble_portion,
-          portion_adjusment: currentdog.portion_adjusment
-        }
+          portion_adjusment: currentdog.portion_adjusment,
+        },
       });
     }
   }
@@ -107,11 +107,7 @@ class EditPlan extends Component {
   }
   handleSelectedCookedRecipes = (food) => {
     const { cookedRecipes } = this.state;
-    if (
-      cookedRecipes &&
-      cookedRecipes.length > 0 &&
-      cookedRecipes.includes(food.recipe)
-    ) {
+    if (cookedRecipes && cookedRecipes.length > 0 && cookedRecipes.includes(food.recipe)) {
       let recipes = [...cookedRecipes];
       const index = recipes.indexOf(food.recipe);
       recipes.splice(index, 1);
@@ -181,14 +177,7 @@ class EditPlan extends Component {
   };
 
   handleMealUpdate = () => {
-    const {
-      cookedRecipes,
-      kibbleRecipes,
-      dietPortion,
-      dog,
-      showCooked,
-      showKibble,
-    } = this.state;
+    const { cookedRecipes, kibbleRecipes, dietPortion, dog, showCooked, showKibble } = this.state;
     const data = {
       dog_id: dog.id,
       cooked_portion: dietPortion.cooked_portion || null,
@@ -227,10 +216,8 @@ class EditPlan extends Component {
     } = this.state;
 
     if (user.subLoading) return <Loader />;
-    let filteredKibble =
-      kibbleRecipes[0] === null || !kibbleRecipes ? 0 : kibbleRecipes.length;
-    let filteredCooked =
-      cookedRecipes[0] === null || !cookedRecipes ? 0 : cookedRecipes.length;
+    let filteredKibble = kibbleRecipes[0] === null || !kibbleRecipes ? 0 : kibbleRecipes.length;
+    let filteredCooked = cookedRecipes[0] === null || !cookedRecipes ? 0 : cookedRecipes.length;
 
     ///checking selected plans length.
     const selectedLength = filteredCooked + filteredKibble;
@@ -242,17 +229,25 @@ class EditPlan extends Component {
 
     ////resolved NaN
     let totalReadable =
-      subData && subData.invoice_estimate_total === "N/A"
+      subData && subData.invoice_estimate_total === 'N/A'
         ? 0
         : subData && (subData.invoice_estimate_total / 100).toFixed(2);
 
-    return ( 
-      <div className="md:bg-white px-4 xl:px-0">
-        
-        
-      
-        <div className="justify-center customContainer mx-auto">
-        
+    return (
+      <div className="md:bg-white sm:px-2 md:px-4 xl:px-0">
+        <div className="justify-center mb-5 customContainer md:border  border-gray-200 p-4 rounded-lg">
+          <div className="flex items-center pb-7 pt-4 border-b border-gray-200">
+            <div className="mr-3 ">
+              <img
+                className="w-20"
+                src="https://staging.kabo.co/assets/dog-pic-placeholder-0e1ea281ad23bc5843589a1968515c57044324a77b4cfada2aa1c13d19ac6dbf.svg"
+              />
+            </div>
+            <div>
+              <h1 className="font-extrabold text-3xl mb-1">{dog && dog.name}'s Plan</h1>
+              <p className="text-xl">Active Subscription</p>
+            </div>
+          </div>
           <RecipeSelection
             user={user}
             showCooked={showCooked}
@@ -268,18 +263,17 @@ class EditPlan extends Component {
             isKibble={this.state.isKibble}
             dog={dog}
           />
-         
-            <DailyDietPortion
-              meal={meal}
-              dog={dog}
-              cookedRecipes={cookedRecipes}
-              dietPortion={this.state.dietPortion}
-              selectedPortion={this.state.selectedPortion}
-              togglePortion={this.togglePortion}
-              selectedDietPortion={this.selectedDietPortion}
-              getDailyDietPortion={getDailyDietPortion}
-              kibbleRecipes={kibbleRecipes}
-            />
+          <DailyDietPortion
+            meal={meal}
+            dog={dog}
+            cookedRecipes={cookedRecipes}
+            dietPortion={this.state.dietPortion}
+            selectedPortion={this.state.selectedPortion}
+            togglePortion={this.togglePortion}
+            selectedDietPortion={this.selectedDietPortion}
+            getDailyDietPortion={getDailyDietPortion}
+            kibbleRecipes={kibbleRecipes}
+          />
             <SelectedRecipes
             dog={dog}
               user={user}
@@ -297,8 +291,8 @@ class EditPlan extends Component {
               }
               onConfirm={(e) => this.handleMealUpdate(e)}
             />
-          
-        </div>     
+
+        </div>
       </div>
     );
   }
@@ -308,11 +302,9 @@ const mapDispatchToProps = (dispatch) => ({
   getAccountData: () => dispatch(userActions.getAccountData()),
   getRecipeData: () => dispatch(userActions.getRecipeData()),
   updateMealPlan: (payload) => dispatch(mealActions.updateMealPlan(payload)),
-  getDailyDietPortion: (payload) =>
-    dispatch(mealActions.getDailyDietPortion(payload)),
+  getDailyDietPortion: (payload) => dispatch(mealActions.getDailyDietPortion(payload)),
   getSubscriptionData: () => dispatch(userActions.getSubscriptionData()),
-  getSubscriptionEstimate: (data) =>
-    dispatch(userActions.getSubscriptionEstimate(data)),
+  getSubscriptionEstimate: (data) => dispatch(userActions.getSubscriptionEstimate(data)),
 });
 
 const mapStateToProps = (state, props) => {

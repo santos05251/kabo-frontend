@@ -1,6 +1,6 @@
 import React from "react";
-import {connect} from "react-redux";
-import {userSelectors} from "../../selectors/user.selectors";
+import { connect } from "react-redux";
+import { userSelectors } from "../../selectors/user.selectors";
 
 const MealIcon = ({ source, notFirst }) => (
   <img
@@ -10,7 +10,7 @@ const MealIcon = ({ source, notFirst }) => (
   />
 );
 
-const MealPlanCard = ({ noPrice, cooked_recipes, kibble_recipes, subscription, currentDog, nextDelivery ,amountOfFood}) => {
+const MealPlanCard = ({ noPrice, cooked_recipes, kibble_recipes, subscription, currentDog, nextDelivery, amountOfFood }) => {
 
   if (!cooked_recipes || !kibble_recipes) return null;
 
@@ -74,33 +74,36 @@ const MealPlanCard = ({ noPrice, cooked_recipes, kibble_recipes, subscription, c
   } else if (!currentDog.kibble_portion) {
     portion = `${currentDog.cooked_portion}% Kabo`;
   } else {
-    portion = `${currentDog.cooked_portion ? currentDog.cooked_portion : 0}% fresh food & ${
-      currentDog.kibble_portion ? currentDog.kibble_portion : 0}% kibble`;
+    portion = `${currentDog.cooked_portion ? currentDog.cooked_portion : 0}% fresh food & ${currentDog.kibble_portion ? currentDog.kibble_portion : 0}% kibble`;
   }
 
   let price = subscription
-  && subscription.invoice_estimate_total
-  && Number.isInteger(+subscription.invoice_estimate_total)
-      ? subscription.invoice_estimate_total : 0;
+    && subscription.invoice_estimate_total
+    && Number.isInteger(+subscription.invoice_estimate_total)
+    ? subscription.invoice_estimate_total : 0;
 
   price /= 100;
 
   const readableRecipe = recipeArray.join(" and ");
   return (
-    <div>
+    <div data-cy="mealplan-card">
       <div>
-        {nextDelivery && <p className="pb-8 font-messina text-gray-600 text-15 leading-20">Expected Arrival: {nextDelivery}</p>}
+        {nextDelivery && <p data-cy="mealplan-next-delivery-date" className="pb-8 font-messina text-gray-600 text-15 leading-20">Expected Arrival: {nextDelivery}</p>}
 
         <div className="w-full font-semibold text-base mb-6 md:flex-col xl:flex-row">
           <div className="flex items-center">
             {iconArray}
             <div className="ml-4 md:ml-4 xl:pr-9">
-              <p className="font-normal text-17 leading-24">{readableRecipe}{amountOfFood && ' for ' + amountOfFood.split("_").join(" ") }</p>
+              <p data-cy="mealplan-recipe" className="font-normal text-17 leading-24">
+                {readableRecipe}
+                <span data-cy="mealplan-plan">
+                  {amountOfFood && ' for ' + amountOfFood.split("_").join(" ")}
+                </span>
+              </p>
             </div>
           </div>
           <div className="flex justify-between mt-6">
-            {" "}
-            <p className="font-normal text-gray-800 pr-4">{portion}</p> {!noPrice && <span className="font-medium">${price.toFixed(2)}</span>}
+            <p data-cy="mealplan-portion" className="font-normal text-gray-800 pr-4">{portion}</p> {!noPrice && <span data-cy="mealplan-price" className="font-medium">${price.toFixed(2)}</span>}
           </div>
         </div>
       </div>

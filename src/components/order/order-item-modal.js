@@ -7,7 +7,6 @@ export default function OrderItemModal({ item, showModal, onClose }) {
       title={item?.name + ' Meal Plan'}
       isOpen={showModal}
       onRequestClose={onClose}
-     
     >
       <div className="p-6 overflow-y-auto" style={{ maxHeight: '90vh' }}>
         <div className="flex md:flex-row flex-col">

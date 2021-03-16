@@ -14,7 +14,7 @@ import OrderDetail from "./pages/order/detail";
 
 import OnboardingSeparateVersion from "./pages/onboardings/separate-version";
 import OnboardingCombinedVersion from "./pages/onboardings/combined-version";
-import FinalStep from "./pages/onboardings/step-6";
+import CheckoutStep from "./pages/onboardings/steps/checkout";
 
 function App() {
   return (
@@ -26,7 +26,10 @@ function App() {
         <div className="page-routing">
           <BrowserRouter>
             <Switch>
-              <Route path="/onboarding/checkout" component={FinalStep} />
+              <NonUserRoute
+                path="/checkout/:checkout_token"
+                component={CheckoutStep}
+              />
               <NonUserRoute
                 path="/a/signup"
                 exact

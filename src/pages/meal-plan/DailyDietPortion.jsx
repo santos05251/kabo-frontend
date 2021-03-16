@@ -28,10 +28,10 @@ const DailyDietPortion = ({
 
   return (
     <React.Fragment>
-      <div className="w-full flex flex-col lg:pt-9 items-center bg-white">
+      <div className="w-full flex flex-col pt-9 items-center bg-white">
         <div className="container flex flex-col">
-          <div className="mb-6 text-xl text-center md:text-left">Choose {dog && dog.name}'s Daily portion of Kabo</div>
-          <div className="w-11/12 lg:w-full mx-auto grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+          <div className="mb-6 text-xl font-extrabold md:text-left">Choose {dog && dog.name}'s Daily portion of Kabo</div>
+          <div className="grid grid-cols-2 md:flex md:flex-wrap">
             {meal.getting_diet_portion && <LoadingCircle />}
             {meal &&
               meal.daily_diet_portion_data &&

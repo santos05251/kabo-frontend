@@ -1,7 +1,8 @@
-import { takeLatest, call, put } from "redux-saga/effects";
+import { takeLatest, call, put, takeEvery } from 'redux-saga/effects';
 
-import { onboardingService } from "../services";
-import { onboardingContstants } from "../constants";
+import { onboardingService } from '../services';
+import { onboardingContstants } from '../constants';
+import { update } from 'immutable';
 
 function* getOnboardingData() {
   try {
@@ -44,7 +45,7 @@ function* createTempUser(action) {
   try {
     const payload = yield call(
       onboardingService.createTempUser,
-      action.payload
+      action.payload,
     );
     yield put({ type: onboardingContstants.CREATE_TEMP_USER_SUCCESS, payload });
   } catch (error) {
@@ -59,7 +60,7 @@ function* updateTempUser(action) {
   try {
     const payload = yield call(
       onboardingService.updateTempUser,
-      action.payload
+      action.payload,
     );
     yield put({ type: onboardingContstants.UPDATE_TEMP_USER_SUCCESS, payload });
   } catch (error) {
@@ -82,11 +83,18 @@ function* addDogRecipes(action) {
   }
 }
 
+function* updateRecipeSelection(action) {
+  yield put({
+    type: onboardingContstants.UPDATE_RECIPES_SELECTION_SUCCESS,
+    payload: action.payload,
+  });
+}
+
 function* getDogDietPortion(action) {
   try {
     const payload = yield call(
       onboardingService.getDogDietPortion,
-      action.payload
+      action.payload,
     );
     yield put({
       type: onboardingContstants.GET_DOG_DIET_PORTION_SUCCESS,
@@ -100,19 +108,36 @@ function* getDogDietPortion(action) {
   }
 }
 
+function* postCheckout(action) {
+  try {
+    const payload = yield call(
+      onboardingService.postCheckout,
+      action.payload,
+    );
+    yield put({
+      type: onboardingContstants.POST_CHECKOUT_SUCCESS,
+      payload,
+    });
+  } catch (error) {
+    yield put({
+      type: onboardingContstants.POST_CHECKOUT_FAILED,
+      payload: error,
+    });
+  }
+}
+
 export default function* onboarding() {
   yield takeLatest(onboardingContstants.GET_ONBOARDING_DATA, getOnboardingData);
   yield takeLatest(onboardingContstants.GET_DOGS_FROM_FORM, getDogsFromForm);
   yield takeLatest(
     onboardingContstants.GET_ONBOARDING_DETAILS,
-    getOnboardingDetails
+    getOnboardingDetails,
   );
 
   yield takeLatest(onboardingContstants.CREATE_TEMP_USER, createTempUser);
-  yield takeLatest(onboardingContstants.UPDATE_TEMP_USER, updateTempUser);
+  yield takeEvery(onboardingContstants.UPDATE_TEMP_USER, updateTempUser);
   yield takeLatest(onboardingContstants.ADD_DOG_RECIPES, addDogRecipes);
-  yield takeLatest(
-    onboardingContstants.GET_DOG_DIET_PORTION,
-    getDogDietPortion
-  );
+  yield takeEvery(onboardingContstants.UPDATE_RECIPES_SELECTION, updateRecipeSelection);
+  yield takeEvery(onboardingContstants.GET_DOG_DIET_PORTION, getDogDietPortion);
+  yield takeEvery(onboardingContstants.POST_CHECKOUT, postCheckout);
 }

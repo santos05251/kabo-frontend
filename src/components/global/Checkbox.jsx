@@ -2,11 +2,11 @@ import React from "react";
 import "./styles.css";
 
 const Checkbox = ({ onChange, label }) => (
-  <div class="checkbox">
+  <div className="checkbox">
     <form>
-      <div class="form-group">
+      <div className="form-group">
         <input type="checkbox" id="html" onChange={onChange} />
-        <label className="text-labelGray font-medium text-xs" for="html">
+        <label className="text-labelGray font-medium text-xs" htmlFor="html">
           {label}
         </label>
       </div>

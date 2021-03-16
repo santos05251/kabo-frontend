@@ -1,4 +1,4 @@
-import { onboardingContstants } from '../constants';
+import { onboardingContstants } from "../constants";
 
 const initialState = {
   loading_onboarding_starter_data: false,
@@ -17,8 +17,13 @@ const initialState = {
   updating_temp_user: false,
   adding_dog_recipes: false,
 
+  recipes_selected: {},
+  
   getting_diet_portion: false,
   diet_portions: {},
+
+  posting_checkout: false,
+  checkout_res: {},
 };
 
 export const onboarding = (state = initialState, action) => {
@@ -93,7 +98,8 @@ export const onboarding = (state = initialState, action) => {
     case onboardingContstants.UPDATE_TEMP_USER_SUCCESS:
       return {
         ...state,
-        updating_temp_user: true,
+        updating_temp_user: false,
+        temp_user: action.payload,
       };
 
     case onboardingContstants.UPDATE_TEMP_USER_FAILED:
@@ -119,7 +125,13 @@ export const onboarding = (state = initialState, action) => {
         ...state,
         adding_dog_recipes: false,
       };
-
+  
+    case onboardingContstants.UPDATE_RECIPES_SELECTION_SUCCESS:
+      return {
+        ...state,
+        recipes_selected: action.payload,
+      };
+  
     case onboardingContstants.GET_DOG_DIET_PORTION:
       return {
         ...state,
@@ -137,6 +149,25 @@ export const onboarding = (state = initialState, action) => {
       return {
         ...state,
         getting_diet_portion: false,
+      };
+
+    case onboardingContstants.POST_CHECKOUT:
+      return {
+        ...state,
+        posting_checkout: true,
+      };
+
+    case onboardingContstants.POST_CHECKOUT_SUCCESS:
+      return {
+        ...state,
+        posting_checkout: false,
+        checkout_res: action.payload,
+      };
+
+    case onboardingContstants.POST_CHECKOUT_FAILED:
+      return {
+        ...state,
+        posting_checkout: false,
       };
     default:
       return state;

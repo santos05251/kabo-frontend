@@ -38,21 +38,21 @@ class LoginPage extends React.Component {
     return (
       <div className="login md:mt-28 sm:mt-23">
         <div className="max-w-2xl mx-auto">
-          <form name="form" onSubmit={this.handleSubmit}>
+          <form name="form" data-cy="login-form" onSubmit={this.handleSubmit}>
             <div className="bg-white px-8 md:py-10 sm:py-1 sm:h-60 sm:px-12 sm:py-8 ">
               <div className="grid grid-cols-12">
                 <div className="col-span-12 sm:col-span-5">
                   <label htmlFor="email" className="leading-snug text-sm font-semibold text-black">Email</label>
-                  <input type="email" name="email" id="email" value={email} autoComplete="email" onChange={this.handleChange} required className="block w-full h-12 px-3 py-2 border border-solid border-gray-400 rounded-lg" />
+                  <input data-cy="login-email" type="email" name="email" id="email" value={email} autoComplete="email" onChange={this.handleChange} required className="block w-full h-12 px-3 py-2 border border-solid border-gray-400 rounded-lg" />
                 </div>
 
                 <div className="col-span-12 pl-0 pt-5 sm:col-span-5 sm:pl-4.5 sm:pt-0">
                   <label htmlFor="password" className="leading-snug text-sm font-semibold text-black">Password</label>
-                  <input type="password" name="password" id="password" value={password} autoComplete="current-password" onChange={this.handleChange} required className="block w-full h-12 px-3 py-2 border border-solid border-gray-400 rounded-lg" />
+                  <input data-cy="login-password" type="password" name="password" id="password" value={password} autoComplete="current-password" onChange={this.handleChange} required className="block w-full h-12 px-3 py-2 border border-solid border-gray-400 rounded-lg" />
                 </div>
               </div>
               {error && (
-                <div className="text-red-500 text-xs mt-1">
+                <div data-cy="login-failure" className="text-red-500 text-xs mt-1">
                   Invalid login credentials
                 </div>
               )}
@@ -63,10 +63,9 @@ class LoginPage extends React.Component {
                 Forgot your password?
               </a>
               <button
+                data-cy="login-submit"
                 type="submit"
-                className={`w-full sm:w-60 h-12 bg-primary text-white rounded-xl leading-8 text-base ${
-                  authLoading ? "flex justify-center items-center" : ""
-                }`}
+                className={`w-full sm:w-60 h-12 bg-primary text-white rounded-xl leading-8 text-base ${authLoading ? 'flex justify-center items-center' : ''}`}
               >
                 {authLoading ? <img src={Loader} className="w-9" /> : "Log In"}
               </button>
