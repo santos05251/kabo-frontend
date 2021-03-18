@@ -3,7 +3,7 @@ module.exports = {
     browser: true,
     es2021: true,
   },
-  extends: ['plugin:react/recommended', 'airbnb'],
+  extends: ['plugin:react/recommended', 'airbnb', 'plugin:cypress/recommended'],
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
@@ -16,15 +16,29 @@ module.exports = {
     'prettier/prettier': 0,
     'import/prefer-default-export': 0,
     semi: 0,
-    'jsx-a11y/label-has-associated-control': ['error', {
-      required: {
-        some: ['nesting', 'id'],
+    'jsx-a11y/label-has-associated-control': [
+      'error',
+      {
+        required: {
+          some: ['nesting', 'id'],
+        },
       },
-    }],
-    'jsx-a11y/label-has-for': ['error', {
-      required: {
-        some: ['nesting', 'id'],
+    ],
+    'jsx-a11y/label-has-for': [
+      'error',
+      {
+        required: {
+          some: ['nesting', 'id'],
+        },
       },
-    }],
+    ],
+    quotes: [
+      "error",
+      "double",
+      {
+        avoidEscape: true,
+        allowTemplateLiterals: true,
+      },
+    ],
   },
 };
