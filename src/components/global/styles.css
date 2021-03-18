@@ -46,16 +46,16 @@
 }
 
 .form-group input:checked + label:after {
-    content: "";
-    display: block;
-    position: absolute;
-    top: 2px;
-    left: 5.9px;
-    width: 5px;
-    height: 10px;
-    border: solid #848484;
-    border-width: 0 2px 2px 0;
-    transform: rotate(45deg);
+  content: "";
+  display: block;
+  position: absolute;
+  top: 2px;
+  left: 5.9px;
+  width: 5px;
+  height: 10px;
+  border: solid #848484;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
 }
 
 .close-icon::before {
@@ -90,4 +90,10 @@
 
 .close-icon.dark::after {
   background-color: black;
+}
+
+@media screen and (min-width: 1280px) {
+  .container {
+    max-width: auto;
+  }
 }

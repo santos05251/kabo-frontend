@@ -1,6 +1,6 @@
 import React from 'react';
 import { CircleSVG } from '../../components/meal-plan/circle';
-import "./style.css";
+import './style.css';
 
 const DietPortionCard = ({
   item, handleSelect, dietPortion, dog,
@@ -14,6 +14,7 @@ const DietPortionCard = ({
   return (
     <div className="mr-4 mt-2 daily-portion-card">
       <button
+        type="button"
         onClick={(e) => handleSelect(item)}
         className={
           item.cooked_portion === dietPortion.cooked_portion
@@ -23,9 +24,10 @@ const DietPortionCard = ({
             : ' flex flex-col md:w-64  p-5 items-center bg-white font-messina relative rounded-lg border border-gray-200'
         }
       >
-        <div className="flex w-16 relative mb-4">
+        <div className="flex w-20 relative mb-2">
           {thenum === 100 && (
             <img
+              alt=""
               src="/diet-logo.png"
               className="absolute w-3/4"
               style={{ top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}
@@ -34,14 +36,26 @@ const DietPortionCard = ({
 
           {thenum > 100 && (
             <img
+              alt=""
               src="/plus.png"
               className="absolute h-1/3"
               style={{ top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}
             />
           )}
-          <CircleSVG num={thenum} />
+          {
+            console.log('item.kibble_portion == dietPortion.kibble_portion',
+            item.kibble_portion == dietPortion.kibble_portion)
+          }
+          <CircleSVG
+            backgroundColor={
+              item.kibble_portion == dietPortion.kibble_portion
+                ? 'rgba(250, 191, 158, 0.5)'
+                : '#dfdfdf'
+            }
+            num={thenum}
+          />
         </div>
-        <p className="font-messina mt-1 font-bold text-sm">{item.title}</p>
+        <p className="font-messina mt-1 text-lg">{item.title}</p>
         {item.description && (
           <div>
             {' '}
