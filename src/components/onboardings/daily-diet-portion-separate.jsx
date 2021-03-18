@@ -6,17 +6,19 @@ import "./style.css";
 
 class DailyDietPortionSeparate extends Component {
   state = {
-    dietPortion: "",
+    dietPortion: {},
     dailyPortions: {}
   };
   
   componentDidMount() {
     this.loadDietPortion = this.loadDietPortion.bind(this);
 
+    const { dietPortion } = this.props;
+    this.setState({dietPortion});
+
     const {
       separateVersion
     } = this.props;
-
     if (separateVersion)
       this.loadDietPortion()
   }
@@ -43,18 +45,21 @@ class DailyDietPortionSeparate extends Component {
 
     this.setState({ dietPortion: item });
 
-    let dietPortion = {};
+    let dietPortion = { title: item.title };
     if (item.kibble_portion && item.cooked_portion) {
       dietPortion = {
+        ...dietPortion,
         cooked_portion: item.cooked_portion,
         kibble_portion: item.kibble_portion,
       };
     } else if (item.cooked_portion) {
       dietPortion = {
+        ...dietPortion,
         cooked_portion: item.cooked_portion
       }
     } else if (item.kibble_portion) {
       dietPortion = {
+        ...dietPortion,
         kibble_portion: item.kibble_portion
       }
     }

@@ -233,7 +233,7 @@ class CheckoutStep extends Component {
       details.stripe_type = "card";
       details.credit_number = creditCard.replace(/ /g, '');
       details.exp_date = billingExpiration;
-      details.exp_cvc = billingCVC
+      details.cvc = billingCVC
     } else {
       details.payment_method = "paypal";
       details.reference_id = paypalReferenceId;

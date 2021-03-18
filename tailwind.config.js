@@ -13,6 +13,11 @@ module.exports = {
         'bg-kibble-chicken',
         'bg-kibble-turkey+salmon',
         'bg-kibble-duck',
+        'w-1/5',
+        'w-2/5',
+        'w-3/5',
+        'w-4/5',
+        'w-5/5',
       ],
     },
   },
@@ -27,6 +32,7 @@ module.exports = {
         fadeGrey: '#2a3c49',
       },
       backgroundColor: {
+        container: '#F2F5F4',
         primary: '#239C6D',
         account: '#F2F5F4',
         promptYellow: '#FFF5E7',
@@ -38,6 +44,23 @@ module.exports = {
         lamb: '#9EC694',
         kibble: {
           chicken: '#eebd5e',
+          'turkey+salmon': '#FE766D',
+          duck: '#91CEB6',
+        },
+        label: '#2F3D33',
+        deliveryStepper:'#FBFBFB'
+      },
+      borderWidth: {
+        '3': '1.72532px',
+      },
+      borderColor: {
+        green: '#239C6D',
+        chicken: '#FF9C63',
+        beef: '#239C6D',
+        turkey: '#875D45',
+        lamb: '#9EC694',
+        kibble: {
+          chicken: '#FECD6D',
           'turkey+salmon': '#FE766D',
           duck: '#91CEB6',
         },
@@ -57,22 +80,6 @@ module.exports = {
           'turkey+salmon': '#FE766D',
           duck: '#91CEB6',
         },
-        label: "#2F3D33",
-      },
-      borderWidth: {
-        "3": "1.72532px",
-      },
-      borderColor: {
-        green: "#239C6D",
-        chicken: "#FF9C63",
-        beef: "#239C6D",
-        turkey: "#875D45",
-        lamb: "#9EC694",
-        kibble: {
-          chicken: "#FECD6D",
-          "turkey+salmon": "#FE766D",
-          duck: "#91CEB6",
-        },
       },
       borderRadius: {
         '1lg': '0.625rem',
@@ -91,6 +98,8 @@ module.exports = {
       boxShadow: {
         modal: '0px 8px 40px rgb(0 0 0 / 20%)',
         green: 'inset 0px 0px 0px 3px #239C6D',
+        tableBoxShadow: '0px 4px 28px rgba(0, 0, 0, 0.04)',
+        light: '0px 4px 28px rgba(0, 0, 0, 0.04)',
       },
       width: {
         7.3: '1.875rem',

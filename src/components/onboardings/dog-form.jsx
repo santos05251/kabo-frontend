@@ -3,11 +3,11 @@ import FormWrapper from "./form-wrapper";
 import EditableDropdown from "./edit-dropdown";
 import DogInput from "./dog-input";
 
-const DogForm = ({ index, breeds, ages, unknown_breeds, updateDog, deleteDog, lastLength }) => {
-  const [dogName, setDogName] = useState("");
-  const [breed, setBreed] = useState({});
-  const [age, setAge] = useState({});
-  const [dog, setDog] = useState({ index });
+const DogForm = ({ index, breeds, ages, unknown_breeds, updateDog, dogDetail, deleteDog, lastLength }) => {
+  const [dogName, setDogName] = useState(dogDetail.name?dogDetail.name:'');
+  const [breed, setBreed] = useState(dogDetail.breed?dogDetail.breed:{});
+  const [age, setAge] = useState(dogDetail.age?dogDetail.age:{});
+  const [dog, setDog] = useState({index, name: dogDetail.name?dogDetail.name:'', breed: dogDetail.breed?dogDetail.breed:{},  age: dogDetail.age?dogDetail.age:{}});
   const handleDogName = (name) => {
     setDogName(name);
     setDog({ ...dog, name: name });
@@ -16,14 +16,14 @@ const DogForm = ({ index, breeds, ages, unknown_breeds, updateDog, deleteDog, la
 
   const handleDogBreed = (breed) => {
     setBreed(breed);
-    setDog({ ...dog, breed: breed.label });
-    updateDog({ ...dog, breed: breed.label });
+    setDog({ ...dog, breed: breed });
+    updateDog({ ...dog, breed: breed });
   };
 
   const handleDogAge = (age) => {
     setAge(age);
-    setDog({ ...dog, age_in_months: age.value });
-    updateDog({ ...dog, age_in_months: age.value });
+    setDog({ ...dog, age: age });
+    updateDog({ ...dog, age: age });
   };
 
   const removeDog = () => {

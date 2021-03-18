@@ -7,6 +7,7 @@ class PortionStep extends Component {
     const {
       cookedRecipes,
       kibbleRecipes,
+      dietPortions,
       temp_user,
       handleDietPortion,
       separateVersion
@@ -25,6 +26,7 @@ class PortionStep extends Component {
               separateVersion={separateVersion}
               cookedRecipes={cookedRecipes[dogId]}
               kibbleRecipes={kibbleRecipes[dogId]}
+              dietPortion={dietPortions[dogId] != undefined ? dietPortions[dogId] : {}}
             />
           ))
         }

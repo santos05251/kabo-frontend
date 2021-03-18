@@ -15,15 +15,10 @@ class AllOrdersPage extends React.Component {
 
   render() {
     const { orders, loading } = this.props;
+    console.log(orders);
     return (
       <div className='container pb-40 bg-white'>
-        <div className='flex items-center flex-col mt-10'>
-          <div className='mb-14'>
-            <div className='text-3xl text-center mb-2'>Recent Orders</div>
-            <div className='text-xs text-center'>
-              You will receive an email confirmation shortly.
-            </div>
-          </div>
+        <div className='flex items-center flex-col md:mt-10 sm:mt-0 font-messina'>
           {loading ? (
               <Loader />
             ) : (

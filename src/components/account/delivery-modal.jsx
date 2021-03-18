@@ -10,6 +10,8 @@ import UnpauseMealPlanModal from "./unpause-modal.jsx";
 import Modal from "../global/modal";
 import SkipDeliveryModal from "./skip-delivery-modal.jsx";
 import { userSelectors } from "../../selectors/user.selectors";
+import { ReactComponent as DeliveryBox } from "../../assets/images/box-colour.svg";
+
 
 class DeliveryModalWrapper extends React.Component {
   constructor(props) {
@@ -39,6 +41,8 @@ class DeliveryModalWrapper extends React.Component {
         setDog={this.setDog}
         showUnpauseBox={this.state.showUnpauseBox}
         showUnpauseBoxCallBack={this.showUnpauseBoxCallBack}
+        readableRecipe={this.props.readableRecipe}
+        readablePortion={this.props.readablePortion}
       />
     );
   }
@@ -47,18 +51,13 @@ class DeliveryModalWrapper extends React.Component {
 const DeliveryModal = ({
   dogSubscription,
   dogsLength,
-  setDog,
-  dogIndex,
   dogs,
-  openSkipDeliveryModal,
-  open_skip_delivery_modal,
   user,
+  readablePortion,
+  readableRecipe,
   User,
   showUnpauseBox,
   showUnpauseBoxCallBack,
-  updatePaymentMethod,
-  setBillingAddress,
-  openUpdatePaymentModal,
 }) => {
   let readableNames = dogs && dogs.map((dog) => dog.name).join(" and ");
 
@@ -87,91 +86,42 @@ const DeliveryModal = ({
   if (dogsLength === 0) return null;
 
   return (
-    <div data-cy="next-delivery-expanded" className="py-8 px-5 relative border-r border-l rounded-b-xl border-b border-gray-300">
-      {PAUSED || CANCELLED ? (
-        <>
-          {dogsLength > 1 && (
-            <DogSelector dogs={dogs} setDog={setDog} dogIndex={dogIndex} />
-          )}
-          <span className="mb-5 text-base font-semibold">
-            {readableNames}'s delivery is currently paused. Unpause to schedule
-            your next delivery
-          </span>
-          <div className="my-8">
-            <MealPlanCard dogIndex={dogIndex} noPrice />
+    <div data-cy="next-delivery-expanded" className="relative border-r mb-4 border-l bg-white rounded-xl border border-gray-300 overflow-hidden">
+      <div className="flex flex-col md:flex-row">
+        <div className="w-full md:w-3/5 p-8">
+          <div className="flex items-center">
+            <DeliveryBox />
+            <div className="ml-4 font-semibold text-xl">
+              Upcoming Delivery
+              </div>
           </div>
-          <GlobalButton
-            filled={true}
-            styles="mb-7"
-            text={
-              PAUSED ? "Unpause Meal Plan" : CANCELLED && "Reactivate Meal Plan"
-            }
-            handleClick={() => showUnpauseBoxCallBack(true)}
+          <div className="font-cooper text-3xl mt-6">
+            {moment(nextDelivery).format('ddd, MMM D')}
+          </div>
+          <div className="font-bold mt-6">
+            Order Summary
+            </div>
+          <div className="text-sm mt-4">
+            <b>Recipes: </b>{readableRecipe}
+          </div>
+          <div className="text-sm mt-2">
+            <b>Portions: </b>{readablePortion}
+          </div>
+          <div className="text-sm mt-2">
+            <b>Amount: </b>{readablePortion}
+          </div>
+        </div>
+        <div className="w-full md:w-2/5 bg-deliveryStepper p-8" data-cy="delivery-stepper" aria-label="Progress">
+          <Stepper
+            labels={[
+              { main: "Scheduled", sub: "We have your order" },
+              { main: "Preparing", sub: "We're getting things ready" },
+              { main: "Delivering", sub: "Your order is out for delivery" },
+            ]}
+            current={deliveryStatus}
           />
-          <br />
-          <span className="text-base font-semibold">
-            Next available delivery date
-          </span>
-          <br />
-          <span className="font-cooper text-25xl">{nextDelivery}</span>
-
-          <Modal
-            title={PAUSED ? "Unpause Kabo" : CANCELLED ? "Reactivate Kabo" : ""}
-            isOpen={showUnpauseBox}
-            onRequestClose={() => showUnpauseBoxCallBack(false)}
-          >
-            <UnpauseMealPlanModal
-              user={User}
-              dogs={dogs}
-              dogIndex={dogIndex}
-              isCancelled={CANCELLED}
-              open_payment_modal={user.open_payment_modal}
-              openUpdatePaymentModal={openUpdatePaymentModal}
-              payment_billing_address={user.payment_billing_address}
-              setBillingAddress={setBillingAddress}
-              payment_method_updated={user.payment_method_updated}
-              updatePaymentMethod={updatePaymentMethod}
-              updating_payment_method={user.updating_payment_method}
-            />
-          </Modal>
-        </>
-      ) : (
-        <>
-          {dogsLength > 1 && (
-            <DogSelector dogs={dogs} setDog={setDog} dogIndex={dogIndex} />
-          )}
-          <MealPlanCard
-            dogIndex={dogIndex}
-            nextDelivery={nextDelivery}
-            amountOfFood={amountOfFood}
-          />
-          <nav data-cy="delivery-stepper" aria-label="Progress">
-            <Stepper
-              labels={[
-                { main: "Scheduled", sub: "We have your order" },
-                { main: "Preparing", sub: "We're getting things ready" },
-                { main: "Delivering", sub: "Your order is out for delivery" },
-              ]}
-              current={deliveryStatus}
-            />
-          </nav>
-          {/* {user && user.user.subscription_phase_status === 'in_trial' && !user.user.skipped_first_box && (
-            <button
-              className="text-primary mt-7 font-bold focus:outline-none"
-              onClick={() => openSkipDeliveryModal(!open_skip_delivery_modal)}
-            >
-              Skip this delivery
-            </button>
-          )} */}
-          <Modal
-            isOpen={open_skip_delivery_modal}
-            onRequestClose={() => openSkipDeliveryModal(!open_skip_delivery_modal)}
-            title="Skip Upcoming Delivery"
-          >
-            <SkipDeliveryModal setDogIndex={setDog} dogIndex={dogIndex} />
-          </Modal>
-        </>
-      )}
+        </div>
+      </div>
     </div>
   );
 };

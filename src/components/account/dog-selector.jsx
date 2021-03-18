@@ -1,15 +1,18 @@
 export default function DogSelector({ dogs, setDog, dogIndex }) {
   const dogDivs = dogs.map((dog, i) => (
-    <div key={i}
-      onClick={() => setDog(i)}
-      className={`inline-flex cursor-pointer justify-center items-center ${dogIndex === i ? 'bg-primary text-white' : 'text-charcoal'} w-1/2`}
+    <option key={i}
+      // onClick={() => setDog(i)}
+      value={i}
+      className={`inline-flex cursor-pointer justify-center items-center`}
     >
       {dog.name}
-    </div>
+    </option>
   ))
   return (
-    <div className="rounded overflow-hidden flex h-7 mb-7 border border-gray-200">
+    <select
+      onChange={e => setDog(e.target.value)}
+      className="rounded overflow-hidden flex w-28 mb-7 border border-gray-200">
       {dogDivs}
-    </div>
+    </select>
   )
 }

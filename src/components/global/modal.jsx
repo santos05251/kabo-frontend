@@ -24,8 +24,7 @@ class Modal extends React.Component {
         >
           <div className={`p-4  flex justify-between ${this.props.bgColor ? this.props.bgColor : ''}`}>
             <h3 className="text-xl">{this.props.title}</h3>
-            <a href="#close-modal" className="close-icon" onClick={() => this.props.onRequestClose()}>
-            </a>
+            <span className="close-icon cursor-pointer" onClick={() => this.props.onRequestClose()}/>
           </div>
           <div>{this.props.children}</div>
         </ReactModal>

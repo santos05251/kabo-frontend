@@ -6,14 +6,18 @@ import "./style.css";
 
 class DailyDietPortion extends Component {
   state = {
-    dietPortion: "",
+    dietPortion: {},
     dailyPortions: {}
   };
+
+  componentDidMount() {
+    const { dietPortion } = this.props;
+    this.setState({dietPortion});
+  }
   
   componentWillReceiveProps(newProps) {
     const { dogId } = this.props;
     const { recipes_selected } = newProps;
-
     if (recipes_selected.dogId === dogId) {
       this.loadDietPortion(recipes_selected);
     }
@@ -41,18 +45,21 @@ class DailyDietPortion extends Component {
 
     this.setState({ dietPortion: item });
 
-    let dietPortion = {};
+    let dietPortion = { title: item.title };
     if (item.kibble_portion && item.cooked_portion) {
       dietPortion = {
+        ...dietPortion,
         cooked_portion: item.cooked_portion,
         kibble_portion: item.kibble_portion,
       };
     } else if (item.cooked_portion) {
       dietPortion = {
+        ...dietPortion,
         cooked_portion: item.cooked_portion
       }
     } else if (item.kibble_portion) {
       dietPortion = {
+        ...dietPortion,
         kibble_portion: item.kibble_portion
       }
     }

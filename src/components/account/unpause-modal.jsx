@@ -14,7 +14,7 @@ import { userSelectors } from "../../selectors/user.selectors";
 import { userConstants } from "../../constants";
 import SelectMealPlanModal from "./select-meal-plan";
 import ChangePaymentMethodModal from "../profile/change-payment-method-modal";
-import DeliveryAddressModal from "./delivery-address-modal";
+import DeliveryAddressModal from "../profile/delivery-address-modal";
 
 class UnpauseMealPlanModal extends React.Component {
   constructor(props) {

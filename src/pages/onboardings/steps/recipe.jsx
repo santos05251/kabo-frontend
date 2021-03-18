@@ -6,6 +6,9 @@ import DailyDietPortion from "../../../components/onboardings/daily-diet-portion
 class RecipeStep extends Component {
   render() {
     const {
+      cookedRecipes,
+      kibbleRecipes,
+      dietPortions,
       selectedDogs,
       temp_user,
       separateVersion
@@ -41,6 +44,8 @@ class RecipeStep extends Component {
                     handleSelectedKibbleRecipe={handleSelectedKibbleRecipe}
                     handleSelectedCookedRecipes={handleSelectedCookedRecipes}
                     separateVersion={separateVersion}
+                    cookedRecipes={cookedRecipes[temp_user.temp_dog_ids[idx]] != undefined ? cookedRecipes[temp_user.temp_dog_ids[idx]] : []}
+                    kibbleRecipes={kibbleRecipes[temp_user.temp_dog_ids[idx]] != undefined ? [kibbleRecipes[temp_user.temp_dog_ids[idx]]] : []}
                   />
                   {!separateVersion &&
                     <div className="h-full lg:border-l-2 border-gray-300 lg:pl-12">
@@ -48,6 +53,7 @@ class RecipeStep extends Component {
                         key={idx}
                         dogId={temp_user.temp_dog_ids[idx]}
                         handleDietPortion={handleDietPortion}
+                        dietPortion={dietPortions[temp_user.temp_dog_ids[idx]] != undefined ? dietPortions[temp_user.temp_dog_ids[idx]] : {}}
                         separateVersion={separateVersion}
                       />
                     </div>

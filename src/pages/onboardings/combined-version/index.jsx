@@ -29,7 +29,6 @@ class OnboardingCombinedVersion extends Component {
         break;
       }
     }
-    this.props.getOnboardingData();
   }
 
   componentWillReceiveProps(newProps) {
@@ -37,6 +36,29 @@ class OnboardingCombinedVersion extends Component {
     if (temp_user.checkout_token) {
       this.props.history.push("/checkout/" + temp_user.checkout_token);
     }
+  }
+
+  handlePrevious = () => {
+    let { step } = this.state;
+    step = step - 1;
+    this.saveDogsData();
+    this.setState({step});
+    if (step === 3) {
+      this.props.temp_user.temp_dog_ids.map(dogId => {
+        setTimeout(() => {
+          this.updateRecipeSelection(dogId);
+        }, 300);
+      });
+    }
+  }
+
+  saveDogsData = () => {
+    const { dogs } = this.state;
+    const data = {
+      dogs
+    };
+    localStorage.setItem("dogs_data", JSON.stringify(data));
+    this.props.getDogsFromForm(data);
   }
 
   updateDog = (dog) => {
@@ -66,15 +88,22 @@ class OnboardingCombinedVersion extends Component {
   };
 
   handleStartStep = () => {
+    this.saveDogsData();
+    const { dogs } = this.state;
+    let start_dogs = [];
+    dogs.map(item => {
+      start_dogs.push({
+        ...item,
+        breed: item.breed ? item.breed.label : '',
+        age_in_months: item.age ? item.age.value : ''
+      });
+    });
     const data = {
       step: "start",
-      dogs: this.state.dogs
+      dogs: start_dogs
     };
-    localStorage.setItem("dogs", JSON.stringify(data.dogs));
-    this.props.getDogsFromForm(data);
     this.props.createTempUser(data);
-    this.setState({ step: this.state.step + 1, dogs: [] });
-    this.props.getOnboardingDetails();
+    this.setState({ step: this.state.step + 1 });
   };
 
   updateDogDetail = (dog) => {
@@ -91,29 +120,38 @@ class OnboardingCombinedVersion extends Component {
     if (bNew)
       this.setState({ dogs: [...dogs, dog] });
   };
-
+  
   handleDetailStep = () => {
-    let { dogs } = this.state;
+    this.saveDogsData();
+    const { dogs } = this.state;
+    let detail_dogs = [];
     dogs.map((item, idx) => {
-      item["id"] = this.props.temp_user.temp_dog_ids[idx];
-      item["neutered"] = item["ovary"];
-      item["gender"] = item.gender ? "male" : "female";
-      return item;
+      detail_dogs.push({
+        ...item,
+        id: this.props.temp_user.temp_dog_ids[idx],
+        neutered: item["ovary"],
+        gender: item.gender ? "male" : "female"
+      });
     });
     const data = {
       id: this.props.temp_user.temp_user_id,
       details: {
         step: "detail",
-        dogs
+        dogs: detail_dogs
       }
     };
-    localStorage.setItem("dogs", JSON.stringify(data.details));
     this.props.updateTempUser(data);
-    this.setState({ step: this.state.step + 1, dogs: [] });
+    this.setState({ step: this.state.step + 1 });
+    this.props.temp_user.temp_dog_ids.map(dogId => {
+      setTimeout(() => {
+        this.updateRecipeSelection(dogId);
+      }, 300);
+    });
   };
 
   updateRecipeSelection = (dogId) => {
-    const { cookedRecipes,kibble } = this.state;
+    const { cookedRecipes, kibble } = this.state;
+    if (cookedRecipes[dogId] === undefined && kibble[dogId] === undefined) return;
     const data = {
       dogId: dogId,
       cookedRecipes: cookedRecipes[dogId],
@@ -200,7 +238,7 @@ class OnboardingCombinedVersion extends Component {
     };
     this.props.updateTempUser(data_portion);
     // combined version
-    this.setState({ step: this.state.step + 2 });
+    this.setState({ step: this.state.step + 1 });
   };
 
   handleUserChange = (key, value) => {
@@ -227,8 +265,6 @@ class OnboardingCombinedVersion extends Component {
   render() {
     const { dogs, step, cookedRecipes, kibble, dietPortions } = this.state;
     const {
-      onboarding_starter_data,
-      onboarding_details_data,
       dogs: selectedDogs,
       temp_user,
       updating_temp_user
@@ -247,16 +283,13 @@ class OnboardingCombinedVersion extends Component {
           }
           {step === 1 && (
             <StartStep
-              onboarding_starter_data={onboarding_starter_data}
               updateDog={this.updateDog}
               removeDog={this.removeDog}
             />
           )}
           {step === 2 && (
             <DetailStep
-              selectedDogs={selectedDogs}
               updateDogDetail={this.updateDogDetail}
-              onboarding_details_data={onboarding_details_data}
             />
           )}
 
@@ -266,6 +299,9 @@ class OnboardingCombinedVersion extends Component {
               handleSelectedKibbleRecipe={this.handleSelectedKibbleRecipe}
               handleSelectedCookedRecipes={this.handleSelectedCookedRecipes}
               handleDietPortion={this.handleDietPortion}
+              cookedRecipes={cookedRecipes}
+              kibbleRecipes={kibble}
+              dietPortions={dietPortions}
             />
           )}
           {step >= 4 && (
@@ -278,13 +314,22 @@ class OnboardingCombinedVersion extends Component {
         </main>
         <div className="h-20" />
 
-        <div className="fixed inset-x-0 bottom-0 h-20 footer border-t bg-white flex justify-center py-4 z-100">
+        <div className="fixed inset-x-0 bottom-0 h-20 footer border-t bg-white flex justify-center py-4 z-50">
+          {step > 1 && (
+            <button
+              onClick={this.handlePrevious}
+              className="flex justify-center items-center border btn mx-5 border-green text-green-600 focus:outline-none rounded-lg py-3 px-20"
+            >
+              Prev
+            </button>
+          )}
+
           {step === 1 && (
             <button
-              disabled={ dogs.length <= 0 || !dogs.every(dog => dog.name != undefined && dog.breed != undefined && dog.age_in_months != undefined && dog.name !== '' && dog.breed !== '' && dog.age_in_months >= 0) }
+              disabled={ dogs.length <= 0 || !dogs.every(dog => dog.name != undefined && dog.breed != undefined && dog.age != undefined && dog.name !== '' && dog.breed.label !== '' && dog.age.value >= 0) }
               onClick={this.handleStartStep}
               className={
-                dogs.length <= 0 || !dogs.every(dog => dog.name != undefined && dog.breed != undefined && dog.age_in_months != undefined && dog.name !== '' && dog.breed !== '' && dog.age_in_months >= 0)
+                dogs.length <= 0 || !dogs.every(dog => dog.name != undefined && dog.breed != undefined && dog.age != undefined && dog.name !== '' && dog.breed.label !== '' && dog.age.value >= 0)
                   ? "flex justify-center items-center border btn mx-5 border-gray-300 bg-gray-200 text-gray-400 focus:outline-none rounded-lg py-3 px-20"
                   : "flex justify-center items-center border btn mx-5 border-green-600 bg-green-600 text-white focus:outline-none rounded-lg py-3 px-20"
               }
@@ -320,7 +365,7 @@ class OnboardingCombinedVersion extends Component {
             </button>
           )}
 
-          {step >=4 && (
+          {step === 4 && (
             <button
               onClick={this.handleUserStep}
               className="flex justify-center items-center border btn mx-5 border-green-600 bg-green-600 text-white focus:outline-none rounded-lg py-3 px-20"
@@ -335,11 +380,8 @@ class OnboardingCombinedVersion extends Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  getOnboardingData: () => dispatch(onboardingActions.getOnboardingData()),
   getDogsFromForm: (payload) =>
     dispatch(onboardingActions.getDogsFromForm(payload)),
-  getOnboardingDetails: () =>
-    dispatch(onboardingActions.getOnboardingDetails()),
   createTempUser: (payload) =>
     dispatch(onboardingActions.createTempUser(payload)),
   updateTempUser: (payload) =>
@@ -350,8 +392,6 @@ const mapDispatchToProps = (dispatch) => ({
 
 function mapStateToProps(state) {
   return {
-    onboarding_starter_data: state.onboarding.onboarding_starter_data,
-    onboarding_details_data: state.onboarding.onboarding_details_data,
     dogs: state.onboarding.dogs,
     temp_user: state.onboarding.temp_user,
     updating_temp_user: state.onboarding.updating_temp_user

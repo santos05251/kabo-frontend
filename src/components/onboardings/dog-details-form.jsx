@@ -3,7 +3,7 @@ import FormWrapper from "./form-wrapper";
 import SingleSelect from "./single-select";
 
 const DogDetailsForm = ({
-  dogDetails,
+  dogDetail,
   updateDog,
   body_types,
   activity_levels
@@ -22,13 +22,13 @@ const DogDetailsForm = ({
     { label: "kg", value: "kg" },
   ];
 
-  const [gender, setGender] = useState(false);
-  const [ovary, setOvary] = useState("");
-  const [weightUnit, setWeightUnit] = useState(units[0].value);
-  const [weight, setWeight] = useState("");
-  const [bodyType, setBodyType] = useState("");
-  const [activityLevel, setActivityLevel] = useState("");
-  const [dog, setDog] = useState({ ...dogDetails, gender: false, weight_unit: units[0].value });
+  const [gender, setGender] = useState(dogDetail.gender!=undefined?dogDetail.gender:false);
+  const [ovary, setOvary] = useState(dogDetail.ovary!=undefined?dogDetail.ovary:'');
+  const [weightUnit, setWeightUnit] = useState(dogDetail.weight_unit!=undefined?dogDetail.weight_unit:units[0].value);
+  const [weight, setWeight] = useState(dogDetail.weight!=undefined?dogDetail.weight:'');
+  const [bodyType, setBodyType] = useState(dogDetail.body_type!=undefined?dogDetail.body_type:'');
+  const [activityLevel, setActivityLevel] = useState(dogDetail.activity_level!=undefined?dogDetail.activity_level:'');
+  const [dog, setDog] = useState({ gender: false, weight_unit: units[0].value, ...dogDetail });
 
   const handleGender = (gender) => {
     setGender(gender);

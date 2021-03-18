@@ -7,6 +7,11 @@ import { ReactComponent as DeliveryBox } from "../../assets/images/box-colour.sv
 import { ReactComponent as Arrow } from "../../assets/images/Vectorarrow.svg";
 import { ReactComponent as MealBox } from "../../assets/images/food-colour.svg";
 import { ReactComponent as BowlIcon } from "../../assets/images/bowl-colour.svg";
+import { ReactComponent as DogHeadIcon } from "../../assets/images/dog-head-badge.svg";
+import { ReactComponent as RecipeSheet } from "../../assets/images/recipe-sheet.svg";
+import { ReactComponent as FrequencyIcon } from "../../assets/images/delivery-frequency-icon.svg";
+
+
 
 import DeliveryModal from "../../components/account/delivery-modal.jsx";
 import MealPlanModal from "../../components/account/meal-modal.jsx";
@@ -15,6 +20,17 @@ import DogImage from "../../assets/images/Badge-Labrador-Retriever.svg";
 import HomeLoader from "../../loaders/homeLoader";
 import { userActions } from "../../actions";
 import { userSelectors } from "../../selectors/user.selectors";
+import { DashboardCard } from "../../components/global/dashboard-card";
+import DogSelector from "../../components/account/dog-selector";
+import PortionDisplay from "../../components/account/portion-display";
+import { CircleSVG } from "../../components/meal-plan/circle";
+
+const PortionCircle = (num) => (
+  <div className="flex w-16 relative mb-4">
+    <CircleSVG num={num} />
+  </div>
+)
+
 
 class AccountPage extends React.Component {
   constructor(props) {
@@ -23,7 +39,7 @@ class AccountPage extends React.Component {
       nextExpanded: !isMobile,
       mealExpanded: false,
       frequencyExpanded: false,
-      dogsIndex: 0,
+      dogIndex: 0,
     };
     this.openModal = this.openModal.bind(this);
   }
@@ -46,100 +62,102 @@ class AccountPage extends React.Component {
     this.props.getRecipeData();
   }
   setDogIndex = (i) => {
-    this.setState({ dogsIndex: i });
+    this.setState({ dogIndex: i });
   };
 
   render() {
     if (!this.props.dogs.length) return <HomeLoader />;
+    const { dogIndex } = this.state
     const { user, subscriptions, dogs, globalState } = this.props;
+    const { cooked_recipes, kibble_recipe } = user
+    if (!cooked_recipes) return <HomeLoader />
+    const currentDog = dogs[dogIndex]
 
-    let dogNames = dogs.map((dog, i) => {
-      return dog.name + `'s`;
-    });
+    const dogInfo = `${currentDog.age_in_months / 12} years old, ${currentDog.weight}${currentDog.weight_unit}, ${currentDog.neutered && 'Neutered'}, ${currentDog.breed}`
 
-    let readableNames = dogNames.join(" + ");
+    const firstTime = user.user.subscription_phase_status === 'first_box_preparing_order' || user.user.subscription_phase_status === 'waiting_for_trial_shipment'
+
     let dogSubscription = userSelectors.selectSubscriptionByDogIndex(
       globalState,
-      this.state.dogsIndex
+      dogIndex
     );
     let isCardDisable =
       dogSubscription.status === "cancelled" ||
       dogSubscription.status === "paused";
+    let recipeArray = [];
 
-    const sectionHeader = (stateValue, Icon, text, Modal, cypressTag) => {
-      let expanded = this.state[stateValue];
+    if (currentDog.chicken_recipe) {
+      recipeArray.push(cooked_recipes[0].name);
+    }
+    if (currentDog.beef_recipe) {
+      recipeArray.push(cooked_recipes[1].name);
+    }
+    if (currentDog.turkey_recipe) {
+      recipeArray.push(cooked_recipes[2].name);
+    }
+    if (currentDog.lamb_recipe) {
+      recipeArray.push(cooked_recipes[3].name);
+    }
+    if (currentDog.kibble_recipe) {
+      recipeArray.push(`${currentDog.kibble_recipe} kibble`);
+    }
 
-      return (
-        <div>
-          <div
-            data-cy={cypressTag}
-            onClick={() => this.openModal(stateValue, isCardDisable)}
-            className={`flex bg-account justify-between items-center h-12 text-xl font-light p-3 cursor-pointer 
-              ${expanded
-                ? "rounded-t-xl border-t border-l border-r border-gray-300"
-                : "rounded-xl"
-              } ${stateValue === "frequencyExpanded" && isCardDisable || stateValue === "mealExpanded" && isCardDisable ? "opacity-40" : ""}`}
-          >
-            <div className="flex justify-between items-center  h-full">
-              <div className="w-8 h-8 mr-6">
-                <Icon className="w-full h-full" />
-              </div>
-              <p className="text-xl sm:text-xl xl:text-2xl">{text}</p>
-            </div>
-            <Arrow
-              className="w-8 h-3"
-              style={{ transform: expanded ? "rotateX(180deg)" : null }}
-            />
-          </div>
-          {expanded && <Modal setDogIndex={this.setDogIndex} />}
-        </div>
-      );
-    };
+    let portion = "";
 
-    const profileImages = dogs.map((dog, i) => {
-      return (
-        <img
-          key={i}
-          src={DogImage}
-          alt=""
-          className="md:mr-9 h-16 w-16 rounded-full"
-        />
-      );
-    });
+    if (currentDog.cooked_portion === 100) {
+      portion = "Full meal";
+    } else if (!currentDog.kibble_portion) {
+      portion = `${currentDog.cooked_portion}% Kabo`;
+    } else {
+      portion = `${currentDog.cooked_portion ? currentDog.cooked_portion : 0}% fresh food & ${currentDog.kibble_portion ? currentDog.kibble_portion : 0}% kibble`;
+    }
+
+    const readableRecipe = recipeArray.join(" and ");
 
     return (
-      <div className="pb-40 bg-white px-3 md:px-0 md:w-11/12 mx-auto xl:w-full">
-        <div data-cy="dashboard-header" className="account-dashboard w-full bg-account flex items-center md:justify-start justify-center md:h-28 rounded-xl p-5 md:p-8 text-5x1 font-bold mb-6 font-messina">
-          <div className="flex justify-center items-center flex-col md:flex-row">
-            <div className="flex justify-around w-3/4 md:w-auto md:justify-center">
-              {profileImages}
-            </div>
-            <div className="h-full text-3xl text-center md:text-left font-bold md:m-6 font-messina">
-              {readableNames} plan
-            </div>
-          </div>
+      <div className="px-3 md:px-0 md:w-11/12 mx-auto xl:w-full pb-10">
+        <div data-cy="dashboard-header" className="h-full text-3xl text-center font-cooper md:text-left ">
+          Welcome {user.user.first_name}
         </div>
-        <div className="grid md:grid-cols-3 gap-5 md:gap-4 xl:gap-10 grid-cols-1">
-          {sectionHeader(
-            'nextExpanded',
-            MealBox,
-            'Next Delivery',
-            DeliveryModal,
-            'delivery-modal-header'
-          )}
-          {sectionHeader(
-            'mealExpanded',
-            BowlIcon,
-            'Meal Plan',
-            MealPlanModal,
-            'meal-modal-header')}
-          {sectionHeader(
-            'frequencyExpanded',
-            DeliveryBox,
-            'Delivery Frequency',
-            FrequencyModal,
-            'frequency-modal-header'
-          )}
+        {dogs.length > 1 && (
+          <div className="flex mb-8">
+            <span className="mr-2">Select your doggo</span>
+            <DogSelector dogIndex={dogIndex} dogs={dogs} setDog={this.setDogIndex} />
+          </div>
+        )}
+        <DeliveryModal readableRecipe={readableRecipe} readablePortion={portion} />
+        <div className="grid md:grid-cols-2 gap-5 md:gap-6 xl:gap-10 grid-cols-1">
+          <DashboardCard
+            icon={<BowlIcon />}
+            title="Meal Plan"
+            text={readableRecipe}
+            redirectLink={`/edit-plan/${dogIndex}`}
+            buttonText="Edit Mealplan" />
+          <DashboardCard
+            icon={<FrequencyIcon />}
+            title="Delivery Frequency"
+            text={portion}
+            buttonText="Edit Delivery Frequency"
+            disabled={firstTime} />
+          <DashboardCard
+            icon={<PortionCircle num={currentDog.cooked_portion} />}
+            title="Portion"
+            text={portion}
+            buttonText="Edit Portion Size" />
+          <DashboardCard
+            icon={<MealBox />}
+            title="Amount of Food"
+            text={portion}
+            buttonText="Edit Amount of Food" />
+          <DashboardCard
+            icon={<DogHeadIcon />}
+            title={`${currentDog.name}'s info`}
+            text={dogInfo} />
+          <DashboardCard
+            icon={<RecipeSheet />}
+            title='Feeding Guide'
+            text={`View ${currentDog.name}'s custom feeding guide`} />
+
         </div>
       </div>
     );
@@ -153,8 +171,8 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => {
-  const { user } = state.authentication;
-  const { subscriptions, dogs } = state.user;
+  const { user } = state;
+  const { subscriptions, dogs } = user;
   return {
     user,
     globalState: state,

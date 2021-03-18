@@ -11,6 +11,9 @@ class Recipes extends Component {
 
   componentDidMount() {
     this.props.getRecipeData();
+
+    const { cookedRecipes, kibbleRecipes } = this.props;
+    this.setState({cookedRecipes, kibble: kibbleRecipes});
   }
 
   handleSelectedCookedRecipes = (food) => {

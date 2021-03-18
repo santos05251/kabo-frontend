@@ -1,13 +1,10 @@
-import React from "react";
-import Button from "../global/button.jsx";
-import PaymentCardIcon from "../global/payment-card-icon.jsx";
-import OrderCard from "../global/order-card.jsx";
-import ChangePaymentMethodModal from "./change-payment-method-modal";
-import { Link } from "react-router-dom";
-import PauseMealModal from "../account/PauseMealModal";
-import Modal from "../global/modal";
-import CancelMealModal from "../account/cancel-meal-modal";
-import OrderTable from "../global/OrderTable";
+import React from 'react';
+import Button from '../global/button.jsx';
+import PaymentCardIcon from '../global/payment-card-icon.jsx';
+import ChangePaymentMethodModal from './change-payment-method-modal';
+import PauseMealModal from '../account/PauseMealModal';
+import Modal from '../global/modal';
+import BillingIcon from '../../assets/images/billing-icon.svg';
 
 class Billing extends React.Component {
   constructor(props) {
@@ -15,7 +12,7 @@ class Billing extends React.Component {
     this.state = {
       showManageSubscriptionsBox: false,
       showManageButton: true,
-      firstDogStatus: "active",
+      firstDogStatus: 'active',
     };
     this.toggleCancelBox = this.toggleCancelBox.bind(this);
   }
@@ -39,9 +36,9 @@ class Billing extends React.Component {
       (key) => subscriptions[key].status
     );
     let showPause =
-      statuses.filter((s) => s === "paused").length !== statuses.length;
+      statuses.filter((s) => s === 'paused').length !== statuses.length;
     let showCancel =
-      statuses.filter((s) => s === "cancelled").length !== statuses.length;
+      statuses.filter((s) => s === 'cancelled').length !== statuses.length;
     // and return if all of them cancelled or paused
     return { showPause, showCancel };
   };
@@ -88,8 +85,11 @@ class Billing extends React.Component {
     const ccLastFour = user.card.last4;
 
     return (
-      <div>
-        <div className="flex-auto text-2xl font-cooper mb-6">Billing</div>
+      <div className="rounded-xl shadow-md">
+        <div className="flex shadow-sm text-2xl font-cooper font-semibold mb-3 border-b px-5 py-3">
+          <img src={BillingIcon} />
+          <span className="ml-2">Billing</span>
+        </div>
         {this.props.payment_method_updated && (
           <div
             className="mb-3 bg-green-500 border-t-4 border-green-500 rounded-b text-white px-4 py-3 shadow-md"
@@ -111,44 +111,32 @@ class Billing extends React.Component {
             </div>
           </div>
         )}
-        <div className="flex my-6">
-          <PaymentCardIcon icon="visa" />
-          <span className="inline-block ml-3">Card ending in {ccLastFour}</span>
-        </div>
-        <Button
-          text="Change Payment Method"
-          onClick={this.toggle}
-          styles="focus:outline-none"
-        />
-        {orders.length ? (
-          <div>
-            <div className="flex-auto text-lg font-semibold my-5">
-              Recent Orders
-            </div>
-            <div className="mb-5 ">
-              <OrderTable orders={orders} noTitlePadding />
-            </div>
-            <Link
-              to={`/orders`}
-              className="font-bold mt-3 text-primary border rounded-xl py-2 px-6 text-base font-bold text-primary button-border focus:outline-none"
-            >
-              View All Orders
-            </Link>
-
-            <div className="flex justify-between px-7 mt-7">
-              <span> </span>
-              <button
-                type="button"
-                onClick={this.toggleCancelBox}
-                className="text-primary font-bold"
-              >
-                Manage subscription
-              </button>
-            </div>
+        <div className="px-5 py-3">
+          <div className="flex my-4">
+            <PaymentCardIcon icon="visa" />
+            <span className="inline-block ml-3">
+              Visa ending in {ccLastFour}
+            </span>
           </div>
-        ) : (
-          <></>
-        )}
+          <div className="py-2">
+            <Button
+              text="Change Payment Method"
+              onClick={this.toggle}
+              styles="focus:outline-none"
+            />
+          </div>
+
+          <div>
+            <button
+              type="button"
+              onClick={this.toggleCancelBox}
+              className="text-primary font-bold"
+            >
+              Manage subscription
+            </button>
+          </div>
+        </div>
+
         <Modal
           title="Manage subscription"
           isOpen={this.props.showManageSubscriptionsBox}

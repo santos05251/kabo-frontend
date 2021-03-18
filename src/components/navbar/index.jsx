@@ -62,18 +62,18 @@ class Navbar extends React.Component {
     const { navStep } = this.state;
 
     const active =
-      "bg-primary text-white px-2 sm:px-3 py-1 sm:py-2 rounded-md text-xs sm:text-sm font-medium";
+      "text-primary font-cooper font-bold text-white py-1 sm:py-2 rounded-md text-4xl font-medium";
     const inActive =
-      "text-charcoal hover:bg-green-500 hover:text-white px-2 sm:px-3 py-1 sm:py-2 rounded-md text-xs sm:text-sm  font-medium";
+      "text-charcoal font-cooper hover:text-primary py-1 sm:py-2 rounded-md text-4xl font-medium";
 
     const loggedIn = user && user.token;
 
     return (
       <nav
-        className="fixed mx-auto inset-x-0 top-0 px-4 md:px-0 xl:px-6 2xl:px-0 md:h-20 sm:h-14 h-24 bg-white z-50 md:w-11/12 xl:w-full"
+        className="fixed inset-x-0 top-0 md:px-0 xl:px-6 2xl:px-0 top-8 left-9 bg-white z-50 w-full md:w-1/5 rounded-xl shadow-lg"
         id="outer-container"
       >
-        <div className="py-3 md:py-6 pl-0 flex items-center sm:justify-between sm:items-stretch">
+        <div className="py-3 md:p-7 pl-0 flex flex-col items-center sm:justify-between sm:items-stretch">
           <div className="sm:hidden">
             <Menu
               pageWrapId={"page-wrap"}
@@ -122,41 +122,37 @@ class Navbar extends React.Component {
             </Menu>
           </div>
           <div
-            className="flex-shrink-0 flex flex-wrap w-4/5 items-center left-0"
+            className="flex-shrink-0 flex flex-col flex-wrap w-full left-0"
             id="page-wrap"
           >
             <a href="/" className="self-start">
               <NavbarLogo className="block w-auto" />
             </a>
             {loggedIn && (
-              <div>
-                <div className="flex align-center just sm:ml-6 mt-1 sm:mt-0">
-                  <div className="flex space-x-4">
-                    <a href="/" className={navStep === 1 ? active : inActive}>
-                      My Kabo
+              <div className="hidden md:flex flex-col mt-2">
+                <a href="/" className={navStep === 1 ? active : inActive}>
+                  My Kabo
                     </a>
-                    {/* <a href="/store" className={navStep === 2 ? active : inActive}>Store</a> */}
-                    <a
-                      href="/orders"
-                      className={navStep === 3 ? active : inActive}
-                    >
-                      Orders
+                {/* <a href="/store" className={navStep === 2 ? active : inActive}>Store</a> */}
+                <a
+                  href="/orders"
+                  className={navStep === 3 ? active : inActive}
+                >
+                  Orders
                     </a>
-                    <a
-                      href="/profile"
-                      className={navStep === 4 ? active : inActive}
-                    >
-                      Account
+                <a
+                  href="/profile"
+                  className={navStep === 4 ? active : inActive}
+                >
+                  Account
                     </a>
-                    <a
-                      href="https://kabo.zendesk.com/hc/en-us"
-                      className={`hidden md:block ${inActive}`}
-                      target="_blank"
-                    >
-                      Support
+                <a
+                  href="https://kabo.zendesk.com/hc/en-us"
+                  className={`hidden md:block ${inActive}`}
+                  target="_blank"
+                >
+                  Support
                     </a>
-                  </div>
-                </div>
               </div>
             )}
           </div>
@@ -189,7 +185,7 @@ class Navbar extends React.Component {
               <button
                 type="button"
                 onClick={() => this.clickLogout()}
-                className="hidden sm:block font-messina font-semibold text-base pb-2"
+                className="hidden sm:block font-messina font-semibold text-base pb-2 mt-6"
               >
                 Logout
               </button>
