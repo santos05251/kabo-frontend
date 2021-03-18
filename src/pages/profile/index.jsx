@@ -6,7 +6,7 @@ import LoadingCircle from "../../components/partials/loading.jsx";
 import { userActions } from "../../actions";
 
 import Billing from "../../components/profile/billing.jsx";
-import { AccountDetails } from "../../components/profile/account-details.jsx";
+import AccountDetails from "../../components/profile/account-details.jsx";
 import DeliveryAddress from "../../components/profile/delivery-address.jsx";
 import Loader from "../../loaders/profileLoader";
 import Cupon from "../../components/profile/cupon";

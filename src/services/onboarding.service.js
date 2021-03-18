@@ -81,6 +81,14 @@ const postCheckout = async (data) => {
     .then((res) => res);
 };
 
+const getCheckoutResult = async (data) => {
+  const requestOptions = request.options('GET', {}, true, false);
+
+  return fetch(`${endpointConstants.CHECKOUT_SUCCESS}`, requestOptions)
+    .then(request.handleResponse)
+    .then((res) => res);
+};
+
 //  eslint-disable-next-line import/prefer-default-export
 export const onboardingService = {
   getOnboardingData,
@@ -93,4 +101,5 @@ export const onboardingService = {
   getPaypalRedirect,
   getPaymentMethodDetails,
   postCheckout,
+  getCheckoutResult,
 };

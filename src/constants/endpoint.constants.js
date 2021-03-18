@@ -37,4 +37,5 @@ export const endpointConstants = {
   GET_PAYMENT_METHOD: `${apiDomain}/${apiVersion}/onboarding/payment_method`,
   VALIDATE_POSTAL_CODE: `${apiDomain}/${apiVersion}/checkout/validate/postal_code`,
   CHECKOUT: `${apiDomain}/${apiVersion}/checkout`,
+  CHECKOUT_SUCCESS: `${apiDomain}/${apiVersion}/checkout/success`,
 };

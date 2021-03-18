@@ -85,7 +85,7 @@ class Billing extends React.Component {
     const ccLastFour = user.card.last4;
 
     return (
-      <div className="rounded-xl shadow-md">
+      <div className="rounded-xl shadow-md bg-white">
         <div className="flex shadow-sm text-2xl font-cooper font-semibold mb-3 border-b px-5 py-3">
           <img src={BillingIcon} />
           <span className="ml-2">Billing</span>

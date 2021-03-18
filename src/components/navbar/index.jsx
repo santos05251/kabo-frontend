@@ -47,6 +47,7 @@ class Navbar extends React.Component {
     } else if (urlString.includes("edit-plan")) {
       this.setNav(0);
     } else {
+      if (urlString.includes("checkout/success")) return;
       this.setNav(1);
     }
     // this.props.getUserNotifications();

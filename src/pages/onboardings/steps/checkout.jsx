@@ -47,13 +47,37 @@ class CheckoutStep extends Component {
   componentDidMount() {
     const params = qs.parse(this.props.location.search.slice(1));
     if (params.token) {
-      // to get details on paypal redirection
-      this.applyDiscount();
       this.getPaymentDetails(params.token);
     }
+    this.getProductDetails();
     this.updateUserDetail();
   }
 
+  componentWillReceiveProps(newProps) {
+    const { post_checkout_result, posting_checkout } = newProps;
+    if (post_checkout_result.status === undefined) {
+      return;
+    }
+    if (posting_checkout) {
+      this.setState({ isLoading: true });
+    } else {
+      this.setState({ isLoading: false });
+    }
+    if (post_checkout_result.status && post_checkout_result.token) {
+      const email = post_checkout_result.email ? post_checkout_result.email : this.state.email;
+      const user = { email, token: post_checkout_result.token };
+      localStorage.setItem('user', JSON.stringify(user));
+      this.props.history.push('/checkout/success');
+    } else if (!post_checkout_result.status) {
+      if (post_checkout_result.error) {
+        alert(post_checkout_result.error);
+      } else {
+        alert('Subscription failure, Please contact support!');
+      }
+    }
+  }
+
+  // from user step: first name, email
   updateUserDetail = () => {
     const account = JSON.parse(localStorage.getItem("account"));
     if (account == null || !account.details)
@@ -80,6 +104,10 @@ class CheckoutStep extends Component {
   }
   async _openPaypalRedirect() {
     const { temp_user } = this.props;
+    if (!temp_user.checkout_token) {
+      alert("Checkout token is not set!");
+      return;
+    }
 
     this.setState({ isLoading: true });
     const paypal_redirect = await onboardingService.getPaypalRedirect({checkout_token: temp_user.checkout_token});
@@ -89,13 +117,13 @@ class CheckoutStep extends Component {
     this.setState({ isLoading: false });
   }
 
-  applyDiscount = () => {
+  getProductDetails = () => {
     const { coupon } = this.state;
 
     const account = JSON.parse(localStorage.getItem("account"));
     if (account == null || !account.details)
       return;
-    
+
     const data = {
       id: account.id,
       details: {
@@ -127,7 +155,6 @@ class CheckoutStep extends Component {
   purchase = () => {
     this._purchase();
   }
-
   async _purchase() {
     const {
       email,
@@ -154,6 +181,11 @@ class CheckoutStep extends Component {
       coupon,
       paypalReferenceId,
     } = this.state;
+    const { temp_user } = this.props;
+    if (!temp_user.checkout_token) {
+      alert("Checkout token is not set!");
+      return;
+    }
 
     this.setState({ isLoading: true });
     if (!validate.validateEmail(email)) {
@@ -206,7 +238,6 @@ class CheckoutStep extends Component {
       }
     }
 
-    const { temp_user } = this.props;
     let details = {
       email,
       password,
@@ -238,16 +269,13 @@ class CheckoutStep extends Component {
       details.payment_method = "paypal";
       details.reference_id = paypalReferenceId;
     }
+
     const data = {
       checkout_token: temp_user.checkout_token,
       details
     };
-
     this.props.postCheckout(data);
-    setTimeout(() => {
-      this.setState({ isLoading: false });
-      this.props.history.push("/login");
-    }, 2000);
+    this.setState({ isLoading: false });
   }
 
   render() {
@@ -595,7 +623,7 @@ class CheckoutStep extends Component {
                 />
               </div>
               <div className="ml-2 flex-1">
-                <button className="w-full py-2 px-6 text-center text-white focus:outline-none transition-colors duration-150 bg-green-600 rounded-md focus:shadow-outline hover:bg-green-700" onClick={this.applyDiscount}>
+                <button className="w-full py-2 px-6 text-center text-white focus:outline-none transition-colors duration-150 bg-green-600 rounded-md focus:shadow-outline hover:bg-green-700" onClick={this.getProductDetails}>
                   Apply
                 </button>
               </div>
@@ -743,7 +771,8 @@ const mapDispatchToProps = (dispatch) => ({
 function mapStateToProps(state) {
   return {
     temp_user: state.onboarding.temp_user,
-    checkout_res: state.onboarding.checkout_res,
+    post_checkout_result: state.onboarding.post_checkout_result,
+    posting_checkout: state.onboarding.posting_checkout,
   };
 }
 

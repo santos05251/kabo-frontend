@@ -43,6 +43,11 @@ const postCheckout = (data) => ({
   payload: data,
 });
 
+const getCheckoutResult = (data) => ({
+  type: onboardingContstants.GET_CHECKOUT_RESULT,
+  payload: data,
+});
+
 export const onboardingActions = {
   getOnboardingData,
   getDogsFromForm,
@@ -53,4 +58,5 @@ export const onboardingActions = {
   updateRecipeSelection,
   getDogDietPortion,
   postCheckout,
+  getCheckoutResult,
 };

@@ -15,6 +15,7 @@ import OrderDetail from "./pages/order/detail";
 import OnboardingSeparateVersion from "./pages/onboardings/separate-version";
 import OnboardingCombinedVersion from "./pages/onboardings/combined-version";
 import CheckoutStep from "./pages/onboardings/steps/checkout";
+import CheckoutSuccess from "./pages/onboardings/steps/success";
 
 function App() {
   return (

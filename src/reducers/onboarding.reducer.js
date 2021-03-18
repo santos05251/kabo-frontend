@@ -23,7 +23,10 @@ const initialState = {
   diet_portions: {},
 
   posting_checkout: false,
-  checkout_res: {},
+  post_checkout_result: {},
+
+  getting_checkout_result: false,
+  checkout_success_result: {},
 };
 
 export const onboarding = (state = initialState, action) => {
@@ -161,13 +164,32 @@ export const onboarding = (state = initialState, action) => {
       return {
         ...state,
         posting_checkout: false,
-        checkout_res: action.payload,
+        post_checkout_result: action.payload,
       };
 
     case onboardingContstants.POST_CHECKOUT_FAILED:
       return {
         ...state,
         posting_checkout: false,
+      };
+
+    case onboardingContstants.GET_CHECKOUT_RESULT:
+      return {
+        ...state,
+        getting_checkout_result: true,
+      };
+
+    case onboardingContstants.GET_CHECKOUT_RESULT_SUCCESS:
+      return {
+        ...state,
+        getting_checkout_result: false,
+        checkout_success_result: action.payload,
+      };
+
+    case onboardingContstants.GET_CHECKOUT_RESULT_FAILED:
+      return {
+        ...state,
+        getting_checkout_result: false,
       };
     default:
       return state;

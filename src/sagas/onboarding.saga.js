@@ -126,6 +126,24 @@ function* postCheckout(action) {
   }
 }
 
+function* getCheckoutResult(action) {
+  try {
+    const payload = yield call(
+      onboardingService.getCheckoutResult,
+      action.payload,
+    );
+    yield put({
+      type: onboardingContstants.GET_CHECKOUT_RESULT_SUCCESS,
+      payload,
+    });
+  } catch (error) {
+    yield put({
+      type: onboardingContstants.GET_CHECKOUT_RESULT_FAILED,
+      payload: error,
+    });
+  }
+}
+
 export default function* onboarding() {
   yield takeLatest(onboardingContstants.GET_ONBOARDING_DATA, getOnboardingData);
   yield takeLatest(onboardingContstants.GET_DOGS_FROM_FORM, getDogsFromForm);
@@ -140,4 +158,5 @@ export default function* onboarding() {
   yield takeEvery(onboardingContstants.UPDATE_RECIPES_SELECTION, updateRecipeSelection);
   yield takeEvery(onboardingContstants.GET_DOG_DIET_PORTION, getDogDietPortion);
   yield takeEvery(onboardingContstants.POST_CHECKOUT, postCheckout);
+  yield takeEvery(onboardingContstants.GET_CHECKOUT_RESULT, getCheckoutResult);
 }

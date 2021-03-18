@@ -71,6 +71,10 @@
   display: block;
 }
 
+.close-icon.dark::before {
+  background-color: black;
+}
+
 .close-icon::after {
   content: "";
   width: 20px;
@@ -82,4 +86,8 @@
   border-radius: 2px;
   transform: rotate(-45deg);
   display: block;
+}
+
+.close-icon.dark::after {
+  background-color: black;
 }
