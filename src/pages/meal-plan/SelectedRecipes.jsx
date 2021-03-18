@@ -29,7 +29,7 @@ class SelectedRecipes extends Component {
       dog,
     } = this.props;
     return (
-      <div className='flex flex-col py-9 items-center bg-white'>
+      <div className='flex flex-col py-9 items-center sm:bg-white'>
         <div className='container flex flex-col  w-11/12 mx-auto lg:w-full'>
           {estimate && (
             <div>
@@ -45,16 +45,15 @@ class SelectedRecipes extends Component {
               <div className='flex md:items-center md:flex-row flex-col items-left'>
                 <button
                   onClick={() => this.setState({ checkout: true })}
-                  className="border border-green-700 hover:border-transparent focus:outline-none bg-green-600 text-white  text-sm md:text-lg md:w-52  md:px-5 rounded border-green   py-4 m-0 "
+                  className="border border-green-700 hover:border-transparent w-8/12 sm:w-full focus:outline-none bg-green-600 text-white  text-sm md:text-lg md:w-52  md:px-5 rounded-xl border-green py-3 m-0 "
                 >
                   Save Changes
                 </button>
-                <div className="flex items-center">
-                  <div className="md:pl-6 pr-4">
-                    <img className="w-12" src="https://staging.kabo.co/assets/exclamation-circle@2x-9b534d2db9649b83b3888bd041cf362ccb6fbe3afa98384520c0f1cf0b5f6e43.png" />
-                  </div>
+                <div className="flex items-center sm:pl-10">
+                  {/* <div className="md:pl-6 pr-4">
+                  </div> */}
                   <div className="w-full">
-                    <p className="text-xl font-bold mb-2 mt-4 md:mt-0">
+                    <p className="text-xl font-bold mb-1 mt-4 md:mt-0">
                       {user &&
                       user.subscription_phase &&
                       user.subscription_phase.status === 'waiting_for_trial_shipment'

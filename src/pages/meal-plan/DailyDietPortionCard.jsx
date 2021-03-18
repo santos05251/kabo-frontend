@@ -23,7 +23,7 @@ const DietPortionCard = ({
             : ' flex flex-col md:w-64  p-5 items-center bg-white font-messina relative rounded-lg border border-gray-200'
         }
       >
-        <div className="flex w-16 relative mb-4">
+        <div className="flex w-20 relative mb-2">
           {thenum === 100 && (
             <img
               src="/diet-logo.png"
@@ -41,7 +41,7 @@ const DietPortionCard = ({
           )}
           <CircleSVG num={thenum} />
         </div>
-        <p className="font-messina mt-1 font-bold text-sm">{item.title}</p>
+        <p className="font-messina mt-1 text-lg">{item.title}</p>
         {item.description && (
           <div>
             {' '}

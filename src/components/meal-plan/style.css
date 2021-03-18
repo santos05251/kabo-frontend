@@ -100,16 +100,27 @@
   position: relative;
 }
 
+.foodCardDesc{
+  font-size: 12px;
+}
+
 .foodcard-add-button {
   color: #239c6d;
   display: block;
   border: 1px solid #239c6d;
   border-radius: 4px;
   text-align: center;
-  padding: 1rem 0.5rem;
-  margin: 1rem;
+  padding-left: 5px;
+  padding-right: 5px;
+  /* padding: 1rem 0.5rem; */
+  /* margin: 1rem; */
+  font-size: 14px;
   margin-bottom: 0.5rem;
-  font-size: 1rem;
+}
+
+.bg-image{
+  height: 5.6rem;
+  background-repeat: no-repeat;
 }
 
 @media screen and (min-width: 1024px) {
