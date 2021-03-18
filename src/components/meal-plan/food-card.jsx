@@ -23,8 +23,8 @@ const FoodCard = ({
 
   const kibbleOnlyNull = kibble.some((el) => el !== null);
 
-  const selectedText = 'bg-green-100 border border-green  focus:outline-none font-bold p-1 md:py-3 w-11/12 sm:w-4/5 rounded mt-2 foodcard-add-button';
-  const unSelectedText = 'bg-transparent border border-green-700 hover:border-transparent focus:outline-none hover:bg-green-700 hover:text-white font-bold w-11/12  sm:w-4/5 p-1 md:py-3 rounded border-green  mt-2 foodcard-add-button';
+  const selectedText = 'bg-green-600 btn-text-white border border-green  focus:outline-none font-bold p-1 md:py-3 w-11/12 sm:w-10/12 rounded mt-2 foodcard-add-button';
+  const unSelectedText = 'bg-transparent border border-green-700 hover:border-transparent focus:outline-none hover:bg-green-700 hover:text-white font-bold w-11/12  sm:w-10/12 p-1 md:py-3 rounded border-green  mt-2 foodcard-add-button';
   return (
     <div>
       <div
@@ -54,7 +54,7 @@ const FoodCard = ({
               : 'w-full rounded-br-lg rounded-bl-lg bg-white focus:bg-green-100 py-5 flex flex-col items-center justify-between'
           }
         >
-          <div className="font-mackinac text-lg text-black text-center pb-2">{food.name}</div>
+          <div className="font-cooper text-lg text-black text-center pb-2">{food.name}</div>
           <div
             onClick={() => {
               openDetails(true);

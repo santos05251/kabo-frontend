@@ -117,6 +117,9 @@
   font-size: 14px;
   margin-bottom: 0.5rem;
 }
+.foodcard-add-button.btn-text-white{
+  color: white
+}
 
 .bg-image{
   height: 5.6rem;

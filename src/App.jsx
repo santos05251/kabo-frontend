@@ -24,7 +24,7 @@ function App() {
         <div className="container flex mx-auto padding-container">
           <Navbar />
           <Alert />
-          <div className="page-content w-full  mt-14  md:px-6 lg:px-12 bg-container relative pb-20">
+          <div className="page-content w-full  mt-14  md:px-6 lg:px-10 bg-container relative pb-20">
             <div className="page-routing">
               <Switch>
                 <NonUserRoute path="/checkout/:checkout_token" component={CheckoutStep} />
