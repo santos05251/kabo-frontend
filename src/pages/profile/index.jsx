@@ -1,15 +1,15 @@
 /* eslint-disable semi */
-import React from "react";
-import { connect } from "react-redux";
-import { ReactComponent as Arrow } from "../../assets/images/Vectorarrow.svg";
-import LoadingCircle from "../../components/partials/loading.jsx";
-import { userActions } from "../../actions";
+import React from 'react';
+import { connect } from 'react-redux';
+import { ReactComponent as Arrow } from '../../assets/images/Vectorarrow.svg';
+import LoadingCircle from '../../components/partials/loading.jsx';
+import { userActions } from '../../actions';
 
-import Billing from "../../components/profile/billing.jsx";
-import AccountDetails from "../../components/profile/account-details.jsx";
-import DeliveryAddress from "../../components/profile/delivery-address.jsx";
-import Loader from "../../loaders/profileLoader";
-import Cupon from "../../components/profile/cupon";
+import Billing from '../../components/profile/billing.jsx';
+import AccountDetails from '../../components/profile/account-details.jsx';
+import DeliveryAddress from '../../components/profile/delivery-address.jsx';
+import Loader from '../../loaders/profileLoader';
+import Cupon from '../../components/profile/cupon';
 class ProfilePage extends React.Component {
   constructor(props) {
     super(props);
@@ -46,44 +46,53 @@ class ProfilePage extends React.Component {
       userError,
     } = this.props;
 
-    const detailsCard = "container pb-4  shadow-profileBoxes p-10 rounded-xl";
+    const detailsCard = 'container pb-6';
     return (
-      <div className="grid lg:grid-cols-2 md:grid-cols-1 gap-7 pb-10">
-        <div className={detailsCard}>
-          <AccountDetails user={user} dogs={dogs} />
+      <>
+        <div className="grid lg:grid-cols-2 md:grid-cols-1 gap-4">
+          <div className="flex flex-col justify-between">
+            <div className={detailsCard}>
+              <Billing
+                user={user}
+                open_payment_modal={user.open_payment_modal}
+                openUpdatePaymentModal={this.props.openUpdatePaymentModal}
+                payment_billing_address={user.payment_billing_address}
+                setBillingAddress={this.props.setBillingAddress}
+                payment_method_updated={user.payment_method_updated}
+                updatePaymentMethod={updatePaymentMethod}
+                updating_payment_method={user.updating_payment_method}
+                showManageSubscriptionsBox={
+                  this.props.showManageSubscriptionsBox
+                }
+                openSubscriptionManagementModal={
+                  this.props.openSubscriptionManagementModal
+                }
+              />
+            </div>
+            <div className={detailsCard}>
+              <DeliveryAddress
+                user={user}
+                deliveryAddress={user.shipping_address}
+              />
+            </div>
+          </div>
+          <div className={detailsCard}>
+            <AccountDetails user={user} dogs={dogs} />
+          </div>
         </div>
-        <div className={detailsCard}>
-          <Billing
-            user={user}
-            open_payment_modal={user.open_payment_modal}
-            openUpdatePaymentModal={this.props.openUpdatePaymentModal}
-            payment_billing_address={user.payment_billing_address}
-            setBillingAddress={this.props.setBillingAddress}
-            payment_method_updated={user.payment_method_updated}
-            updatePaymentMethod={updatePaymentMethod}
-            updating_payment_method={user.updating_payment_method}
-            showManageSubscriptionsBox={this.props.showManageSubscriptionsBox}
-            openSubscriptionManagementModal={
-              this.props.openSubscriptionManagementModal
-            }
-          />
+        <div className="grid lg:grid-cols-2 md:grid-cols-1 gap-4 pb-10">
+          <div className={detailsCard}>
+            <Cupon
+              user={user}
+              deliveryAddress={user.shipping_address}
+              addCoupon={addCoupon}
+              couponResponse={couponResponse}
+              userError={userError}
+            />
+          </div>
+          <div></div>
         </div>
-        <div className={detailsCard}>
-          <DeliveryAddress
-            user={user}
-            deliveryAddress={user.shipping_address}
-          />
-        </div>
-        <div className={detailsCard}>
-          <Cupon
-            user={user}
-            deliveryAddress={user.shipping_address}
-            addCoupon={addCoupon}
-            couponResponse={couponResponse}
-            userError={userError}
-          />
-        </div>
-      </div>
+      </>
     );
   }
 }

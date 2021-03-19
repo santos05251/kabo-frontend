@@ -5,6 +5,7 @@ import ChangePaymentMethodModal from './change-payment-method-modal';
 import PauseMealModal from '../account/PauseMealModal';
 import Modal from '../global/modal';
 import BillingIcon from '../../assets/images/billing-icon.svg';
+import { otherConstants } from "../../constants";
 
 class Billing extends React.Component {
   constructor(props) {
@@ -111,7 +112,7 @@ class Billing extends React.Component {
             </div>
           </div>
         )}
-        <div className="px-5 py-3">
+        <div className="px-5 pt-3 pb-5">
           <div className="flex my-4">
             <PaymentCardIcon icon="visa" />
             <span className="inline-block ml-3">
@@ -122,19 +123,18 @@ class Billing extends React.Component {
             <Button
               text="Change Payment Method"
               onClick={this.toggle}
-              styles="focus:outline-none"
+              styles="focus:outline-none w-full"
             />
           </div>
-
-          <div>
+          { user && user.user && user.user.subscription_phase_status !== otherConstants.SUBSCRIPTION_STATUS.WAITING_FOR_TRIAL_SHIPMENT &&
             <button
               type="button"
               onClick={this.toggleCancelBox}
               className="text-primary font-bold"
             >
-              Manage subscription
+              Manage Subscription
             </button>
-          </div>
+          }
         </div>
 
         <Modal

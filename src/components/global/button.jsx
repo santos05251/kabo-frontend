@@ -19,7 +19,7 @@ class Button extends React.Component {
               disabled ?
                 { "borderColor": "grey", "color": "grey", "backgroundColor": "#EDF0F2" }
                 :
-                { "borderColor": "green", "color": "green" }
+                { "borderColor": "#239C6D", "color": "#239C6D" }
             }
           >
             {text}

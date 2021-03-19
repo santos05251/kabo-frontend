@@ -48,7 +48,7 @@ module.exports = {
           duck: '#91CEB6',
         },
         label: '#2F3D33',
-        deliveryStepper: '#FBFBFB',
+        deliveryStepper:'#FBFBFB'
       },
       borderWidth: {
         '3': '1.72532px',
@@ -97,25 +97,16 @@ module.exports = {
       },
       boxShadow: {
         modal: '0px 8px 40px rgb(0 0 0 / 20%)',
-        green: 'inset 0px 0px 0px 2px #239C6D',
+        green: 'inset 0px 0px 0px 3px #239C6D',
         tableBoxShadow: '0px 4px 28px rgba(0, 0, 0, 0.04)',
         light: '0px 4px 28px rgba(0, 0, 0, 0.04)',
-      },
-      height: {
-        '40': '40%',
       },
       width: {
         7.3: '1.875rem',
         13: '3.25rem',
       },
-      maxHeight: {
-        '63': '63%',
-      },
       maxWidth: {
         23: '23rem',
-      },
-      minWidth: {
-        10: '10rem',
       },
     },
     fontFamily: {

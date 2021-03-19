@@ -47,7 +47,7 @@ class DeliveryAddress extends React.Component {
             <img src={DeliveryAddressIcon} />
             <span className="ml-2">Delivery Address</span>
           </div>
-          <div className="px-5 py-3">
+          <div className="px-5 pt-3 pb-10">
             <div>
               {deliveryAddress.line2 && (
                 <span className="inline-block">
@@ -70,7 +70,7 @@ class DeliveryAddress extends React.Component {
               </div>
             )}
 
-            <div className="py-2">
+            <div className="pt-2 pb-5">
               <Button
                 text="Edit"
                 onClick={this.editDeliveryAddress}

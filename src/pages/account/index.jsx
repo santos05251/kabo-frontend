@@ -24,6 +24,10 @@ import { DashboardCard } from "../../components/global/dashboard-card";
 import DogSelector from "../../components/account/dog-selector";
 import PortionDisplay from "../../components/account/portion-display";
 import { CircleSVG } from "../../components/meal-plan/circle";
+import DeliveryModalPaused from "../../components/account/delivery-modal-paused";
+import Modal from "../../components/global/modal";
+import UnpauseMealPlanModal from "../../components/account/unpause-modal";
+import DeliveryModalCancelled from "../../components/account/delivery-modal-cancelled";
 
 const PortionCircle = (num) => (
   <div className="flex w-16 relative mb-4">
@@ -40,8 +44,11 @@ class AccountPage extends React.Component {
       mealExpanded: false,
       frequencyExpanded: false,
       dogIndex: 0,
+      showUnpauseBox: false,
     };
     this.openModal = this.openModal.bind(this);
+    this.setDogIndex = this.setDogIndex.bind(this);
+    this.showUnpauseBoxCallBack = this.showUnpauseBoxCallBack.bind(this);
   }
 
   openModal(name, isCardDisable) {
@@ -61,14 +68,19 @@ class AccountPage extends React.Component {
     this.props.getSubscriptionData();
     this.props.getRecipeData();
   }
+
   setDogIndex = (i) => {
     this.setState({ dogIndex: i });
   };
 
+  showUnpauseBoxCallBack(val) {
+    this.setState({ showUnpauseBox: val });
+  }
+
   render() {
     if (!this.props.dogs.length) return <HomeLoader />;
-    const { dogIndex } = this.state
-    const { user, subscriptions, dogs, globalState } = this.props;
+    const { dogIndex, showUnpauseBox } = this.state
+    const { user, subscriptions, dogs, globalState, openUpdatePaymentModal, setBillingAddress, updatePaymentMethod } = this.props;
     const { cooked_recipes, kibble_recipe } = user
     if (!cooked_recipes) return <HomeLoader />
     const currentDog = dogs[dogIndex]
@@ -81,11 +93,11 @@ class AccountPage extends React.Component {
       globalState,
       dogIndex
     );
-    let isCardDisable =
-      dogSubscription.status === "cancelled" ||
-      dogSubscription.status === "paused";
-    let recipeArray = [];
 
+    const isPaused = dogSubscription.status === "paused"
+    const isCancelled = dogSubscription.status === "cancelled"
+
+    let recipeArray = [];
     if (currentDog.chicken_recipe) {
       recipeArray.push(cooked_recipes[0].name);
     }
@@ -103,7 +115,6 @@ class AccountPage extends React.Component {
     }
 
     let portion = "";
-
     if (currentDog.cooked_portion === 100) {
       portion = "Full meal";
     } else if (!currentDog.kibble_portion) {
@@ -125,40 +136,85 @@ class AccountPage extends React.Component {
             <DogSelector dogIndex={dogIndex} dogs={dogs} setDog={this.setDogIndex} />
           </div>
         )}
-        <DeliveryModal readableRecipe={readableRecipe} readablePortion={portion} />
+        {isPaused ?
+          <DeliveryModalPaused dog={currentDog} openModal={() => this.showUnpauseBoxCallBack(true)} />
+          :
+          isCancelled ?
+            <DeliveryModalCancelled isCancelled dog={currentDog} openModal={() => this.showUnpauseBoxCallBack(true)} />
+            :
+            <DeliveryModal readableRecipe={readableRecipe} user={user} readablePortion={portion} />
+        }
         <div className="grid md:grid-cols-2 gap-5 md:gap-6 xl:gap-10 grid-cols-1">
           <DashboardCard
             icon={<BowlIcon />}
             title="Meal Plan"
             text={readableRecipe}
+            buttonAction={() => this.showUnpauseBoxCallBack(true)}
+            paused={isPaused}
+            cancelled={isCancelled}
             redirectLink={`/edit-plan/${dogIndex}`}
             buttonText="Edit Mealplan" />
-          <DashboardCard
-            icon={<FrequencyIcon />}
-            title="Delivery Frequency"
-            text={portion}
-            buttonText="Edit Delivery Frequency"
-            disabled={firstTime} />
-          <DashboardCard
-            icon={<PortionCircle num={currentDog.cooked_portion} />}
-            title="Portion"
-            text={portion}
-            buttonText="Edit Portion Size" />
-          <DashboardCard
-            icon={<MealBox />}
-            title="Amount of Food"
-            text={portion}
-            buttonText="Edit Amount of Food" />
+          {!isCancelled &&
+            <DashboardCard
+              icon={<FrequencyIcon />}
+              title="Delivery Frequency"
+              paused={isPaused}
+              cancelled={isCancelled}
+              text={portion}
+              buttonText="Edit Delivery Frequency"
+              disabled={firstTime} />
+          }
+          {!isCancelled &&
+            <DashboardCard
+              icon={<PortionCircle num={currentDog.cooked_portion} />}
+              title="Portion"
+              paused={isPaused}
+              cancelled={isCancelled}
+              text={portion}
+              buttonText="Edit Portion Size" />
+          }
+          {!isCancelled &&
+            <DashboardCard
+              icon={<MealBox />}
+              title="Amount of Food"
+              paused={isPaused}
+              cancelled={isCancelled}
+              text={portion}
+              buttonText="Edit Amount of Food" />
+          }
           <DashboardCard
             icon={<DogHeadIcon />}
             title={`${currentDog.name}'s info`}
             text={dogInfo} />
-          <DashboardCard
-            icon={<RecipeSheet />}
-            title='Feeding Guide'
-            text={`View ${currentDog.name}'s custom feeding guide`} />
+          {!isCancelled &&
+            <DashboardCard
+              icon={<RecipeSheet />}
+              cancelled={isCancelled}
+              title='Feeding Guide'
+              text={`View ${currentDog.name}'s custom feeding guide`} />
+          }
+          <Modal
+            title={isCancelled ? "Reactivate Kabo" : "Unpause Kabo"}
+            isOpen={showUnpauseBox}
+            onRequestClose={() => this.showUnpauseBoxCallBack(false)}
+          >
+            <UnpauseMealPlanModal
+              user={user}
+              dogs={dogs}
+              dogIndex={dogIndex}
+              isCancelled={isCancelled}
+              open_payment_modal={user.open_payment_modal}
+              openUpdatePaymentModal={openUpdatePaymentModal}
+              payment_billing_address={user.payment_billing_address}
+              setBillingAddress={setBillingAddress}
+              payment_method_updated={user.payment_method_updated}
+              updatePaymentMethod={updatePaymentMethod}
+              updating_payment_method={user.updating_payment_method}
+            />
+          </Modal>
 
         </div>
+
       </div>
     );
   }
@@ -168,6 +224,14 @@ const mapDispatchToProps = (dispatch) => ({
   getAccountData: () => dispatch(userActions.getAccountData()),
   getSubscriptionData: () => dispatch(userActions.getSubscriptionData()),
   getRecipeData: () => dispatch(userActions.getRecipeData()),
+  openSkipDeliveryModal: (payload) =>
+    dispatch(userActions.openSkipDeliveryModal(payload)),
+  openUpdatePaymentModal: (payload) =>
+    dispatch(userActions.openUpdatePaymentModal(payload)),
+  setBillingAddress: (payload) =>
+    dispatch(userActions.setBillingAddress(payload)),
+  updatePaymentMethod: (payload) =>
+    dispatch(userActions.updatePaymentMethod(payload)),
 });
 
 const mapStateToProps = (state) => {

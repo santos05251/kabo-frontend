@@ -8,8 +8,6 @@ import FreshOrKibble from '../../components/meal-plan/fresh-kibble-selector';
 import Loader from '../../loaders/mealPlan';
 import { ReactComponent as Arrow } from '../../assets/images/Vectorarrow.svg';
 import { ReactComponent as DeliveryBox } from '../../assets/images/delivery-box.svg';
-import { ReactComponent as Bowl } from '../../assets/images/bowl-colour.svg';
-
 import { userSelectors } from '../../selectors/user.selectors';
 
 class EditPlan extends Component {
@@ -236,56 +234,48 @@ class EditPlan extends Component {
         : subData && (subData.invoice_estimate_total / 100).toFixed(2);
 
     return (
-      <div>
-        {dog && dog.name && (
-          <div className="sm:flex items-center  sm:mb-8">
-            <p>Select your doggo</p>
-            <select className="sm:ml-4 mt-2 sm:mt-0 px-3 py-3 min-w-10 bg-white border border-gray-300 rounded-lg" disabled>
-              {[{ name: dog && dog.name }].map((item, index) => (
-                <option value={index}>{item.name}</option>
-              ))}
-            </select>
-          </div>
-        )}
-        <div className="sm:bg-white sm:px-2 md:border rounded-lg border-gray-200 md:px-4 xl:px-2">
-          <div className="justify-center mb-5 customContainer p-1 sm:p-4 ">
-            <div className="flex items-end sm:items-center  sm:pt-4">
-              <div className="mr-3 ">
-                <Bowl className="w-14 md:w-20" />
-              </div>
-              <div className="pb-1 sm:pb-0">
-                <h1 className="font-extrabold text-2xl sm:text-3xl mb-1">{dog && dog.name}'s Plan</h1>
-                <p className="hidden sm:block text-xl">Active Subscription</p>
-              </div>
+      <div className="md:bg-white sm:px-2 md:px-4 xl:px-0">
+        <div className="justify-center mb-5 customContainer md:border  border-gray-200 p-4 rounded-lg">
+          <div className="flex items-center pb-7 pt-4 border-b border-gray-200">
+            <div className="mr-3 ">
+              <img
+                className="w-20"
+                src="https://staging.kabo.co/assets/dog-pic-placeholder-0e1ea281ad23bc5843589a1968515c57044324a77b4cfada2aa1c13d19ac6dbf.svg"
+              />
             </div>
-            <RecipeSelection
-              user={user}
-              showCooked={showCooked}
-              showKibble={showKibble}
-              index={this.props.match.params.id}
-              selectedDog={this.selectedDog}
-              handleSelectedCookedRecipes={this.handleSelectedCookedRecipes}
-              selectedCookedRecipes={cookedRecipes}
-              handleSelectedKibbleRecipe={this.handleSelectedKibbleRecipe}
-              selectedKibble={kibbleRecipes}
-              selectedLength={selectedLength}
-              toggleKibble={this.toggleKibble}
-              isKibble={this.state.isKibble}
-              dog={dog}
-            />
-            <DailyDietPortion
-              meal={meal}
-              dog={dog}
-              cookedRecipes={cookedRecipes}
-              dietPortion={this.state.dietPortion}
-              selectedPortion={this.state.selectedPortion}
-              togglePortion={this.togglePortion}
-              selectedDietPortion={this.selectedDietPortion}
-              getDailyDietPortion={getDailyDietPortion}
-              kibbleRecipes={kibbleRecipes}
-            />
+            <div>
+              <h1 className="font-extrabold text-3xl mb-1">{dog && dog.name}'s Plan</h1>
+              <p className="text-xl">Active Subscription</p>
+            </div>
+          </div>
+          <RecipeSelection
+            user={user}
+            showCooked={showCooked}
+            showKibble={showKibble}
+            index={this.props.match.params.id}
+            selectedDog={this.selectedDog}
+            handleSelectedCookedRecipes={this.handleSelectedCookedRecipes}
+            selectedCookedRecipes={cookedRecipes}
+            handleSelectedKibbleRecipe={this.handleSelectedKibbleRecipe}
+            selectedKibble={kibbleRecipes}
+            selectedLength={selectedLength}
+            toggleKibble={this.toggleKibble}
+            isKibble={this.state.isKibble}
+            dog={dog}
+          />
+          <DailyDietPortion
+            meal={meal}
+            dog={dog}
+            cookedRecipes={cookedRecipes}
+            dietPortion={this.state.dietPortion}
+            selectedPortion={this.state.selectedPortion}
+            togglePortion={this.togglePortion}
+            selectedDietPortion={this.selectedDietPortion}
+            getDailyDietPortion={getDailyDietPortion}
+            kibbleRecipes={kibbleRecipes}
+          />
             <SelectedRecipes
-              dog={dog}
+            dog={dog}
               user={user}
               index={this.props.match.params.id}
               selectedDog={this.selectedDog}
@@ -296,10 +286,12 @@ class EditPlan extends Component {
               selectedLength={selectedLength}
               toggleKibble={this.toggleKibble}
               isKibble={this.state.isKibble}
-              estimate={!user.estimate ? null : user.estimate.amount}
+              estimate={
+                !user.estimate ? null : user.estimate.amount
+              }
               onConfirm={(e) => this.handleMealUpdate(e)}
             />
-          </div>
+
         </div>
       </div>
     );

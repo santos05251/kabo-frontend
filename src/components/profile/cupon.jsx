@@ -17,7 +17,7 @@ const Cupon = ({ addCoupon, couponResponse, userError }) => {
         <span className="ml-2">Coupons</span>
       </div>
 
-      <div className="px-5 py-3">
+      <div className="px-5 pt-3 pb-8">
         <form action="" onSubmit={handleSubmit}>
           <label>Enter coupon code below</label>
           <div className="w-full flex mt-2">

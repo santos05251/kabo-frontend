@@ -39,7 +39,7 @@ const AccountDetails = ({ user = null, dogs = null }) => {
           <img src={AccountDetailsIcon} />
           <span className="ml-2">Account Details</span>
         </div>
-        <div className="px-5 py-5">
+        <div className="px-5 pt-5 pb-8">
           <div className="mb-3">
             <h5 className="text-xl font-bold mb-3">{capitalizeFirstLetter(user.user.first_name)} Details</h5>
             <p className="text-sm leading-5">{user.user.email}</p>

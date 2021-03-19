@@ -44,15 +44,15 @@ class RecipeSelection extends Component {
       dog,
     } = this.props;
     return (
-      <div className='w-full flex flex-col lg:py-1 items-center'>
+      <div className='w-full flex flex-col lg:py-1 items-center bg-white'>
         <div className='w-full'>
           <>
             <div>
-              <div className='font-sofiaPro text-fadeGrey font-medium pt-1 sm:pt-5 sm:bg-white text-lg customContainer mx-auto pb-6 sm:pb-10'>
+              <div className='font-sofiaPro text-fadeGrey font-extrabold pt-5 bg-white text-2xl customContainer mx-auto pb-5'>
                 What's in {dog && dog.name}'s Box (Choose up to 2 and click Save Changes):
               </div>
             </div>
-            <div className='grid w-full mx-auto sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 grid-cols-1 gap-4'>
+            <div className='grid w-full mx-auto sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 grid-cols-1 xl:gap-6'>
               {user.cooked_recipes && (
                 <MealPlanSelect
                   dog={dog}
