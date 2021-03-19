@@ -140,20 +140,27 @@ class Navbar extends React.Component {
                   className={navStep === 3 ? active : inActive}
                 >
                   Orders
-                    </a>
+                </a>
                 <a
                   href="/profile"
                   className={navStep === 4 ? active : inActive}
                 >
                   Account
-                    </a>
+                </a>
+                <a
+                  id="blog"
+                  className={inActive}
+                  href="https://kabo.co/blog"
+                >
+                  Blog
+                </a>
                 <a
                   href="https://kabo.zendesk.com/hc/en-us"
                   className={`hidden md:block ${inActive}`}
                   target="_blank"
                 >
                   Support
-                    </a>
+                </a>
               </div>
             )}
           </div>

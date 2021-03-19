@@ -91,3 +91,9 @@
 .close-icon.dark::after {
   background-color: black;
 }
+
+@media screen and (min-width: 1280px) {
+  .container {
+    max-width: auto;
+  }
+}

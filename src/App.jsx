@@ -20,14 +20,14 @@ import CheckoutSuccess from "./pages/onboardings/steps/success";
 function App() {
   return (
     <div className="bg-container">
-      <div className="container flex mx-auto padding-container">
-        <Navbar />
-        <div className="md:h-20 sm:h-14 h-24"> </div>
-        <Alert />
-        <div className="w-1/5 hidden md:block" />
-        <div className="page-content w-full md:w-4/5 mt-8  xl:px-6 bg-container relative">
-          <div className="page-routing">
-            <BrowserRouter>
+      <BrowserRouter>
+        <div className="container flex mx-auto padding-container">
+          <Navbar />
+          <div className="md:h-20 sm:h-14 h-24"></div>
+          < Alert />
+          <div className="w-1/5 hidden md:block" />
+          <div className="page-content w-full md:w-4/5 mt-20 xl:px-6 bg-container relative">
+            <div className="page-routing">
               <Switch>
                 <NonUserRoute
                   path="/checkout/:checkout_token"
@@ -50,10 +50,10 @@ function App() {
                 <PrivateRoute path="/profile" component={ProfilePage} />
                 <PrivateRoute component={AccountPage} />
               </Switch>
-            </BrowserRouter>
+            </div>
           </div>
         </div>
-      </div>
+      </BrowserRouter>
     </div>
   );
 }

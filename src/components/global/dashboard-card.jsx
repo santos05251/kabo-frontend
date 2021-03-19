@@ -17,7 +17,6 @@ export const DashboardCard = ({ title, icon, text, buttonText, buttonAction, dis
             <Button
               styles="w-full mt-8"
               text={buttonText}
-              onClick={buttonAction}
               disabled={disabled}
             />
           </a>

@@ -160,7 +160,7 @@
   font-family: 'Recoleta';
   font-style: 'sans serif';
   font-weight: 600;
-  src: url('../../fonts/RecoletaAltBold.otf'); /* IE9 Compat Modes */ 
+  src: url('../../fonts/RecoletaAltBold.otf'); /* IE9 Compat Modes */
   src: local('Recoleta Alt Bold'), local('Recoleta Alt Bold'),
        url('../../fonts/RecoletaAltBold.otf') format('embedded-opentype'), /* IE6-IE8 */
        url('../../fonts/RecoletaAltBold.otf') format('truetype'), /* Super Modern Browsers */
@@ -174,10 +174,7 @@
   animation: loader 1s infinite ease-in-out;
   -webkit-animation: loader 1s infinite ease-in-out;
 }
-.customContainer{
-  max-width: 1280px;
-  margin: 0 auto;
-}
+
 .webkitFillAvalible{
   width: -webkit-fill-available;
 }

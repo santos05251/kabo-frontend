@@ -101,12 +101,21 @@ module.exports = {
         tableBoxShadow: '0px 4px 28px rgba(0, 0, 0, 0.04)',
         light: '0px 4px 28px rgba(0, 0, 0, 0.04)',
       },
+      height: {
+        '40': '40%',
+      },
       width: {
         7.3: '1.875rem',
         13: '3.25rem',
       },
+      maxHeight: {
+        '63': '63%',
+      },
       maxWidth: {
         23: '23rem',
+      },
+      minWidth: {
+        10: '10rem',
       },
     },
     fontFamily: {
