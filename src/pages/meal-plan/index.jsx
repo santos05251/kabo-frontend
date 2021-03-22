@@ -72,6 +72,12 @@ class EditPlan extends Component {
         },
       });
     }
+    // Specific position will be shown after rendering, when dogs data are loaded.
+    if (this.props.location.hash.length > 0) {
+      const scrollId = this.props.location.hash.replace('#', '');
+      const scrollElement = document.getElementById(scrollId);
+      if (scrollElement) scrollElement.scrollIntoView();
+    }
   }
 
   selectedDog = (dog) => {
@@ -273,6 +279,7 @@ class EditPlan extends Component {
               isKibble={this.state.isKibble}
               dog={dog}
             />
+            <div id="DailyDietPortion" />
             <DailyDietPortion
               meal={meal}
               dog={dog}

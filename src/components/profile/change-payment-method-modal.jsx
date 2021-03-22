@@ -4,9 +4,9 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 
 import Divider from "../divider/index.jsx";
-import PaymentCardIcon from "../global/payment-card-icon.jsx";
 import PayPalIcon from "../../assets/images/paypal-logo.png";
 import StripeForm from "./stripe-elements/";
+import BillingMethodIcon from "../global/billingMethodIcon";
 
 const stripePromise = loadStripe("pk_test_pk5H5N8H1PQ3qujf7YW2MWqN00IWiJzjsM");
 const ChangePaymentMethodModal = ({
@@ -34,12 +34,7 @@ const ChangePaymentMethodModal = ({
           <Divider text="OR" />
         </div>
         <div className="flex mt-2 mb-2">
-          <PaymentCardIcon icon="visa" />
-          <img
-            src="https://www.pixartprinting.co.uk/blog/wp-content/uploads/2019/07/mastercard.png"
-            alt="Master Card"
-            width="50px"
-          />
+          <BillingMethodIcon />
         </div>
         <Elements stripe={stripePromise}>
           <StripeForm

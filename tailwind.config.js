@@ -1,6 +1,5 @@
 /* eslint-disable quote-props */
 // tailwind.config.js
-
 module.exports = {
   purge: {
     content: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
@@ -27,6 +26,7 @@ module.exports = {
       textColor: {
         primary: '#239C6D',
         secondary: '#124E37',
+        copyPrimary: '071F16',
         charcoal: '#414141',
         lightGrey: '#525252',
         fadeGrey: '#2a3c49',
@@ -34,10 +34,10 @@ module.exports = {
       backgroundColor: {
         container: '#F2F5F4',
         primary: '#239C6D',
+        mobileNav: '#F3F3F3',
         account: '#F2F5F4',
         promptYellow: '#FFF5E7',
         recipeGray: '#F2F5F4',
-        skinColor: '#fff5e8',
         chicken: '#FF9C63',
         beef: '#239C6D',
         turkey: '#875D45',
@@ -48,7 +48,7 @@ module.exports = {
           duck: '#91CEB6',
         },
         label: '#2F3D33',
-        deliveryStepper:'#FBFBFB'
+        deliveryStepper: '#FBFBFB',
       },
       borderWidth: {
         '3': '1.72532px',
@@ -60,7 +60,7 @@ module.exports = {
         turkey: '#875D45',
         lamb: '#9EC694',
         kibble: {
-          chicken: '#FECD6D',
+          chicken: '#eebd5e',
           'turkey+salmon': '#FE766D',
           duck: '#91CEB6',
         },
@@ -68,18 +68,6 @@ module.exports = {
       },
       borderWidth: {
         '3': '1.72532px',
-      },
-      borderColor: {
-        green: '#239C6D',
-        chicken: '#FF9C63',
-        beef: '#239C6D',
-        turkey: '#875D45',
-        lamb: '#9EC694',
-        kibble: {
-          chicken: '#FECD6D',
-          'turkey+salmon': '#FE766D',
-          duck: '#91CEB6',
-        },
       },
       borderRadius: {
         '1lg': '0.625rem',

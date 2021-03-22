@@ -28,6 +28,8 @@ import DeliveryModalPaused from "../../components/account/delivery-modal-paused"
 import Modal from "../../components/global/modal";
 import UnpauseMealPlanModal from "../../components/account/unpause-modal";
 import DeliveryModalCancelled from "../../components/account/delivery-modal-cancelled";
+import { otherConstants } from '../../constants'
+import WelcomeModal from "../../components/account/welcome-modal";
 
 const PortionCircle = (num) => (
   <div className="flex w-16 relative mb-4">
@@ -45,10 +47,10 @@ class AccountPage extends React.Component {
       frequencyExpanded: false,
       dogIndex: 0,
       showUnpauseBox: false,
+      isWelcomeModal: false,
     };
     this.openModal = this.openModal.bind(this);
     this.setDogIndex = this.setDogIndex.bind(this);
-    this.showUnpauseBoxCallBack = this.showUnpauseBoxCallBack.bind(this);
   }
 
   openModal(name, isCardDisable) {
@@ -69,17 +71,43 @@ class AccountPage extends React.Component {
     this.props.getRecipeData();
   }
 
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const { user } = nextProps;
+    if (user.user && user.user.subscription_phase_status) {
+      const isWelcomeModal = user.user.subscription_phase_status === otherConstants.SUBSCRIPTION_STATUS.FIRST_BOX_PREPARING_ORDER || user.user.subscription_phase_status === otherConstants.SUBSCRIPTION_STATUS.WAITING_FOR_TRIAL_SHIPMENT;
+      const firstTrial = localStorage.getItem("first_trial");
+      if (firstTrial === null) {
+        localStorage.setItem("first_trial", true);
+      }
+      return { isWelcomeModal: isWelcomeModal && firstTrial === null }
+    }
+    return null;
+  }
+
   setDogIndex = (i) => {
     this.setState({ dogIndex: i });
   };
 
-  showUnpauseBoxCallBack(val) {
-    this.setState({ showUnpauseBox: val });
+  selectSubscription = (isPaused, isCancelled) => {
+    if (isPaused) this.manageSubscription(true);
+    else if (isCancelled) this.manageSubscription(false);
+  };
+
+  manageSubscription = (status) => {
+    const { dogIndex } = this.state;
+    if (dogIndex === null || dogIndex < 0) return;
+    if (status) this.props.history.push(`/unpause/${dogIndex}`);
+    else this.props.history.push(`/reactivate/${dogIndex}`);
+  };
+
+  confirmWelcome = () => {
+    this.setState({ isWelcomeModal: false });
+    this.props.history.push("/profile");
   }
 
   render() {
     if (!this.props.dogs.length) return <HomeLoader />;
-    const { dogIndex, showUnpauseBox } = this.state
+    const { dogIndex } = this.state
     const { user, subscriptions, dogs, globalState, openUpdatePaymentModal, setBillingAddress, updatePaymentMethod } = this.props;
     const { cooked_recipes, kibble_recipe } = user
     if (!cooked_recipes) return <HomeLoader />
@@ -87,12 +115,17 @@ class AccountPage extends React.Component {
 
     const dogInfo = `${currentDog.age_in_months / 12} years old, ${currentDog.weight}${currentDog.weight_unit}, ${currentDog.neutered && 'Neutered'}, ${currentDog.breed}`
 
-    const firstTime = user.user.subscription_phase_status === 'first_box_preparing_order' || user.user.subscription_phase_status === 'waiting_for_trial_shipment'
+    const firstTime = user.user.subscription_phase_status === otherConstants.SUBSCRIPTION_STATUS.FIRST_BOX_PREPARING_ORDER || user.user.subscription_phase_status === otherConstants.SUBSCRIPTION_STATUS.WAITING_FOR_TRIAL_SHIPMENT
 
     let dogSubscription = userSelectors.selectSubscriptionByDogIndex(
       globalState,
       dogIndex
     );
+
+    const { invoice_estimate_total } = dogSubscription
+    const displayPrice = (invoice_estimate_total / 100).toFixed(2)
+
+    console.log(displayPrice)
 
     const isPaused = dogSubscription.status === "paused"
     const isCancelled = dogSubscription.status === "cancelled"
@@ -127,7 +160,7 @@ class AccountPage extends React.Component {
 
     return (
       <div className="px-3 md:px-0 md:w-11/12 mx-auto xl:w-full pb-10">
-        <div data-cy="dashboard-header" className="h-full text-3xl text-center font-cooper md:text-left ">
+        <div data-cy="dashboard-header" className="h-full text-3xl text-center font-cooper mb-8 md:text-left ">
           Welcome {user.user.first_name}
         </div>
         {dogs.length > 1 && (
@@ -137,26 +170,26 @@ class AccountPage extends React.Component {
           </div>
         )}
         {isPaused ?
-          <DeliveryModalPaused dog={currentDog} openModal={() => this.showUnpauseBoxCallBack(true)} />
+          <DeliveryModalPaused dog={currentDog} openModal={() => this.manageSubscription(true)} />
           :
           isCancelled ?
-            <DeliveryModalCancelled isCancelled dog={currentDog} openModal={() => this.showUnpauseBoxCallBack(true)} />
+            <DeliveryModalCancelled isCancelled dog={currentDog} openModal={() => this.manageSubscription(false)} />
             :
-            <DeliveryModal readableRecipe={readableRecipe} user={user} readablePortion={portion} />
+            <DeliveryModal displayPrice={displayPrice} readableRecipe={readableRecipe} user={user} readablePortion={portion} />
         }
         <div className="grid md:grid-cols-2 gap-5 md:gap-6 xl:gap-10 grid-cols-1">
           <DashboardCard
-            icon={<BowlIcon />}
+            icon={<BowlIcon className="h-full" />}
             title="Meal Plan"
             text={readableRecipe}
-            buttonAction={() => this.showUnpauseBoxCallBack(true)}
+            buttonAction={() => this.selectSubscription(isPaused, isCancelled)}
             paused={isPaused}
             cancelled={isCancelled}
             redirectLink={`/edit-plan/${dogIndex}`}
             buttonText="Edit Mealplan" />
           {!isCancelled &&
             <DashboardCard
-              icon={<FrequencyIcon />}
+              icon={<FrequencyIcon className="h-full" />}
               title="Delivery Frequency"
               paused={isPaused}
               cancelled={isCancelled}
@@ -166,53 +199,36 @@ class AccountPage extends React.Component {
           }
           {!isCancelled &&
             <DashboardCard
-              icon={<PortionCircle num={currentDog.cooked_portion} />}
+              icon={<PortionCircle num={currentDog.cooked_portion} className="h-full" />}
               title="Portion"
+              subText="When you change your portions, the size of your packs of food change"
               paused={isPaused}
               cancelled={isCancelled}
               text={portion}
+              redirectLink={`/edit-plan/${dogIndex}#DailyDietPortion`}
               buttonText="Edit Portion Size" />
           }
           {!isCancelled &&
             <DashboardCard
-              icon={<MealBox />}
+              icon={<MealBox className="h-full" />}
               title="Amount of Food"
+              subText="This is the amount of food in your next delivery "
               paused={isPaused}
               cancelled={isCancelled}
               text={portion}
               buttonText="Edit Amount of Food" />
           }
           <DashboardCard
-            icon={<DogHeadIcon />}
+            icon={<DogHeadIcon className="h-full" />}
             title={`${currentDog.name}'s info`}
             text={dogInfo} />
           {!isCancelled &&
             <DashboardCard
-              icon={<RecipeSheet />}
+              icon={<RecipeSheet className="h-full" />}
               cancelled={isCancelled}
               title='Feeding Guide'
               text={`View ${currentDog.name}'s custom feeding guide`} />
           }
-          <Modal
-            title={isCancelled ? "Reactivate Kabo" : "Unpause Kabo"}
-            isOpen={showUnpauseBox}
-            onRequestClose={() => this.showUnpauseBoxCallBack(false)}
-          >
-            <UnpauseMealPlanModal
-              user={user}
-              dogs={dogs}
-              dogIndex={dogIndex}
-              isCancelled={isCancelled}
-              open_payment_modal={user.open_payment_modal}
-              openUpdatePaymentModal={openUpdatePaymentModal}
-              payment_billing_address={user.payment_billing_address}
-              setBillingAddress={setBillingAddress}
-              payment_method_updated={user.payment_method_updated}
-              updatePaymentMethod={updatePaymentMethod}
-              updating_payment_method={user.updating_payment_method}
-            />
-          </Modal>
-
         </div>
 
       </div>

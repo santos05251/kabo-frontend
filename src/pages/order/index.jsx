@@ -20,17 +20,17 @@ class AllOrdersPage extends React.Component {
   render() {
     const { user, dogs, orders, loading } = this.props;
     return (
-      <div className='container pb-40'>
+      <div className='pb-40 container'>
         <div className='flex items-center flex-col md:mt-10 sm:mt-0 font-messina'>
           {loading ? (
-              <Loader />
-            ) : (
-            <div>
+            <Loader />
+          ) : (
+            <div className="w-full">
               <OrderTable
                 orders={orders}
                 dogs={dogs}
-                coupon={user.subscription? user.subscription.coupon : ''}
-                shippingAddress={user.subscription? user.subscription.shipping_address: ''}
+                coupon={user.subscription ? user.subscription.coupon : ''}
+                shippingAddress={user.subscription ? user.subscription.shipping_address : ''}
                 showModal={this.state.checkout}
                 handleCloseEvent={() => {
                   this.setState({ checkout: false });

@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import OrderItemModal from "../order/order-item-modal";
-import chevron from "../../assets/images/chevron.svg";
 import "./style.css";
 
 const FoodCard = ({
@@ -19,8 +18,8 @@ const FoodCard = ({
 }) => {
   if (!selectedCookedRecipes && !kibble) return null;
 
+  const recipeImage = require(`../../assets/images/recipe/${food.name.split(" ").join("-")}.png`);
   const [details, openDetails] = useState(false);
-
   const kibbleOnlyNull = kibble.some((el) => el !== null);
 
   const selectedText = 'bg-green-600 btn-text-white border border-green  focus:outline-none font-bold p-1 md:py-3 w-11/12 sm:w-10/12 rounded mt-2 foodcard-add-button';
@@ -45,7 +44,7 @@ const FoodCard = ({
             </div>
           )}
 
-          <img src={food.image_url} className="h-4/5 max-h-28 md:mx-h-none" />
+          <img src={recipeImage.default} className="h-4/5 max-h-28 md:mx-h-none" />
         </div>
         <div
           className={
@@ -86,19 +85,21 @@ const FoodCard = ({
 
           {type === 'kibble' ? (
             <button
+              type="button"
               className={`${selected ? selectedText : unSelectedText} md:mt-4`}
               onClick={() => selectKibbleRecipe(food)}
               disabled={selectedLength >= 2 && !selected && !kibbleOnlyNull}
             >
-              {selected ? 'Remove from box' : `Add to ${dog && dog.name}'s box`}
+              {selected ? "Remove from box" : `Add to box`}
             </button>
           ) : (
             <button
+              type="button"
               className={`${selected ? selectedText : unSelectedText} md:mt-4`}
               onClick={() => selectCookedFood(food)}
               disabled={selectedLength >= 2 && !selected}
             >
-              {selected ? 'Remove from box' : `Add to ${dog && dog.name}'s box`}
+              {selected ? "Remove from box" : `Add to box`}
             </button>
           )}
           <OrderItemModal
@@ -166,19 +167,21 @@ const FoodCard = ({
           <div className="flex justify-center">
             {type === 'kibble' ? (
               <button
+                type="button"
                 className={`${selected ? selectedText : unSelectedText} margin-bottom-4`}
                 onClick={() => selectKibbleRecipe(food)}
                 disabled={selectedLength >= 2 && !selected && !kibbleOnlyNull}
               >
-                {selected ? 'Remove from box' : `Add to ${dog && dog.name}'s box`}
+                {selected ? "Remove from box" : `Add to box`}
               </button>
             ) : (
               <button
+                type="button"
                 className={`${selected ? selectedText : unSelectedText} md:mt-4`}
                 onClick={() => selectCookedFood(food)}
                 disabled={selectedLength >= 2 && !selected}
               >
-                {selected ? 'Remove from box' : `Add to ${dog && dog.name}'s box`}
+                {selected ? "Remove from box" : `Add to box`}
               </button>
             )}
           </div>

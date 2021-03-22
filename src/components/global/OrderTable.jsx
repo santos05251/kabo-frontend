@@ -49,7 +49,7 @@ const OrderTable = ({ orders, dogs, coupon, shippingAddress, showModal, handleCl
                 <td className="text-sm p-4 w-1/5">
                   <p className="pb-1">{date}</p>
                   {/* <Link to={`/orders/${invoice_id}`} className="text-primary">View Order</Link> */}
-                  <a className="text-primary" onClick={() => handleOrder(index)}>View Order</a>
+                  <a className="text-primary cursor-pointer" onClick={() => handleOrder(index)}>View Order</a>
                 </td>
                 <td className="text-sm  p-4 w-1/5">
                   <span>{total}</span>

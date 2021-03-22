@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Button from '../global/button.jsx';
 import PaymentCardIcon from '../global/payment-card-icon.jsx';
 import ChangePaymentMethodModal from './change-payment-method-modal';
@@ -126,30 +127,16 @@ class Billing extends React.Component {
               styles="focus:outline-none w-full"
             />
           </div>
+
+          
           { user && user.user && user.user.subscription_phase_status !== otherConstants.SUBSCRIPTION_STATUS.WAITING_FOR_TRIAL_SHIPMENT &&
-            <button
-              type="button"
-              onClick={this.toggleCancelBox}
-              className="text-primary font-bold"
-            >
+          <div>
+            <a href="/manage-subscription" className="text-primary font-bold">
               Manage Subscription
-            </button>
+            </a>
+          </div>
           }
         </div>
-
-        <Modal
-          title="Manage subscription"
-          isOpen={this.props.showManageSubscriptionsBox}
-          onRequestClose={this.toggleCancelBox}
-        >
-          <PauseMealModal
-            closeModal={() =>
-              this.props.openSubscriptionManagementModal(
-                !this.props.showManageSubscriptionsBox
-              )
-            }
-          />
-        </Modal>
 
         <ChangePaymentMethodModal
           isOpen={this.props.open_payment_modal}

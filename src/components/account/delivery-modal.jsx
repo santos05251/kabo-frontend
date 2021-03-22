@@ -2,12 +2,15 @@ import React from "react";
 import moment from 'moment'
 import Stepper from "../partials/stepper.jsx";
 import { ReactComponent as DeliveryBox } from "../../assets/images/box-colour.svg";
+import { ReactComponent as QuestionMark } from "../../assets/images/green-question.svg";
+
 
 const DeliveryModal = ({
   dogsLength,
   user,
   readablePortion,
   readableRecipe,
+  displayPrice
 }) => {
 
   let deliveryStatus;
@@ -38,22 +41,30 @@ const DeliveryModal = ({
             <DeliveryBox />
             <div className="ml-4 font-semibold text-xl">
               Upcoming Delivery
-              </div>
+            </div>
           </div>
           <div className="font-cooper text-3xl mt-6">
-            {moment(nextDelivery).format('ddd, MMM D')}
+            {moment(nextDelivery).format("ddd, MMM D")}
           </div>
           <div className="font-bold mt-6">
             Order Summary
             </div>
           <div className="text-sm mt-4">
-            <b>Recipes: </b>{readableRecipe}
+            <b>Recipes: </b>
+            {readableRecipe}
+            <b className="float-right">${displayPrice}</b>
           </div>
           <div className="text-sm mt-2">
-            <b>Portions: </b>{readablePortion}
+            <b>Portions: </b>
+            {readablePortion}
           </div>
           <div className="text-sm mt-2">
-            <b>Amount: </b>{readablePortion}
+            <b>Amount: </b>
+            {readablePortion}
+          </div>
+          <div className="flex items-center text-primary text-xs font-semibold mt-1">
+            <QuestionMark className="-ml-1" />
+            Read feeding guide
           </div>
         </div>
         <div className="w-full md:w-2/5 bg-deliveryStepper p-8 flex justify-center items-center" data-cy="delivery-stepper" aria-label="Progress">

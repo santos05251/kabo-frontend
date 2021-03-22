@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import CouponsIcon from '../../assets/images/coupons.svg';
+import SpinButton from '../../components/global/spinButton';
 
-const Cupon = ({ addCoupon, couponResponse, userError }) => {
-  const [coupon, setCoupon] = useState('');
+const Cupon = ({ addCoupon, couponResponse, userError, isApplying}) => {
+  const [coupon, setCoupon] = useState(couponResponse && couponResponse.coupon ? couponResponse.coupon : '');
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = () => {
     if (coupon) {
       addCoupon({ coupon_code: coupon, coupon: coupon });
     }
   };
+
   return (
     <div className="rounded-xl shadow-md bg-white">
       <div className="flex shadow-sm text-2xl font-cooper font-semibold mb-3 border-b px-5 py-3">
@@ -18,37 +19,36 @@ const Cupon = ({ addCoupon, couponResponse, userError }) => {
       </div>
 
       <div className="px-5 pt-3 pb-8">
-        <form action="" onSubmit={handleSubmit}>
-          <label>Enter coupon code below</label>
-          <div className="w-full flex mt-2">
-            <input
-              disabled={couponResponse}
-              placeholder="Promo Code"
-              className={`${
-                couponResponse ? 'bg-green-100' : ''
-              } p-2 rounded-l-lg  border border-1 border-green   w-max webkitFillAvalible`}
-              onChange={(e) => setCoupon(e.target.value)}
-              defaultValue={couponResponse ? couponResponse.coupon : ''}
-            />
-            <button
-              disabled={couponResponse}
-              class="py-4  px-6 md:py-3 md:px-8  rounded-r-lg text-base font-bold bg-primary text-white "
-              type="submit"
-            >
-              Apply
-            </button>
+        <label>Enter coupon code below</label>
+        <div className="w-full flex mt-2">
+          <input
+            disabled={couponResponse}
+            placeholder="Promo Code"
+            className={`${
+              couponResponse ? 'bg-green-100' : ''
+            } p-2 rounded-l-lg  border border-1 border-green   w-max webkitFillAvalible`}
+            onChange={(e) => setCoupon(e.target.value)}
+            defaultValue={coupon}
+          />
+          <SpinButton
+            text="Apply"
+            loadingText="Applying"
+            disabled={couponResponse}
+            className="py-2 px-4 md:py-4 md:px-6 rounded-r-lg text-base font-bold bg-primary text-white"
+            isFinished={!isApplying}
+            handleClick={handleSubmit}
+          />
+        </div>
+        {couponResponse && (
+          <div class="text-primary text-xs font-messina mt-1">
+            Your coupon has been successfully applied! See on your next billing
           </div>
-          {couponResponse && (
-            <div class="text-primary text-xs font-messina mt-1">
-              Your coupon has been succssfully applied! See on your next billing
-            </div>
-          )}
-          {userError && (
-            <div class="text-red-500 text-xs font-messina mt-1">
-              {userError}
-            </div>
-          )}
-        </form>
+        )}
+        {userError && (
+          <div class="text-red-500 text-xs font-messina mt-1">
+            {userError}
+          </div>
+        )}
       </div>
     </div>
   );

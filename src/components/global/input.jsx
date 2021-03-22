@@ -53,6 +53,7 @@ class Input extends React.Component {
             <textarea
               required
               id='input'
+              onChange={onChange}
               defaultValue={inputValue}
               style={{ width: '95%' }}
               className='outline-none text-grey-darkest ml-2.5 h-11 mb-2.5 text-sm resize-none'

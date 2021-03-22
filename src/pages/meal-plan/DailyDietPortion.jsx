@@ -42,7 +42,7 @@ const DailyDietPortion = ({
               {dog && dog.name}
               's Daily portion of Kabo:
               <br />
-              If you want to edit the amount of food in your box click here
+              If you want to edit the amount of food in your box <span className="text-primary cursor-pointer">click here</span>
             </p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4">

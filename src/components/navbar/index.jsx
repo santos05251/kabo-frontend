@@ -66,15 +66,19 @@ class Navbar extends React.Component {
       "text-primary font-cooper font-bold text-white py-1 sm:py-2 rounded-md text-4xl font-medium";
     const inActive =
       "text-charcoal font-cooper hover:text-primary py-1 sm:py-2 rounded-md text-4xl font-medium";
+    const mobileActive =
+      "bg-primary text-white text-center px-2 sm:px-3 py-1 sm:py-2 rounded-md text-xs sm:text-sm font-medium";
+    const mobileInactive =
+      "text-charcoal hover:bg-green-500 bg-mobileNav text-center  hover:text-white px-2 sm:px-3 py-1 sm:py-2 rounded-md text-xs sm:text-sm  font-medium";
 
     const loggedIn = user && user.token;
 
     return (
       <nav
-        className="fixed inset-x-0 top-0 md:px-0 xl:px-6 2xl:px-0 top-8 left-9 bg-white z-50 w-full md:w-1/5 rounded-xl shadow-lg"
+        className="fixed inset-x-0 top-0 py-4 px-3 md:px-0 xl:px-6 2xl:px-0 md:top-8 md:left-9 bg-white z-50 w-full md:w-1/5 md:rounded-xl md:shadow-lg"
         id="outer-container"
       >
-        <div className="py-3 md:p-7 pl-0 flex flex-col items-center sm:justify-between sm:items-stretch">
+        <div className="pb-5 md:p-7 pl-0 flex flex-col items-center sm:justify-between sm:items-stretch">
           <div className="sm:hidden">
             <Menu
               pageWrapId={"page-wrap"}
@@ -199,6 +203,24 @@ class Navbar extends React.Component {
               </button>
             </div>
           )}
+        </div>
+        <div className="sm:hidden grid grid-cols-3 gap-4">
+          <a href="/" className={navStep === 1 ? mobileActive : mobileInactive}>
+            My Kabo
+          </a>
+          {/* <a href="/store" className={navStep === 2 ? active : inActive}>Store</a> */}
+          <a
+            href="/orders"
+            className={navStep === 3 ? mobileActive : mobileInactive}
+          >
+            Orders
+          </a>
+          <a
+            href="/profile"
+            className={navStep === 4 ? mobileActive : mobileInactive}
+          >
+            Account
+          </a>
         </div>
       </nav>
     );

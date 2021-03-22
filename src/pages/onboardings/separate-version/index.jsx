@@ -11,7 +11,7 @@ import UserStep from "../steps/user";
 import LoadingCircle from "../../../components/partials/loading";
 import qs from 'qs';
 
-class OnboardingSeparateVersion extends Component {
+class OnboardingVersionB extends Component {
   state = {
     step: 1,
     dogs: [],
@@ -43,7 +43,7 @@ class OnboardingSeparateVersion extends Component {
     let { step } = this.state;
     step = step - 1;
     this.saveDogsData();
-    this.setState({step});
+    this.setState({ step });
   }
 
   saveDogsData = () => {
@@ -75,7 +75,7 @@ class OnboardingSeparateVersion extends Component {
     for (let i in dogs) {
       if (dogs[i].index === index) {
         dogs.splice(i, 1);
-        this.setState({dogs});
+        this.setState({ dogs });
         break;
       }
     }
@@ -159,7 +159,7 @@ class OnboardingSeparateVersion extends Component {
 
   handleSelectedKibbleRecipe = (dogId, _kibble) => {
     let { kibble } = this.state;
-    if(kibble[dogId] != undefined) {
+    if (kibble[dogId] != undefined) {
       kibble[dogId] = undefined;
       this.setState({ kibble });
       return;
@@ -181,7 +181,7 @@ class OnboardingSeparateVersion extends Component {
     this.props.temp_user.temp_dog_ids.map(dogId => {
       dogs.push({
         id: dogId,
-        cooked_recipes: cookedRecipes[dogId] == undefined ? []: cookedRecipes[dogId],
+        cooked_recipes: cookedRecipes[dogId] == undefined ? [] : cookedRecipes[dogId],
         kibble_recipe: kibble[dogId] == undefined ? null : kibble[dogId]
       });
     });
@@ -232,7 +232,7 @@ class OnboardingSeparateVersion extends Component {
       id: this.props.temp_user.temp_user_id,
       details: {
         step: "account",
-        first_name: user.first_name ? user.first_name: '',
+        first_name: user.first_name ? user.first_name : '',
         email: user.email ? user.email : '',
         referral_code: Number(couponPercentage) <= 0 ? null : '40off'
       }
@@ -256,7 +256,7 @@ class OnboardingSeparateVersion extends Component {
         />
         <Steps completePercent={`${step}/5`} />
         <main className="flex flex-col justify-between sm:px-4 sm:py-5 px-3 py-4">
-          { temp_user &&
+          {temp_user &&
             updating_temp_user &&
             <LoadingCircle />
           }
@@ -302,77 +302,77 @@ class OnboardingSeparateVersion extends Component {
         <div className="h-20" />
 
         <div className="fixed inset-x-0 bottom-0 h-20 footer border-t bg-white flex justify-center py-4 z-50">
-            {step > 1 && (
-              <button
-                onClick={this.handlePrevious}
-                className="flex justify-center items-center border btn mx-5 border-green text-green-600 focus:outline-none rounded-lg py-3 px-20"
-              >
-                Prev
-              </button>
-            )}
-            {step === 1 && (
-              <button
-                disabled={ dogs.length <= 0 || !dogs.every(dog => dog.name != undefined && dog.breed != undefined && dog.age != undefined && dog.name !== '' && dog.breed.label != '' && dog.age.value >= 0) }
-                onClick={this.handleStartStep}
-                className={
-                  dogs.length <= 0 || !dogs.every(dog => dog.name != undefined && dog.breed != undefined && dog.age != undefined && dog.name !== '' && dog.breed.label != '' && dog.age.value >= 0)
-                    ? "flex justify-center items-center border btn mx-5 border-gray-300 bg-gray-200 text-gray-400 focus:outline-none rounded-lg py-3 px-20"
-                    : "flex justify-center items-center border btn mx-5 border-green-600 bg-green-600 text-white focus:outline-none rounded-lg py-3 px-20"
-                }
-              >
-                Next
-              </button>
-            )}
-            {step === 2 && (
-              <button
-                disabled={ dogs.length <= 0 || !dogs.every(dog => dog.gender != undefined && dog.ovary != undefined && dog.weight_unit != undefined && dog.weight != undefined && dog.body_type != undefined && dog.activity_level != undefined && dog.weight_unit != '' && Number(dog.weight) > 0 && dog.body_type >= 0 && dog.activity_level >= 0) }
-                onClick={this.handleDetailStep}
-                className={
-                  dogs.length <= 0 || !dogs.every(dog => dog.gender != undefined && dog.ovary != undefined && dog.weight_unit != undefined && dog.weight != undefined && dog.body_type != undefined && dog.activity_level != undefined && dog.weight_unit != '' && Number(dog.weight) > 0 && dog.body_type >= 0 && dog.activity_level >= 0)
-                    ? "flex justify-center items-center border btn mx-5 border-gray-300 bg-gray-200 text-gray-400 focus:outline-none rounded-lg py-3 px-20"
-                    : "flex justify-center items-center border btn mx-5 border-green-600 bg-green-600 text-white focus:outline-none rounded-lg py-3 px-20"
-                }
-              >
-                Next
-              </button>
-            )}
+          {step > 1 && (
+            <button
+              onClick={this.handlePrevious}
+              className="flex justify-center items-center border btn mx-5 border-green text-green-600 focus:outline-none rounded-lg py-3 px-20"
+            >
+              Prev
+            </button>
+          )}
+          {step === 1 && (
+            <button
+              disabled={dogs.length <= 0 || !dogs.every(dog => dog.name != undefined && dog.breed != undefined && dog.age != undefined && dog.name !== '' && dog.breed.label != '' && dog.age.value >= 0)}
+              onClick={this.handleStartStep}
+              className={
+                dogs.length <= 0 || !dogs.every(dog => dog.name != undefined && dog.breed != undefined && dog.age != undefined && dog.name !== '' && dog.breed.label != '' && dog.age.value >= 0)
+                  ? "flex justify-center items-center border btn mx-5 border-gray-300 bg-gray-200 text-gray-400 focus:outline-none rounded-lg py-3 px-20"
+                  : "flex justify-center items-center border btn mx-5 border-green-600 bg-green-600 text-white focus:outline-none rounded-lg py-3 px-20"
+              }
+            >
+              Next
+            </button>
+          )}
+          {step === 2 && (
+            <button
+              disabled={dogs.length <= 0 || !dogs.every(dog => dog.gender != undefined && dog.ovary != undefined && dog.weight_unit != undefined && dog.weight != undefined && dog.body_type != undefined && dog.activity_level != undefined && dog.weight_unit != '' && Number(dog.weight) > 0 && dog.body_type >= 0 && dog.activity_level >= 0)}
+              onClick={this.handleDetailStep}
+              className={
+                dogs.length <= 0 || !dogs.every(dog => dog.gender != undefined && dog.ovary != undefined && dog.weight_unit != undefined && dog.weight != undefined && dog.body_type != undefined && dog.activity_level != undefined && dog.weight_unit != '' && Number(dog.weight) > 0 && dog.body_type >= 0 && dog.activity_level >= 0)
+                  ? "flex justify-center items-center border btn mx-5 border-gray-300 bg-gray-200 text-gray-400 focus:outline-none rounded-lg py-3 px-20"
+                  : "flex justify-center items-center border btn mx-5 border-green-600 bg-green-600 text-white focus:outline-none rounded-lg py-3 px-20"
+              }
+            >
+              Next
+            </button>
+          )}
 
-            {step === 3 && (
-              <button
-                disabled={!temp_user.temp_dog_ids.every(dogId => (cookedRecipes[dogId] != undefined ? cookedRecipes[dogId].length : 0) + (kibble[dogId] != undefined ? 1 : 0) > 0)}
-                onClick={this.handleRecipeStep}
-                className={
-                  !temp_user.temp_dog_ids.every(dogId => (cookedRecipes[dogId] != undefined ? cookedRecipes[dogId].length : 0) + (kibble[dogId] != undefined ? 1 : 0) > 0)
-                    ? "flex justify-center items-center border btn mx-5 border-gray-300 bg-gray-200 text-gray-400 focus:outline-none rounded-lg py-3 px-20"
-                    : "flex justify-center items-center border btn mx-5 border-green-600 bg-green-600 text-white focus:outline-none rounded-lg py-3 px-20"
-                }
-              >
-                Next
-              </button>
-            )}
-            {step === 4 && (
-              <button
-                disabled= {!temp_user.temp_dog_ids.every(dogId => dietPortions[dogId] != undefined)}
-                onClick={this.handlePortionStep}
-                className={
-                  !temp_user.temp_dog_ids.every(dogId => dietPortions[dogId] != undefined)
-                    ? "flex justify-center items-center border btn mx-5 border-gray-300 bg-gray-200 text-gray-400 focus:outline-none rounded-lg py-3 px-20"
-                    : "flex justify-center items-center border btn mx-5 border-green-600 bg-green-600 text-white focus:outline-none rounded-lg py-3 px-20"
-                }
-              >
-                Next
-              </button>
-            )}
+          {step === 3 && (
+            <button
+              disabled={!temp_user.temp_dog_ids.every(dogId => (cookedRecipes[dogId] != undefined ? cookedRecipes[dogId].length : 0) + (kibble[dogId] != undefined ? 1 : 0) > 0)}
+              onClick={this.handleRecipeStep}
+              className={
+                !temp_user.temp_dog_ids.every(dogId => (cookedRecipes[dogId] != undefined ? cookedRecipes[dogId].length : 0) + (kibble[dogId] != undefined ? 1 : 0) > 0)
+                  ? "flex justify-center items-center border btn mx-5 border-gray-300 bg-gray-200 text-gray-400 focus:outline-none rounded-lg py-3 px-20"
+                  : "flex justify-center items-center border btn mx-5 border-green-600 bg-green-600 text-white focus:outline-none rounded-lg py-3 px-20"
+              }
+            >
+              Next
+            </button>
+          )}
+          {step === 4 && (
+            <button
+              disabled={!temp_user.temp_dog_ids.every(dogId => dietPortions[dogId] != undefined)}
+              onClick={this.handlePortionStep}
+              className={
+                !temp_user.temp_dog_ids.every(dogId => dietPortions[dogId] != undefined)
+                  ? "flex justify-center items-center border btn mx-5 border-gray-300 bg-gray-200 text-gray-400 focus:outline-none rounded-lg py-3 px-20"
+                  : "flex justify-center items-center border btn mx-5 border-green-600 bg-green-600 text-white focus:outline-none rounded-lg py-3 px-20"
+              }
+            >
+              Next
+            </button>
+          )}
 
-            {step === 5 && (
-              <button
-                onClick={this.handleUserStep}
-                className="flex justify-center items-center border btn mx-5 border-green-600 bg-green-600 text-white focus:outline-none rounded-lg py-3 px-20"
-              >
-                Next
-              </button>
-            )}
-          </div>
+          {step === 5 && (
+            <button
+              onClick={this.handleUserStep}
+              className="flex justify-center items-center border btn mx-5 border-green-600 bg-green-600 text-white focus:outline-none rounded-lg py-3 px-20"
+            >
+              Next
+            </button>
+          )}
+        </div>
       </React.Fragment>
     );
   }
@@ -395,4 +395,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(OnboardingSeparateVersion);
+export default connect(mapStateToProps, mapDispatchToProps)(OnboardingVersionB);

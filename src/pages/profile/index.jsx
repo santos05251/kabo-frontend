@@ -44,6 +44,7 @@ class ProfilePage extends React.Component {
       addCoupon,
       couponResponse,
       userError,
+      loading,
     } = this.props;
 
     const detailsCard = 'container pb-6';
@@ -88,6 +89,7 @@ class ProfilePage extends React.Component {
               addCoupon={addCoupon}
               couponResponse={couponResponse}
               userError={userError}
+              isApplying={loading}
             />
           </div>
           <div></div>
@@ -120,6 +122,7 @@ const mapStateToProps = (state) => {
     couponResponse,
     errorMessage,
     showManageSubscriptionsBox,
+    loading,
   } = state.user;
   return {
     user,
@@ -128,6 +131,7 @@ const mapStateToProps = (state) => {
     couponResponse,
     userError: errorMessage,
     showManageSubscriptionsBox,
+    loading,
   };
 };
 

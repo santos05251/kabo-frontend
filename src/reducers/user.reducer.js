@@ -132,6 +132,10 @@ export const user = (state = initialState, action) => {
       return {
         ...nextState,
         ...action.payload,
+        loadingKeys: {
+          ...state.loadingKeys,
+          [userConstants.UNPAUSE_SUBSCRIPTION_REQUESTED]: false,
+        },
         error: false,
       };
     }

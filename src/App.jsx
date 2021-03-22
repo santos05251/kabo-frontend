@@ -7,27 +7,32 @@ import LoginPage from "./pages/login";
 import AccountPage from "./pages/account";
 import AllOrdersPage from "./pages/order";
 import { Navbar } from "./components/navbar";
+import { LoginNav } from "./components/navbar/login-nav";
 import { Alert } from "./components/alert";
 import ProfilePage from "./pages/profile";
 import EditPlan from "./pages/meal-plan";
 import OrderDetail from "./pages/order/detail";
+import ReactivationPage from './pages/reactivation';
 
-import OnboardingSeparateVersion from "./pages/onboardings/separate-version";
-import OnboardingCombinedVersion from "./pages/onboardings/combined-version";
-import CheckoutStep from "./pages/onboardings/steps/checkout";
-import CheckoutSuccess from "./pages/onboardings/steps/success";
+import OnboardingVersionB from './pages/onboardings/separate-version';
+import OnboardingVersionA from './pages/onboardings/combined-version';
+import CheckoutStep from './pages/onboardings/steps/checkout';
+import ManageSubscription from './pages/profile/manage-subscription';
+import CheckoutSuccess from './pages/onboardings/steps/success';
 
 function App() {
+  const loginPage = window.location.pathname.includes('login')
   return (
-    <div className="bg-container">
-      <BrowserRouter>
-        <div className="container flex mx-auto padding-container">
-          <Navbar />
-          <div className="md:h-20 sm:h-14 h-24"></div>
-          < Alert />
-          <div className="w-1/5 hidden md:block" />
-          <div className="page-content w-full md:w-4/5 mt-20 xl:px-6 bg-container relative">
-            <div className="page-routing">
+    <div className="bg-container min-h-screen">
+      {loginPage && <LoginNav />}
+      <div className="container flex mx-auto padding-container">
+        {window.location.pathname !== '/manage-subscription' && !window.location.pathname.includes('login') && !window.location.pathname.includes('/edit-plan') && <Navbar />}
+        <div className="md:h-20 sm:h-14 h-24"> </div>
+        <Alert />
+        {!loginPage && <div className="w-1/5 hidden md:block" />}
+        <div className={`page-content w-full  ${!loginPage && 'md:w-4/5'} mt-8  xl:px-6 bg-container relative`}>
+          <div className="page-routing">
+            <BrowserRouter>
               <Switch>
                 <NonUserRoute
                   path="/checkout/:checkout_token"
@@ -36,24 +41,35 @@ function App() {
                 <NonUserRoute
                   path="/a/signup"
                   exact
-                  component={OnboardingCombinedVersion}
+                  component={OnboardingVersionA}
                 />
                 <NonUserRoute
                   path="/b/signup"
                   exact
-                  component={OnboardingSeparateVersion}
+                  component={OnboardingVersionB}
                 />
                 <Route path="/login" component={LoginPage} />
                 <PrivateRoute path="/orders" exact component={AllOrdersPage} />
-                <PrivateRoute path="/orders/:id" exact component={OrderDetail} />
+                <PrivateRoute
+                  path="/orders/:id"
+                  exact
+                  component={OrderDetail}
+                />
                 <PrivateRoute path="/edit-plan/:id" component={EditPlan} />
                 <PrivateRoute path="/profile" component={ProfilePage} />
+                <PrivateRoute
+                  path="/manage-subscription"
+                  exact
+                  component={ManageSubscription}
+                />
+                <PrivateRoute path="/reactivate/:dog_id" exact component={ReactivationPage} />
+                <PrivateRoute path="/unpause/:dog_id" exact component={ReactivationPage} />
                 <PrivateRoute component={AccountPage} />
               </Switch>
-            </div>
+            </BrowserRouter>
           </div>
         </div>
-      </BrowserRouter>
+      </div>
     </div>
   );
 }

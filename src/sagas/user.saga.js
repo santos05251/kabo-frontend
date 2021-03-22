@@ -65,25 +65,9 @@ function* getOrderDataSaga() {
 function* cancelSubscriptionSaga(action) {
   try {
     const payload = yield call(userService.cancelSubscription, action.payload);
-    yield all([
-      put({ type: userConstants.CANCEL_SUBSCRIPTION_SUCCESS, payload }),
-      put(
-        userActions.setUserLoading(
-          userConstants.CANCEL_SUBSCRIPTION_REQUESTED,
-          false,
-        ),
-      ),
-    ]);
-  } catch (e) {
-    yield all([
-      put({ type: otherConstants.REQUEST_ERROR, payload: e }),
-      put(
-        userActions.setUserLoading(
-          userConstants.CANCEL_SUBSCRIPTION_REQUESTED,
-          false,
-        ),
-      ),
-    ]);
+    yield put({ type: userConstants.CANCEL_SUBSCRIPTION_SUCCESS, payload })
+  } catch(error) {
+    yield put({ type: userConstants.CANCEL_SUBSCRIPTION_FAILURE, payload: error})
   }
 }
 
