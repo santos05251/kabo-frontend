@@ -10,7 +10,7 @@ export const DashboardCard = ({ title, icon, text, buttonText, buttonAction, dis
       <h3 className={`text-xl messina font-bold my-4 ${disabled && 'text-gray-500'}`}>
         {paused ? 'Your meal plan is currently paused' : cancelled ? 'Your meal plan is currently cancelled' : title}
       </h3>
-      <div>{paused ? 'Your meal plan is currently paused' : cancelled ? 'Your meal plan is currently cancelled' : text}</div>
+      <div className="text-center">{paused ? 'Your meal plan is currently paused' : cancelled ? 'Your meal plan is currently cancelled' : text}</div>
       {!paused && !cancelled && subText && <div className="text-xs text-lightGrey text-center mt-1" style={{ minHeight: '2rem' }}>{subText} </div>}
       {
         buttonText && (

@@ -189,6 +189,15 @@ function* addCoupon(action) {
     yield put({ type: userConstants.APPLY_COUPON_FAILURE, error });
   }
 }
+function* addCouponPerDog(action) {
+  try {
+    const payload = yield call(userService.applyCouponPerDog, action.payload);
+    payload.coupon = action.payload.coupon_code;
+    yield put({ type: userConstants.APPLY_COUPON_PER_DOG_SUCCESS, payload });
+  } catch (error) {
+    yield put({ type: userConstants.APPLY_COUPON_PER_DOG_FAILURE, error });
+  }
+}
 
 function* getUserNotifications() {
   try {
@@ -211,6 +220,7 @@ function* openSubscriptionManagementModal(action) {
 
 export default function* user() {
   yield takeLatest(userConstants.APPLY_COUPON, addCoupon);
+  yield takeLatest(userConstants.APPLY_COUPON_PER_DOG, addCouponPerDog);
   yield takeLatest(userConstants.ACCOUNT_DATA_REQUESTED, getAccountDataSaga);
   yield takeLatest(userConstants.RECIPE_DATA_REQUESTED, getRecipeDataSaga);
   yield takeLatest(userConstants.BREED_DATA_REQUESTED, getBreedDataSaga);

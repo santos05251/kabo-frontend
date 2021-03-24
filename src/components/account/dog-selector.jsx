@@ -10,10 +10,10 @@ export default function DogSelector({ dogs, setDog, dogIndex }) {
   ))
   return (
     <div className="flex">
-      <span className="mr-2">Select your doggo</span>
+      <span className="mr-2 text-base font-messina">Select your doggo</span>
       <select
         onChange={e => setDog(e.target.value)}
-        className="rounded overflow-hidden flex w-28 mb-7 border border-gray-200">
+        className="rounded-md cursor-pointer overflow-hidden flex w-28 mb-7 border border-gray-200 bg-white p-1">
         {dogDivs}
       </select>
     </div>

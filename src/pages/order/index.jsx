@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { userActions } from '../../actions';
-import Loader from "../../loaders/ordersPage";
+import OrdersLoader from "../../loaders/ordersPage";
 import OrderTable from "../../components/global/OrderTable";
 class AllOrdersPage extends React.Component {
   constructor(props) {
@@ -19,11 +19,12 @@ class AllOrdersPage extends React.Component {
 
   render() {
     const { user, dogs, orders, loading } = this.props;
+    console.log(orders);
     return (
       <div className='pb-40 container'>
         <div className='flex items-center flex-col md:mt-10 sm:mt-0 font-messina'>
           {loading ? (
-            <Loader />
+            <OrdersLoader />
           ) : (
             <div className="w-full">
               <OrderTable

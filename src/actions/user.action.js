@@ -101,6 +101,10 @@ const applyCoupon = (data) => ({
   type: userConstants.APPLY_COUPON,
   payload: data,
 });
+const applyCouponPerDog = (data) => ({
+  type: userConstants.APPLY_COUPON_PER_DOG,
+  payload: data,
+});
 
 const getUserNotifications = (data) => ({
   type: userConstants.GET_USER_NOTIFICATIONS,
@@ -136,6 +140,7 @@ export const userActions = {
   resetUserLoading,
   setUserLoading,
   applyCoupon,
+  applyCouponPerDog,
   getUserNotifications,
   openSubscriptionManagementModal,
 };

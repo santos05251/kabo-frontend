@@ -22,16 +22,16 @@ const OrderTable = ({ orders, dogs, coupon, shippingAddress, showModal, handleCl
         <table className="table-fixed w-full hidden md:block">
           <thead>
             <tr>
-              <th className={`text-sm text-left font-semibold ${!noTitlePadding && 'px-4'} pb-4`}>
+              <th className={`text-sm text-left font-semibold ${!noTitlePadding && 'px-4 md:px-1 lg:px-4'} pb-4`}>
                 ORDER DATE
               </th>
-              <th className={`text-sm text-left font-semibold ${!noTitlePadding && 'px-4'} pb-4`}>
+              <th className={`text-sm text-left font-semibold ${!noTitlePadding && 'px-4 md:px-1 lg:px-4'} pb-4`}>
                 AMOUNT
               </th>
-              <th className={`text-sm text-left font-semibold ${!noTitlePadding && 'px-4'} pb-4`}>
+              <th className={`text-sm text-left font-semibold ${!noTitlePadding && 'px-4 md:px-1 lg:px-4'} pb-4`}>
                 SUMMARY
               </th>
-              <th className={`text-sm text-left font-semibold ${!noTitlePadding && 'px-4'} pb-4`}>
+              <th className={`text-sm text-left font-semibold ${!noTitlePadding && 'px-4 md:px-1 lg:px-4'} pb-4`}>
                 STATUS
               </th>
             </tr>
@@ -42,21 +42,20 @@ const OrderTable = ({ orders, dogs, coupon, shippingAddress, showModal, handleCl
             }, index) => (
               <tr
                 key={invoice_id}
-                className={`${index % 2 === 0 && 'bg-lightGray rounded-xl'} ${
-                  index !== orders.length - 1 && 'border-b border-gray-300'
-                }`}
+                className={`${index % 2 === 0 && 'bg-lightGray rounded-xl'} ${index !== orders.length - 1 && 'border-b border-gray-300'
+                  }`}
               >
-                <td className="text-sm p-4 w-1/5">
+                <td className="text-sm  p-4 md:p-1 lg:p-4 w-1/5">
                   <p className="pb-1">{date}</p>
                   {/* <Link to={`/orders/${invoice_id}`} className="text-primary">View Order</Link> */}
                   <a className="text-primary cursor-pointer" onClick={() => handleOrder(index)}>View Order</a>
                 </td>
-                <td className="text-sm  p-4 w-1/5">
+                <td className="text-sm  px-4 md:px-1 lg:px-4 w-1/5">
                   <span>{total}</span>
                   <br />
                 </td>
-                <td className="text-sm px-4 py-3 w-2/5">{plan}</td>
-                <td className="text-sm px-4 py-3 w-1/5">{payment_status}</td>
+                <td className="text-sm px-4 md:px-1 lg:px-4 py-3 w-2/5">{plan}</td>
+                <td className="text-sm px-4 md:px-1 lg:px-4 py-3 w-1/5">{payment_status}</td>
               </tr>
             ))}
           </tbody>
@@ -67,9 +66,8 @@ const OrderTable = ({ orders, dogs, coupon, shippingAddress, showModal, handleCl
         }, index) => (
           <div
             key={invoice_id}
-            className={`md:hidden px-4 py-5 ${
-              index !== orders.length - 1 && 'border-b border-gray-300'
-            }`}
+            className={`md:hidden px-4 py-5 ${index !== orders.length - 1 && 'border-b border-gray-300'
+              }`}
           >
             <p className="text-sm pb-2">{payment_status}</p>
             <h2 className="text-lg font-bold font-cooper">{date}</h2>

@@ -171,7 +171,13 @@ const applyCoupon = (data) => {
     .then(request.handleResponse)
     .then((res) => res);
 };
+const applyCouponPerDog = (data) => {
+  const requestOptions = request.options('POST', JSON.stringify(data.details), true, true);
 
+  return fetch(`${endpointConstants.APPLY_COUPON_PER_DOG}/${data.dog_id}/apply_coupon`, requestOptions)
+    .then(request.handleResponse)
+    .then((res) => res);
+};
 const getUserNotifications = () => {
   const requestOptions = request.options('GET', {}, true, false);
 
@@ -198,5 +204,6 @@ export const userService = {
   skipDogDelivery,
   updatePhoneEmail,
   applyCoupon,
+  applyCouponPerDog,
   getUserNotifications,
 };

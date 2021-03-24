@@ -32,7 +32,7 @@ const MealPlanSelect = ({
       {recipes &&
         recipes.map((food, idx) => (
           <FoodCard
-          handleKibbleChange={handleKibbleChange}
+            handleKibbleChange={handleKibbleChange}
             key={idx}
             type={type}
             index={index}

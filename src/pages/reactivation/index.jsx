@@ -64,7 +64,7 @@ class ReactivationPage extends React.Component {
   
   static getDerivedStateFromProps(nextProps, prevState) {
     if (prevState.processing) {
-      if (!nextProps.loading && !nextProps.error) {
+      if (!nextProps.loading) {
         return { isSuccess: true, processing: false};
       }
     }

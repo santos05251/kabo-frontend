@@ -12,6 +12,7 @@ class Modal extends React.Component {
 
   render() {
     const { isAppend, isLarge,isSmall } = this.props;
+    const subcriptionPage = window.location.pathname.includes('manage-subscription');
     return (
       <div className="">
         <ReactModal
@@ -20,11 +21,11 @@ class Modal extends React.Component {
           className={
             isLarge
               ? "w-full bg-white md:m-24 lg:rounded-xl shadow-modal outline-none"
-              : `w-full ${isSmall ? 'max-w-23' : 'max-w-2xl' }  bg-white md:m-24 lg:rounded-xl shadow-modal outline-none`
+              : `w-full ${isSmall ? 'max-w-23' : 'max-w-2xl' } bg-white md:m-24 lg:rounded-xl shadow-modal outline-none`
           }
           onRequestClose={() => this.props.onRequestClose()}
         >
-          <div className={`p-4  flex justify-between ${this.props.bgColor ? this.props.bgColor : ''}`}>
+          <div className={`p-4 ${subcriptionPage ? 'bg-green-50 lg:rounded-xl': '' } flex justify-between ${this.props.bgColor ? this.props.bgColor : ''}`}>
             <h3 className="text-xl flex items-center font-bold font-messina">
               {this.props.isOrderLogo? <OrderEnvelope className="mr-4"/> : null}
               {this.props.title}

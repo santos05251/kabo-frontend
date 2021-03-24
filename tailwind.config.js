@@ -26,7 +26,7 @@ module.exports = {
       textColor: {
         primary: '#239C6D',
         secondary: '#124E37',
-        copyPrimary: '071F16',
+        copyPrimary: '#071F16',
         charcoal: '#414141',
         lightGrey: '#525252',
         fadeGrey: '#2a3c49',
@@ -49,6 +49,8 @@ module.exports = {
         },
         label: '#2F3D33',
         deliveryStepper: '#FBFBFB',
+        greebShade: '#155E41',
+        greebShadeInput: '#1C7D57',
       },
       borderWidth: {
         '3': '1.72532px',
@@ -72,6 +74,7 @@ module.exports = {
       borderRadius: {
         '1lg': '0.625rem',
         '2lg': '0.9rem',
+        '5lg': '10px',
         '5md': '5.75108px',
         '6md': '9px',
       },
@@ -101,9 +104,24 @@ module.exports = {
       },
       maxWidth: {
         23: '23rem',
+        37: '148px',
+        43: '170px',
+        56.5: '225px',
+        54: '213px',
+        58: '237px',
+        70: '272px',
       },
       minWidth: {
         10: '10rem',
+        23.5: '95px',
+      },
+      spacing: {
+        1.75: '7px',
+        3.5: '14px',
+        4.25: '17px',
+        4.5: '187px',
+        4.75: '19px',
+        5.5: '22px',
       },
     },
     fontFamily: {

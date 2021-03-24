@@ -72,53 +72,55 @@ class Navbar extends React.Component {
       "text-charcoal hover:bg-green-500 bg-mobileNav text-center  hover:text-white px-2 sm:px-3 py-1 sm:py-2 rounded-md text-xs sm:text-sm  font-medium";
 
     const loggedIn = user && user.token;
+    console.log(navStep)
 
     return (
       <nav
-        className="fixed inset-x-0 top-0 py-4 px-3 md:px-0 xl:px-6 2xl:px-0 md:top-8 md:left-9 bg-white z-50 w-full md:w-1/5 md:rounded-xl md:shadow-lg"
+        className="fixed inset-x-0 top-0 py-4 px-3 md:px-0 xl:px-6 2xl:px-0 md:top-8 md:left-9 bg-white z-50 w-full md:w-1/4 lg:w-1/5 md:rounded-xl md:shadow-lg"
         id="outer-container"
       >
-        <div className="pb-5 md:p-7 pl-0 flex flex-col items-center sm:justify-between sm:items-stretch">
-          <div className="sm:hidden">
+        <div className="pb-5 md:p-5 lg:p-7 pl-0 flex md:flex-col items-center md:justify-between sm:items-stretch">
+          <div className="sm:hidden right-4 absolute">
             <Menu
               pageWrapId={"page-wrap"}
               noTransition={true}
               outerContainerId={"outer-container"}
               right
             >
-              <a id="home" className="menu-item" href="/">
-                Kabo Homepage
-              </a>
               {loggedIn && (
-                <a id="account" className="menu-item" href="/profile">
-                  Your Account
-                </a>
+                <>
+                  <a id="home" className={navStep === 1 ? active : inActive} href="/">
+                    My Kabo
+                  </a>
+                  <br />
+                  <a id="orders" className={navStep === 3 ? active : inActive} href="/orders">
+                    Orders
+                  </a>
+                  <br />
+                  <a id="account" className={navStep === 4 ? active : inActive} href="/profile">
+                    Account
+                  </a>
+                </>
               )}
               <a
-                id="blog"
-                className="menu-item"
-                href="https://kabo.co/blog"
-              >
-                Blog
-              </a>
-              <a
-                id="help"
-                className="menu-item"
-                href="https://kabo.zendesk.com/"
-              >
-                Help
-              </a>
-              <a
                 id="support"
-                className="menu-item"
+                className={inActive}
                 href="https://kabo.zendesk.com/hc/en-us"
               >
                 Support
               </a>
+              <a
+                id="blog"
+                className={inActive}
+                href="https://kabo.co/blog"
+              >
+                Blog
+              </a>
+
               {loggedIn && (
                 <a
                   onClick={() => this.clickLogout()}
-                  className="menu-item"
+                  className="menu-item font-semibold text-sm"
                   href=""
                 >
                   Logout
@@ -127,7 +129,7 @@ class Navbar extends React.Component {
             </Menu>
           </div>
           <div
-            className="flex-shrink-0 flex flex-col flex-wrap w-full left-0"
+            className="flex-shrink-0 flex flex-col flex-wrap md:w-full left-0"
             id="page-wrap"
           >
             <a href="/" className="self-start">
@@ -169,7 +171,7 @@ class Navbar extends React.Component {
             )}
           </div>
           {loggedIn && (
-            <div className="flex flex-row center mr-20 sm:mr-0">
+            <div className="flex flex-row center md:mr-20 sm:mr-0">
               {this.props.user_notifications && this.props.user_notifications.length > 0 &&
                 <div
                   className="profile-box-icon"
@@ -197,7 +199,7 @@ class Navbar extends React.Component {
               <button
                 type="button"
                 onClick={() => this.clickLogout()}
-                className="hidden sm:block font-messina font-semibold text-base pb-2 mt-6"
+                className="hidden md:block font-messina font-semibold text-base md:pb-2 md:mt-6"
               >
                 Logout
               </button>

@@ -1,7 +1,7 @@
-import { userConstants, otherConstants } from "../constants";
+import { userConstants, otherConstants } from '../constants';
 
-const couponResponse = localStorage.getItem("couponResponse")
-  ? JSON.parse(localStorage.getItem("couponResponse"))
+const couponResponse = localStorage.getItem('couponResponse')
+  ? JSON.parse(localStorage.getItem('couponResponse'))
   : null;
 const initialState = {
   subscriptions: {},
@@ -20,6 +20,7 @@ const initialState = {
   open_skip_delivery_modal: false,
   skipping_dog_delivery: false,
   couponResponse,
+  couponResponsePerDog: null,
 
   loading_notifications: false,
   user_notifications: [],
@@ -91,6 +92,27 @@ export const user = (state = initialState, action) => {
         error: false,
       };
 
+    case userConstants.DELIVERY_UPDATE_REQUESTED:
+      return {
+        ...state,
+        loading: true,
+        error: false,
+      };
+    case userConstants.DELIVERY_UPDATE_SUCCESS:
+      return {
+        ...state,
+        ...action.payload,
+        loading: false,
+        error: false,
+      };
+    case userConstants.DELIVERY_UPDATE_FAILURE:
+      return {
+        ...state,
+        ...action.payload,
+        loading: false,
+        error: true,
+      };
+
     case userConstants.PAUSE_SUBSCRIPTION_REQUESTED:
       return {
         ...state,
@@ -139,7 +161,14 @@ export const user = (state = initialState, action) => {
         error: false,
       };
     }
-
+    case userConstants.UNPAUSE_SUBSCRIPTION_FAILURE:
+      return {
+        ...state,
+        loadingKeys: {
+          ...state.loadingKeys,
+          [userConstants.UNPAUSE_SUBSCRIPTION_REQUESTED]: false,
+        },
+      };
     case otherConstants.REQUEST_ERROR:
       return {
         ...state,
@@ -172,8 +201,8 @@ export const user = (state = initialState, action) => {
     case userConstants.UPDATE_PWD_ALERT_CLEAR:
       return {
         ...state,
-        pwd_update_success: " ",
-        pwd_alert: " ",
+        pwd_update_success: ' ',
+        pwd_alert: ' ',
       };
     case userConstants.OPEN_UPDATE_PAYMENT_MODAL_SUCCESS:
       return {
@@ -199,15 +228,15 @@ export const user = (state = initialState, action) => {
         open_payment_modal: !state.open_payment_modal,
         payment_method_updated: true,
         payment_billing_address: {
-          stripe_token: "",
-          same_as_shipping_address: "",
-          billing_first_name: "",
-          billing_last_name: "",
-          billing_street_address: "  ",
-          billing_apt_suite: "",
-          billing_city: "",
-          billing_postal_code: "",
-          billing_phone_number: "",
+          stripe_token: '',
+          same_as_shipping_address: '',
+          billing_first_name: '',
+          billing_last_name: '',
+          billing_street_address: '  ',
+          billing_apt_suite: '',
+          billing_city: '',
+          billing_postal_code: '',
+          billing_phone_number: '',
         },
       };
 
@@ -271,7 +300,7 @@ export const user = (state = initialState, action) => {
       return {
         ...state,
         error: false,
-        errorMessage: "",
+        errorMessage: '',
       };
     case userConstants.RESET_USER_LOADING:
       return {
@@ -282,19 +311,41 @@ export const user = (state = initialState, action) => {
       return {
         ...state,
         loading: true,
-        errorMessage: "",
+        errorMessage: '',
       };
     case userConstants.APPLY_COUPON_SUCCESS:
-      localStorage.setItem("couponResponse", JSON.stringify(action.payload));
+      localStorage.setItem('couponResponse', JSON.stringify(action.payload));
+
+      return {
+        ...state,
+        loading: false,
+        errorMessage: '',
+        couponResponse: action.payload,
+      };
+    case userConstants.APPLY_COUPON_FAILURE:
+      localStorage.removeItem('couponResponse');
+      return {
+        ...state,
+        errorMessage: 'Invalid coupon',
+        loading: false,
+      };
+    case userConstants.APPLY_COUPON_PER_DOG:
+      return {
+        ...state,
+        loading: true,
+        errorMessage: "",
+      };
+    case userConstants.APPLY_COUPON_PER_DOG_SUCCESS:
+      localStorage.setItem("couponResponsePerDog", JSON.stringify(action.payload));
 
       return {
         ...state,
         loading: false,
         errorMessage: "",
-        couponResponse: action.payload,
+        couponResponsePerDog: action.payload,
       };
-    case userConstants.APPLY_COUPON_FAILURE:
-      localStorage.removeItem("couponResponse");
+    case userConstants.APPLY_COUPON_PER_DOG_FAILURE:
+      localStorage.removeItem("couponResponsePerDog");
       return {
         ...state,
         errorMessage: "Invalid coupon",

@@ -20,8 +20,8 @@ const DietPortionCard = ({
           item.cooked_portion === dietPortion.cooked_portion
           && item.portion_adjustment == dietPortion.portion_adjustment
           && item.kibble_portion == dietPortion.kibble_portion
-            ? ' flex flex-col md:w-64  p-5 items-center bg-green-100 font-messina relative rounded-lg shadow-green'
-            : ' flex flex-col md:w-64  p-5 items-center bg-white font-messina relative rounded-lg border border-gray-200'
+            ? 'flex flex-col w-full md:w-64 p-5 items-center bg-green-100 font-messina relative rounded-lg border border-green focus:outline-none'
+            : 'flex flex-col w-full md:w-64 p-5 items-center bg-white font-messina relative rounded-lg border border-green-100 focus:outline-none'
         }
       >
         <div className="flex w-20 relative mb-2">
@@ -42,10 +42,6 @@ const DietPortionCard = ({
               style={{ top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}
             />
           )}
-          {
-            console.log('item.kibble_portion == dietPortion.kibble_portion',
-            item.kibble_portion == dietPortion.kibble_portion)
-          }
           <CircleSVG
             backgroundColor={
               item.kibble_portion == dietPortion.kibble_portion
@@ -55,7 +51,7 @@ const DietPortionCard = ({
             num={thenum}
           />
         </div>
-        <p className="font-messina mt-1 text-lg">{item.title}</p>
+        <p className="font-cooper mt-1 text-lg">{item.title}</p>
         {item.description && (
           <div>
             {' '}

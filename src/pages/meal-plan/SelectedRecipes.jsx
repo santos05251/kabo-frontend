@@ -29,13 +29,13 @@ class SelectedRecipes extends Component {
       dog,
     } = this.props;
     return (
-      <div className='flex flex-col py-9 items-center sm:bg-white'>
-        <div className='container flex flex-col  w-11/12 mx-auto lg:w-full'>
+      <div className='flex flex-col pt-2 pb-6 items-center sm:bg-white'>
+        <div className='container flex flex-col mx-auto px-3 md:px-0 w-full'>
           {estimate && (
             <div>
               <div>
                 {user.how_often && (
-                  <p className=" mt-1 text-2xl font-normal  mb-8">
+                  <p className="text-xl font-normal mt-3 mb-6">
                     Your new subscription price will be{' '}
                     <span className="text-green-500"> {estimate} </span> every{' '}
                     {parseInt(user.how_often)} weeks
@@ -53,7 +53,7 @@ class SelectedRecipes extends Component {
                   {/* <div className="md:pl-6 pr-4">
                   </div> */}
                   <div className="w-full">
-                    <p className="text-xl font-bold mb-1 mt-4 md:mt-0">
+                    <p className="text-lg font-medium mt-4 md:mt-0">
                       {user &&
                       user.subscription_phase &&
                       user.subscription_phase.status === 'waiting_for_trial_shipment'
@@ -66,13 +66,9 @@ class SelectedRecipes extends Component {
                             )
                           } delivery onwards`}
                     </p>
-                    <p className='text-left text-sm'>
-                      {' '}
-                      <a className="font-medium text-green-500" href="mailto:help@kabo.co">
-                        Email help@kabo.co{' '}
-                      </a>{' '}
-                      if you require additional help.
-                    </p>
+                    <a className="text-green-500 text-sm" href="mailto:help@kabo.co">
+                      Email help@kabo.co <span>if you require additional help.</span>
+                    </a>
                   </div>
                 </div>
               </div>

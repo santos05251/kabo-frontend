@@ -67,7 +67,7 @@ const DeliveryModal = ({
             Read feeding guide
           </div>
         </div>
-        <div className="w-full md:w-2/5 bg-deliveryStepper p-8 flex justify-center items-center" data-cy="delivery-stepper" aria-label="Progress">
+        <div className="w-full md:w-2/5 bg-deliveryStepper p-4 lg:p-8 flex justify-center items-center" data-cy="delivery-stepper" aria-label="Progress">
           <Stepper
             labels={[
               { main: "Scheduled", sub: "We have your order" },

@@ -1,13 +1,20 @@
 import React, { useState } from 'react';
 import CouponsIcon from '../../assets/images/coupons.svg';
+import DogSelector from '../../components/account/dog-selector';
 import SpinButton from '../../components/global/spinButton';
-
-const Cupon = ({ addCoupon, couponResponse, userError, isApplying}) => {
+const Cupon = ({ applyCouponPerDog, couponResponsePerDog, userError, dogs, isApplying, couponResponse }) => {
   const [coupon, setCoupon] = useState(couponResponse && couponResponse.coupon ? couponResponse.coupon : '');
+  const [dogIndex, setDogIndex] = useState(0);
 
   const handleSubmit = () => {
     if (coupon) {
-      addCoupon({ coupon_code: coupon, coupon: coupon });
+      const data = {
+        dog_id: dogs[dogIndex].id,
+        details: {
+          coupon_code: coupon,
+        }
+      };
+      applyCouponPerDog(data);
     }
   };
 
@@ -20,26 +27,35 @@ const Cupon = ({ addCoupon, couponResponse, userError, isApplying}) => {
 
       <div className="px-5 pt-3 pb-8">
         <label>Enter coupon code below</label>
+        <div className="my-2">
+          {dogs &&
+            dogs.length > 1 && (
+              <DogSelector
+                dogs={dogs}
+                setDog={setDogIndex}
+                dogIndex={dogIndex}
+              />
+            )}
+        </div>
         <div className="w-full flex mt-2">
           <input
-            disabled={couponResponse}
+            disabled={couponResponsePerDog}
             placeholder="Promo Code"
-            className={`${
-              couponResponse ? 'bg-green-100' : ''
-            } p-2 rounded-l-lg  border border-1 border-green   w-max webkitFillAvalible`}
+            className={`${couponResponsePerDog ? 'bg-green-100' : ''
+              } p-2 rounded-l-lg  border border-1 border-green   w-max webkitFillAvalible`}
             onChange={(e) => setCoupon(e.target.value)}
             defaultValue={coupon}
           />
           <SpinButton
             text="Apply"
             loadingText="Applying"
-            disabled={couponResponse}
+            disabled={couponResponsePerDog}
             className="py-2 px-4 md:py-4 md:px-6 rounded-r-lg text-base font-bold bg-primary text-white"
             isFinished={!isApplying}
             handleClick={handleSubmit}
           />
         </div>
-        {couponResponse && (
+        {couponResponsePerDog && (
           <div class="text-primary text-xs font-messina mt-1">
             Your coupon has been successfully applied! See on your next billing
           </div>

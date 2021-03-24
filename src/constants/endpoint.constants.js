@@ -26,6 +26,7 @@ export const endpointConstants = {
   SKIP_DOG_DELIVERY: `${apiDomain}/${apiVersion}/user/subscriptions/skip_delivery`,
   UPDATE_PHONE_EMAIL: `${apiDomain}/${apiVersion}/user/contact`,
   APPLY_COUPON: `${apiDomain}/${apiVersion}/user/apply_coupon`,
+  APPLY_COUPON_PER_DOG: `${apiDomain}/${apiVersion}/user/dogs`,
 
   ONBOARDING_STARTER_STEP: `${apiDomain}/${apiVersion}/onboarding/signup?step=start`,
   ONBOARDING_DETAILS_STEP: `${apiDomain}/${apiVersion}/onboarding/signup?step=detail`,

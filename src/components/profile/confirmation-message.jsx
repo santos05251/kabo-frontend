@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 const ConfirmationMessage = () => {
   return (
@@ -15,12 +14,12 @@ const ConfirmationMessage = () => {
         </p>
       </div>
 
-      <Link
-        to="/profile"
+      <a
+        href="/profile"
         className="rounded-xl py-3 px-8 text-base font-bold bg-primary text-white"
       >
         Back to My Kabo
-      </Link>
+      </a>
     </div>
   );
 };

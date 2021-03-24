@@ -22,13 +22,13 @@ const FoodCard = ({
   const [details, openDetails] = useState(false);
   const kibbleOnlyNull = kibble.some((el) => el !== null);
 
-  const selectedText = 'bg-green-600 btn-text-white border border-green  focus:outline-none font-bold p-1 md:py-3 w-11/12 sm:w-10/12 rounded mt-2 foodcard-add-button';
-  const unSelectedText = 'bg-transparent border border-green-700 hover:border-transparent focus:outline-none hover:bg-green-700 hover:text-white font-bold w-11/12  sm:w-10/12 p-1 md:py-3 rounded border-green  mt-2 foodcard-add-button';
+  const selectedText = 'bg-green-600 btn-text-white border border-green focus:outline-none font-bold p-1 md:py-3 w-11/12 sm:w-10/12 rounded mt-2 foodcard-add-button';
+  const unSelectedText = 'bg-transparent border border-green-700 hover:border-transparent focus:outline-none hover:bg-green-700 hover:text-white font-bold w-11/12 sm:w-10/12 p-1 md:py-3 rounded border-green mt-2 foodcard-add-button';
   return (
     <div>
       <div
-        className={`hidden sm:block rounded-6md  w-full mb-4  md:flex-row flex-col overflow-hidden foodcard ${
-          selected ? `border-3 border-${food.recipe}` : 'border-2 border-gray-200'
+        className={`hidden sm:block rounded-6md w-full mb-4 md:flex-row flex-col overflow-hidden foodcard ${
+          selected ? 'border-2 border-green bg-green-100' : 'border-2 border-gray-100 bg-white'
         }`}
       >
         <div
@@ -49,8 +49,8 @@ const FoodCard = ({
         <div
           className={
             selected
-              ? 'w-full rounded-br-lg rounded-bl-lg bg-white focus:bg-green-100 py-5 flex flex-col items-center justify-between'
-              : 'w-full rounded-br-lg rounded-bl-lg bg-white focus:bg-green-100 py-5 flex flex-col items-center justify-between'
+              ? 'w-full rounded-br-lg rounded-bl-lg focus:bg-green-100 py-5 flex flex-col items-center justify-between'
+              : 'w-full rounded-br-lg rounded-bl-lg focus:bg-green-100 py-5 flex flex-col items-center justify-between'
           }
         >
           <div className="font-cooper text-lg text-black text-center pb-2">{food.name}</div>
@@ -58,14 +58,14 @@ const FoodCard = ({
             onClick={() => {
               openDetails(true);
             }}
-            className="text-primary text-sm mt-2 md:mt-1 mb-1 font-messina cursor-pointer font-bold	 mealplan-choose-details"
+            className="text-primary text-sm mt-2 md:mt-1 mb-1 font-messina cursor-pointer font-medium mealplan-choose-details"
           >
             See Details
           </div>
-          <div className="text-fadeGrey font-normal py-2 px-4 foodCardDesc">{food.ingredients}</div>
+          <div className="text-fadeGrey font-messina font-normal py-2 px-4 foodCardDesc">{food.ingredients}</div>
           {type !== 'kibble' && user.kibble_recipes && (
             <select
-              className="w-11/12 mx-auto px-3 py-3 bg-white border border-gray-100 rounded-0 opacity-0"
+              className="w-11/12 mx-auto px-3 py-3 bg-transparent border border-gray-400 rounded-0 opacity-0"
               disabled
             >
               {user.kibble_recipes
@@ -75,7 +75,7 @@ const FoodCard = ({
 
           {type === 'kibble' && user.kibble_recipes && (
             <select
-              className="w-11/12 mx-auto px-3 py-3 bg-white border border-gray-100 rounded-0"
+              className="w-11/12 mx-auto px-3 py-3 bg-transparent border border-gray-400 rounded-0"
               onChange={(e) => handleKibbleChange(e.target.value)}
             >
               {user.kibble_recipes
@@ -90,7 +90,7 @@ const FoodCard = ({
               onClick={() => selectKibbleRecipe(food)}
               disabled={selectedLength >= 2 && !selected && !kibbleOnlyNull}
             >
-              {selected ? "Remove from box" : `Add to box`}
+              {selected ? "Remove from box" : `Add to ${ dog && dog.name }'s box`}
             </button>
           ) : (
             <button
@@ -99,7 +99,7 @@ const FoodCard = ({
               onClick={() => selectCookedFood(food)}
               disabled={selectedLength >= 2 && !selected}
             >
-              {selected ? "Remove from box" : `Add to box`}
+              {selected ? "Remove from box" : `Add to ${ dog && dog.name }'s box`}
             </button>
           )}
           <OrderItemModal
@@ -114,15 +114,15 @@ const FoodCard = ({
 
       {/* -----mobile card */}
       <div
-        className={`sm:hidden rounded-6md  w-full mb-4 flex flex-row overflow-hidden  ${
-          selected ? `border-3 border-${food.recipe}` : 'border-2 border-gray-200'
+        className={`sm:hidden rounded-6md w-full h-full mb-4 flex flex-row overflow-hidden  ${
+          selected ? 'border-3 border-green bg-green-100' : 'border-2 border-gray-200 bg-white'
         }`}
       >
         <div
           className={
             type === 'kibble'
-              ? `bg-kibble-${food.recipe}  rounded-tl-5md p-4  w-auto  flex items-center justify-center md:h-auto relative`
-              : `bg-${food.recipe} w-auto  rounded-tl-5md p-4  flex items-center justify-center h-1/2 md:h-auto relative`
+              ? `bg-kibble-${food.recipe}  rounded-tl-5md p-4  h-full  flex items-center justify-center md:h-auto relative`
+              : `bg-${food.recipe} h-full  rounded-tl-5md p-4  flex items-center justify-center h-1/2 md:h-auto relative`
           }
         >
           {food.new && (
@@ -138,8 +138,8 @@ const FoodCard = ({
         <div
           className={
             selected
-              ? 'w-full rounded-br-lg rounded-bl-lg bg-white focus:bg-green-100  flex flex-col  px-2 relative'
-              : 'w-full rounded-br-lg rounded-bl-lg bg-white focus:bg-green-100  flex flex-col  px-2 relative'
+              ? 'w-full rounded-br-lg rounded-bl-lg focus:bg-green-100  flex flex-col  px-2 relative'
+              : 'w-full rounded-br-lg rounded-bl-lg focus:bg-green-100  flex flex-col  px-2 relative'
           }
         >
           <div className="flex flex-col justify-center items-center mt-4">
@@ -156,7 +156,7 @@ const FoodCard = ({
 
           {type === 'kibble' && user.kibble_recipes && (
             <select
-              className="w-11/12 px-3 py-3 bg-white border border-gray-100 rounded-0 m-auto my-1"
+              className="w-11/12 px-3 py-3 bg-transparent border border-gray-400 rounded-0 m-auto my-1"
               onChange={(e) => handleKibbleChange(e.target.value)}
             >
               {user.kibble_recipes
@@ -172,7 +172,7 @@ const FoodCard = ({
                 onClick={() => selectKibbleRecipe(food)}
                 disabled={selectedLength >= 2 && !selected && !kibbleOnlyNull}
               >
-                {selected ? "Remove from box" : `Add to box`}
+                {selected ? "Remove from box" : `Add to ${ dog && dog.name }'s box`}
               </button>
             ) : (
               <button
@@ -181,7 +181,7 @@ const FoodCard = ({
                 onClick={() => selectCookedFood(food)}
                 disabled={selectedLength >= 2 && !selected}
               >
-                {selected ? "Remove from box" : `Add to box`}
+                {selected ? "Remove from box" : `Add to ${ dog && dog.name }'s box`}
               </button>
             )}
           </div>

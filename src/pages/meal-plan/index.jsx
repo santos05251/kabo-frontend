@@ -30,6 +30,7 @@ class EditPlan extends Component {
     showCooked: true,
     editRecipiesOpen: false,
     editPortionsOpen: false,
+    selectedDogIndex: this.props.match.params.id,
   };
 
   componentDidMount() {
@@ -39,14 +40,12 @@ class EditPlan extends Component {
   }
 
   componentDidUpdate(prevProps, prevState, snap) {
-    let index = parseInt(this.props.match.params.id);
     if (
       !this.props.user.subLoading &&
       this.props.user.dogs.length > 0 &&
       !this.state.dog.name
-      // Object.keys(prevState.dog).length === 0
-    ) {
-      let currentdog = this.props.user.dogs[index];
+      ) {
+      let currentdog = this.props.user.dogs[this.state.selectedDogIndex];
       this.setState({ dog: currentdog });
       let loadRecipes = [];
       if (currentdog.chicken_recipe) {
@@ -72,8 +71,9 @@ class EditPlan extends Component {
         },
       });
     }
+    // Should check props.location, because we use this page as modal on some sections. e.g: unpause meal-plan.
     // Specific position will be shown after rendering, when dogs data are loaded.
-    if (this.props.location.hash.length > 0) {
+    if (this.props.location && this.props.location.hash && this.props.location.hash.length > 0) {
       const scrollId = this.props.location.hash.replace('#', '');
       const scrollElement = document.getElementById(scrollId);
       if (scrollElement) scrollElement.scrollIntoView();
@@ -83,6 +83,34 @@ class EditPlan extends Component {
   selectedDog = (dog) => {
     this.setState({ dog });
   };
+
+  handleDog = (value) => {
+    this.setState({ dog: this.props.user.dogs[value] });
+    this.setState({ selectedDogIndex: value });
+    let currentdog = this.props.user.dogs[value];
+    let loadRecipes = [];
+    if (currentdog.chicken_recipe) {
+      loadRecipes.push('chicken');
+    }
+    if (currentdog.beef_recipe) {
+      loadRecipes.push('beef');
+    }
+    if (currentdog.lamb_recipe) {
+      loadRecipes.push('lamb');
+    }
+    if (currentdog.turkey_recipe) {
+      loadRecipes.push('turkey');
+    }
+    this.setState({
+      cookedRecipes: loadRecipes,
+      kibbleRecipes: [currentdog.kibble_recipe] || [],
+      dietPortion: {
+        cooked_portion: currentdog.cooked_portion,
+        kibble_portion: currentdog.kibble_portion,
+        portion_adjusment: currentdog.portion_adjusment,
+      },
+    });
+  }
 
   displayKibble = (state) => {
     this.setState({ showKibble: state });
@@ -226,7 +254,6 @@ class EditPlan extends Component {
     if (user.subLoading) return <Loader />;
     let filteredKibble = kibbleRecipes[0] === null || !kibbleRecipes ? 0 : kibbleRecipes.length;
     let filteredCooked = cookedRecipes[0] === null || !cookedRecipes ? 0 : cookedRecipes.length;
-
     ///checking selected plans length.
     const selectedLength = filteredCooked + filteredKibble;
 
@@ -240,35 +267,34 @@ class EditPlan extends Component {
       subData && subData.invoice_estimate_total === 'N/A'
         ? 0
         : subData && (subData.invoice_estimate_total / 100).toFixed(2);
-
+    const {
+      user: { dogs },
+    } = this.props;
     return (
       <div className="mx-2">
-        {dog && dog.name && (
-          <div className="sm:flex items-center sm:mb-8">
+        {dog && dog.name && dogs && dogs.length > 1 && (
+          <div className="sm:flex items-center sm:mb-8 ml-0 sm:ml-10">
             <p>Select your doggo</p>
-            <select className="sm:ml-4 mt-2 sm:mt-0 px-3 py-3 min-w-10 bg-white border border-gray-300 rounded-lg" disabled>
-              {[{ name: dog && dog.name }].map((item, index) => (
+            <select className="sm:ml-4 mt-2 sm:mt-0 px-3 py-3 min-w-10 bg-white border border-gray-300 rounded-lg" value={this.state.selectedDogIndex} onChange={e => this.handleDog(e.target.value)}>
+              {dogs.map((item, index) => (
                 <option value={index}>{item.name}</option>
               ))}
             </select>
           </div>
         )}
-        <div className="sm:bg-white sm:px-2 md:border rounded-lg border-gray-200 md:px-4 xl:px-2">
+        <div className="mt-4 sm:mt-0 sm:bg-white sm:px-4 md:border rounded-lg border-gray-200 md:px-6 xl:px-8">
           <div className="justify-center mb-5 p-1 sm:p-4 ">
             <div className="flex items-end sm:items-center sm:pt-4">
               <div className="mr-3 ">
                 <Bowl className="w-14 md:w-20" />
               </div>
-              <div className="pb-1 sm:pb-0">
-                <h1 className="font-extrabold text-2xl sm:text-3xl mb-1">{dog && dog.name}'s Plan</h1>
-                <p className="hidden sm:block text-xl">Active Subscription</p>
-              </div>
+              <h1 className="font-extrabold text-2xl sm:text-3xl">{dog && dog.name}'s meal plan</h1>
             </div>
             <RecipeSelection
               user={user}
               showCooked={showCooked}
               showKibble={showKibble}
-              index={this.props.match.params.id}
+              index={this.state.selectedDogIndex}
               selectedDog={this.selectedDog}
               handleSelectedCookedRecipes={this.handleSelectedCookedRecipes}
               selectedCookedRecipes={cookedRecipes}
@@ -294,7 +320,7 @@ class EditPlan extends Component {
             <SelectedRecipes
               dog={dog}
               user={user}
-              index={this.props.match.params.id}
+              index={this.state.selectedDogIndex}
               selectedDog={this.selectedDog}
               handleSelectedCookedRecipes={this.handleSelectedCookedRecipes}
               selectedCookedRecipes={cookedRecipes}

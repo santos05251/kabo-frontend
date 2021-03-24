@@ -21,7 +21,7 @@ class ReactivationSuccessModal extends Component {
               Can't wait for your doggos's next meal!
             </div>
             <button className="w-10/12 mt-10 md:mt-14 px-4 py-4 md:px-6 md:py-4 text-white text-center rounded-lg bg-green-600 focus:outline-none hover:bg-green-700" onClick={onConfirmClick}>
-              Back to account settings
+              Got it
             </button>
           </div>
           <img src={doggo} className="mt-16 md:mt-0" />

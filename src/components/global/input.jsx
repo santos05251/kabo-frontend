@@ -17,6 +17,7 @@ class Input extends React.Component {
       disabled,
       onChange,
       required,
+      maxLength = null
     } = this.props;
 
     return (
@@ -36,6 +37,7 @@ class Input extends React.Component {
               disabled={disabled}
               onChange={onChange}
               id={name}
+              maxlength={maxLength}
               defaultValue={inputValue}
               className='outline-none w-4/5 text-grey-darkest text-sm h-5 mb-2.5 ml-2.5'
             ></input>
@@ -53,6 +55,7 @@ class Input extends React.Component {
             <textarea
               required
               id='input'
+              maxlength={maxLength}
               onChange={onChange}
               defaultValue={inputValue}
               style={{ width: '95%' }}

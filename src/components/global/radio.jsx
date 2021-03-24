@@ -15,7 +15,7 @@ class Radio extends React.Component {
       >
         <div
           className={`
-            flex justify-center items-center w-5 h-5 self-center mr-3 rounded-3xl 
+            flex justify-center items-center w-5 h-5 self-center mr-3 rounded-3xl
             ${!selected ? 'cursor-pointer' : ''}
             ${selected ? 'bg-primary' : 'border-solid border-gray-700 border'}
           `}
@@ -24,8 +24,8 @@ class Radio extends React.Component {
         </div>
         <div
           className={`
-            font-base font-semibold
-            ${selected ? 'text-black' : 'text-gray-500'}
+            font-base font-messina ${this.props.isLight ? "font-normal"  : "font-semibold"}
+            ${selected ? 'text-copyPrimary' : 'text-gray-500'}
           `}
         >
           {this.props.text}

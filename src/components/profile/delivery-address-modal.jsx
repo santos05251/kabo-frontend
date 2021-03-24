@@ -16,7 +16,7 @@ class DeliveryAddressModal extends React.Component {
         line2: '',
         city: '',
         zip: '',
-        delivery_instructions: '',
+        line3: '',
       },
       clean: true,
       submitted: false,
@@ -53,14 +53,15 @@ class DeliveryAddressModal extends React.Component {
       shipping_apt_suite: deliveryAddress.line2,
       shipping_city: deliveryAddress.city,
       shipping_postal_code: deliveryAddress.zip,
-      shipping_delivery_instructions: deliveryAddress.delivery_instructions,
+      shipping_delivery_instructions: deliveryAddress.line3,
     };
     this.props.updateAddress(apiObject) && this.setState({ submitted: true });
   }
 
   render() {
-    const { isOpen, toggle } = this.props;
-    const { deliveryAddress, clean, submitted } = this.state;
+    const { isOpen, toggle, loading, error } = this.props;
+    const { deliveryAddress, clean, submitted, } = this.state;
+    console.log(deliveryAddress)
 
     return (
       <Modal title="Delivery Address" isOpen={isOpen} onRequestClose={toggle}>
@@ -106,12 +107,18 @@ class DeliveryAddressModal extends React.Component {
             <Input
               name="SPECIAL DELIVERY INSTRUCTIONS"
               type="large"
-              inputValue={deliveryAddress.delivery_instructions}
-              onChange={(e) => this.changeAddress(e, 'delivery_instructions')}
+              inputValue={deliveryAddress.line3}
+              onChange={(e) => this.changeAddress(e, 'line3')}
+              maxLength={100}
             />
-            {submitted && (
+            {submitted && !loading && !error && (
               <div className="text-primary text-xs font-messina mt-1">
                 Your changes have been saved
+              </div>
+            )}
+            {submitted && !loading && error && (
+              <div className="text-red-500 text-xs font-messina mt-1">
+                An error occured please try again later
               </div>
             )}
             <button
@@ -135,4 +142,13 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(DeliveryAddressModal);
+const mapStateToProps = (state) => {
+  const { user } = state;
+  const { loading, error } = user;
+  return {
+    loading,
+    error
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(DeliveryAddressModal);

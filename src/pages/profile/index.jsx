@@ -1,4 +1,3 @@
-/* eslint-disable semi */
 import React from 'react';
 import { connect } from 'react-redux';
 import { ReactComponent as Arrow } from '../../assets/images/Vectorarrow.svg';
@@ -41,8 +40,8 @@ class ProfilePage extends React.Component {
       subscriptions,
       dogs,
       updatePaymentMethod,
-      addCoupon,
-      couponResponse,
+      applyCouponPerDog,
+      couponResponsePerDog,
       userError,
       loading,
     } = this.props;
@@ -86,10 +85,10 @@ class ProfilePage extends React.Component {
             <Cupon
               user={user}
               deliveryAddress={user.shipping_address}
-              addCoupon={addCoupon}
-              couponResponse={couponResponse}
+              applyCouponPerDog={applyCouponPerDog}
+              couponResponsePerDog={couponResponsePerDog}
               userError={userError}
-              isApplying={loading}
+              dogs={dogs}
             />
           </div>
           <div></div>
@@ -110,6 +109,7 @@ const mapDispatchToProps = (dispatch) => ({
   updatePaymentMethod: (payload) =>
     dispatch(userActions.updatePaymentMethod(payload)),
   addCoupon: (payload) => dispatch(userActions.applyCoupon(payload)),
+  applyCouponPerDog: (payload) => dispatch(userActions.applyCouponPerDog(payload)),
   openSubscriptionManagementModal: (payload) =>
     dispatch(userActions.openSubscriptionManagementModal(payload)),
 });
@@ -120,6 +120,7 @@ const mapStateToProps = (state) => {
     subscriptions,
     dogs,
     couponResponse,
+    couponResponsePerDog,
     errorMessage,
     showManageSubscriptionsBox,
     loading,
@@ -129,6 +130,7 @@ const mapStateToProps = (state) => {
     subscriptions,
     dogs,
     couponResponse,
+    couponResponsePerDog,
     userError: errorMessage,
     showManageSubscriptionsBox,
     loading,

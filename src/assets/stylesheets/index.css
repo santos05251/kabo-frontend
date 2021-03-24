@@ -131,6 +131,84 @@
 }
 
 @font-face {
+  font-family: 'Messinasans';
+  font-weight: 900;
+  font-style: normal;
+  src: url('../../fonts/MessinaSans-Black.otf'); /* IE9 Compat Modes */
+  src: local('Messina Sans Black'), local('Messina Sans Black'),
+       url('../../fonts/MessinaSans-Black.otf') format('embedded-opentype'), /* IE6-IE8 */
+       url('../../fonts/MessinaSans-Black.otf') format('truetype'), /* Super Modern Browsers */
+       url('../../fonts/MessinaSans-Black.otf') format('truetype'), /* Modern Browsers */
+       url('../../fonts/MessinaSans-Black.otf') format('truetype'), /* Safari, Android, iOS */
+       url('../../fonts/MessinaSans-Black.otf') format('svg'); /* Legacy iOS */
+}
+
+@font-face {
+  font-family: 'Messinasans';
+  font-weight: bold;
+  font-style: normal;
+  src: url('../../fonts/MessinaSans-Bold.otf'); /* IE9 Compat Modes */
+  src: local('Messina Sans Bold'), local('Messina Sans Bold'),
+       url('../../fonts/MessinaSans-Bold.otf') format('embedded-opentype'), /* IE6-IE8 */
+       url('../../fonts/MessinaSans-Bold.otf') format('truetype'), /* Super Modern Browsers */
+       url('../../fonts/MessinaSans-Bold.otf') format('truetype'), /* Modern Browsers */
+       url('../../fonts/MessinaSans-Bold.otf') format('truetype'), /* Safari, Android, iOS */
+       url('../../fonts/MessinaSans-Bold.otf') format('svg'); /* Legacy iOS */
+}
+
+@font-face {
+  font-family: 'Messinasans';
+  font-weight: normal;
+  font-style: normal;
+  src: url('../../fonts/MessinaSans-Book.otf'); /* IE9 Compat Modes */
+  src: local('Messina Sans Book'), local('Messina Sans Book'),
+       url('../../fonts/MessinaSans-Book.otf') format('embedded-opentype'), /* IE6-IE8 */
+       url('../../fonts/MessinaSans-Book.otf') format('truetype'), /* Super Modern Browsers */
+       url('../../fonts/MessinaSans-Book.otf') format('truetype'), /* Modern Browsers */
+       url('../../fonts/MessinaSans-Book.otf') format('truetype'), /* Safari, Android, iOS */
+       url('../../fonts/MessinaSans-Book.otf') format('svg'); /* Legacy iOS */
+}
+
+@font-face {
+  font-family: 'Messinasans';
+  font-weight: 300;
+  font-style: normal;
+  src: url('../../fonts/MessinaSans-Light.otf'); /* IE9 Compat Modes */
+  src: local('Messina Sans Light'), local('Messina Sans Light'),
+       url('../../fonts/MessinaSans-Light.otf') format('embedded-opentype'), /* IE6-IE8 */
+       url('../../fonts/MessinaSans-Light.otf') format('truetype'), /* Super Modern Browsers */
+       url('../../fonts/MessinaSans-Light.otf') format('truetype'), /* Modern Browsers */
+       url('../../fonts/MessinaSans-Light.otf') format('truetype'), /* Safari, Android, iOS */
+       url('../../fonts/MessinaSans-Light.otf') format('svg'); /* Legacy iOS */
+}
+
+@font-face {
+  font-family: 'Messinasans';
+  font-weight: 400;
+  font-style: normal;
+  src: url('../../fonts/MessinaSans-Regular.otf'); /* IE9 Compat Modes */
+  src: local('Messina Sans Regular'), local('Messina Sans Regular'),
+       url('../../fonts/MessinaSans-Regular.otf') format('embedded-opentype'), /* IE6-IE8 */
+       url('../../fonts/MessinaSans-Regular.otf') format('truetype'), /* Super Modern Browsers */
+       url('../../fonts/MessinaSans-Regular.otf') format('truetype'), /* Modern Browsers */
+       url('../../fonts/MessinaSans-Regular.otf') format('truetype'), /* Safari, Android, iOS */
+       url('../../fonts/MessinaSans-Regular.otf') format('svg'); /* Legacy iOS */
+}
+
+@font-face {
+  font-family: 'Messinasans';
+  font-weight: 600;
+  font-style: normal;
+  src: url('../../fonts/MessinaSans-SemiBold.otf'); /* IE9 Compat Modes */
+  src: local('Messina Sans SemiBold'), local('Messina Sans SemiBold'),
+       url('../../fonts/MessinaSans-SemiBold.otf') format('embedded-opentype'), /* IE6-IE8 */
+       url('../../fonts/MessinaSans-SemiBold.otf') format('truetype'), /* Super Modern Browsers */
+       url('../../fonts/MessinaSans-SemiBold.otf') format('truetype'), /* Modern Browsers */
+       url('../../fonts/MessinaSans-SemiBold.otf') format('truetype'), /* Safari, Android, iOS */
+       url('../../fonts/MessinaSans-SemiBold.otf') format('svg'); /* Legacy iOS */
+}
+
+@font-face {
   font-family: 'Cooper';
   font-style: 'sans serif';
   font-weight: 600;

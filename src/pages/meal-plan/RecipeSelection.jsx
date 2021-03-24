@@ -12,7 +12,7 @@ class RecipeSelection extends Component {
     selecTedKbRecipie: [],
   };
   componentDidMount() {
-    let { user,selectedKibble } = this.props;
+    let { user, selectedKibble } = this.props;
     if (user && user.kibble_recipes) {
       let oneItem = [];
       oneItem.push(user.kibble_recipes[0]);
@@ -23,7 +23,7 @@ class RecipeSelection extends Component {
   handleKibbleChange = (index) => {
     let oneItem = [];
     oneItem.push(this.state.localkribbleRecipies[index]);
-    this.setState({selecTedKbRecipie: oneItem})
+    this.setState({ selecTedKbRecipie: oneItem })
   };
   render() {
 
@@ -48,11 +48,11 @@ class RecipeSelection extends Component {
         <div className='w-full'>
           <>
             <div>
-              <div className='font-sofiaPro text-fadeGrey font-medium pt-1 sm:pt-5 sm:bg-white text-lg mx-auto pb-6 sm:pb-10'>
+              <div className='font-messina text-fadeGrey font-medium pt-1 sm:pt-5 sm:bg-white text-md mx-auto pb-4 sm:pb-8'>
                 What's in {dog && dog.name}'s Box (Choose up to 2 and click Save Changes):
               </div>
             </div>
-            <div className='grid w-full mx-auto sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 grid-cols-1 gap-4'>
+            <div className='grid w-full mx-auto sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 grid-cols-1 gap-2 sm:gap-4'>
               {user.cooked_recipes && (
                 <MealPlanSelect
                   dog={dog}

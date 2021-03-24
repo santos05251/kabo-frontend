@@ -42,7 +42,7 @@ const CancelReason = ({ reason, setReason, dogName, lastName }) => {
   });
   return (
     <React.Fragment>
-      <p className="text-lg text-center font-medium text-gray-800">
+      <p className="text-lg text-center font-900 font-cooper text-gray-800">
         Please select a reason why you'd like to cancel your subscription
       </p>
       <div className="mt-5 grid sm:grid-cols-1">

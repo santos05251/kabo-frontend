@@ -2,26 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import CancelSubscription from '../../components/profile/cancel-subscription';
 import { userActions } from '../../actions';
-import ConfirmationModal from '../../components/profile/confirmation-modal';
 
 class ManageSubscription extends Component {
-  state = {
-    isOpen: false,
-    step: 1
-  };
-
   componentDidMount() {
     this.props.getAccountData();
     this.props.getSubscriptionData();
-    this.setState({ isOpen: !this.state.isOpen })
-  }
-
-  toggle = () => {
-    this.setState({ isOpen: !this.state.isOpen })
-  }
-
-  handleStep = (step) => {
-    this.setState({ step: step })
   }
 
   render() {
@@ -30,18 +15,13 @@ class ManageSubscription extends Component {
         <CancelSubscription
           dogs={this.props.dogs}
           userName={this.props.userName}
+          subscriptionPhase={this.props.user.subscription_phase}
           cancelSubscription={this.props.cancelSubscription}
           pauseSubscription={this.props.pauseSubscription}
           subscriptionCancel={this.props.subscriptionCancel}
           isSubscriptionPaused={this.props.isSubscriptionPaused}
-          step={this.state.step}
-          handleStep={this.handleStep}
-        />
-
-        <ConfirmationModal
-          isOpen={this.state.isOpen}
-          toggle={this.toggle}
-          handleStep={this.handleStep}
+          subscription={this.props.subscription}
+          delivery_starting_date_options={this.props.delivery_starting_date_options}
         />
       </React.Fragment>
     );
@@ -50,15 +30,15 @@ class ManageSubscription extends Component {
 
 const mapStateToProps = (state) => {
   const { user } = state;
-  const { dogs, subscriptionCancel, isSubscriptionPaused } = state.user;
+  const { dogs, subscriptionCancel, isSubscriptionPaused, delivery_starting_date_options, subscription } = state.user;
   return {
     user,
     dogs,
+    subscription,
     subscriptionCancel,
     isSubscriptionPaused,
-    userName: user.first_name
-      ? user.first_name
-      : 'Customer',
+    delivery_starting_date_options,
+    userName: user.first_name ? user.first_name : 'Customer',
   };
 };
 
