@@ -36,6 +36,11 @@ class ReactivationPage extends React.Component {
       this.setState({isCancelled: true});
     else
       this.setState({isCancelled: false});
+    
+    this.props.getAccountData();
+    this.props.getSubscriptionData();
+    this.props.getRecipeData()
+    
   }
 
   toggleMealPlanModal = () => {
@@ -80,9 +85,11 @@ class ReactivationPage extends React.Component {
     const { dogs, user, error, errorMessage } = this.props;
     const { dogIndex, isCancelled } = this.state;
 
-    const ccLastFour = user.card.last4;
-    const address1 = user.subscription.shipping_address.line1;
-    const address2 = `${user.subscription.shipping_address.city}, ${user.subscription.shipping_address.country} ${user.subscription.shipping_address.zip}`;
+    const ccLastFour = user && user.card && user.card.last4 && user.card.last4;
+    const address1 = user && user.subscription && user.subscription.shipping_address.line1;
+    const address2 = `${user && user.subscription && user.subscription.shipping_address.city}, 
+                        ${user && user.subscription && user.subscription.shipping_address.country} 
+                        ${user && user.subscription && user.subscription.shipping_address.zip}`;
     const nextDeliveries = user.delivery_starting_date_options;
 
     return (
@@ -216,6 +223,9 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(userActions.setBillingAddress(payload)),
   updatePaymentMethod: (payload) =>
     dispatch(userActions.updatePaymentMethod(payload)),
+  getAccountData: () => dispatch(userActions.getAccountData()),
+  getSubscriptionData: () => dispatch(userActions.getSubscriptionData()),
+  getRecipeData: () => dispatch(userActions.getRecipeData())
 });
 
 function mapStateToProps(state) {

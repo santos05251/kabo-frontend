@@ -7,7 +7,7 @@ import "./nav-mobile.css"
 
 import { ReactComponent as NavbarLogo } from "../../assets/images/kabo-logo-nav.svg";
 
-class LoginNav extends React.Component {
+class HorizontalNav extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -76,7 +76,7 @@ class LoginNav extends React.Component {
         className="flex md:block p-3 md:px-0 xl:px-6 2xl:px-0 md:top-8 md:left-9 bg-white z-50 w-full"
         id="outer-container"
       >
-        <div className="md:pb-5 md:p-7 container pl-0 flex items-center sm:justify-between sm:items-stretch">
+        <div className="md:pb-5 md:p-7 w-full pl-0 flex items-center sm:justify-between sm:items-stretch">
           <div className="sm:hidden">
             <Menu
               pageWrapId={"page-wrap"}
@@ -84,23 +84,37 @@ class LoginNav extends React.Component {
               outerContainerId={"outer-container"}
             >
               <a
-                href="https://kabo.co/recipes"
+                href="/"
                 className={inActive}
               >
-                About Our Food
+                My Kabo
                 </a>
               <a
-                href="https://kabo.co/faq"
+                href="/orders"
                 className={inActive}
               >
-                FAQ
-                </a>
+                Orders
+              </a>
+              <a
+                id="support"
+                className={inActive}
+                href="https://kabo.zendesk.com/hc/en-us"
+              >
+                Support
+              </a>
               <a
                 id="blog"
                 className={inActive}
                 href="https://kabo.co/blog"
               >
                 Blog
+              </a>
+              <a
+                onClick={() => this.clickLogout()}
+                className="menu-item font-semibold text-sm"
+                href=""
+              >
+                Logout
               </a>
             </Menu>
           </div>
@@ -111,29 +125,26 @@ class LoginNav extends React.Component {
             <a href="/" className="self-start">
               <NavbarLogo className="block w-auto" />
             </a>
-            <div className="sm:hidden ">
-              <a href="/a/signup">
-                <button
-                  className='bg-primary text-white rounded-md p-2 text-base'
-                >
-                  Get Started
-              </button>
-              </a>
-            </div>
-
             <div className="md:flex hidden w-1/3 justify-between items-center">
               <a
-                href="https://kabo.co/recipes"
+                href="/"
                 className={inActive}
               >
-                About Our Food
+                My Kabo
                 </a>
               <a
-                href="https://kabo.co/faq"
+                href="/orders"
                 className={inActive}
               >
-                FAQ
-                </a>
+                Orders
+              </a>
+              <a
+                id="support"
+                className={inActive}
+                href="https://kabo.zendesk.com/hc/en-us"
+              >
+                Support
+              </a>
               <a
                 id="blog"
                 className={inActive}
@@ -141,12 +152,12 @@ class LoginNav extends React.Component {
               >
                 Blog
               </a>
-              <a href="/a/signup">
-                <button
-                  className='bg-primary text-white rounded-md p-2 text-base'
-                >
-                  Get Started
-              </button>
+              <a
+                onClick={() => this.clickLogout()}
+                className="menu-item font-semibold text-sm"
+                href=""
+              >
+                Logout
               </a>
             </div>
           </div>
@@ -178,5 +189,5 @@ const mapStateToProps = (state) => {
   };
 };
 
-const connectedNavbar = connect(mapStateToProps, mapDispatchToProps)(LoginNav);
-export { connectedNavbar as LoginNav };
+const connectedNavbar = connect(mapStateToProps, mapDispatchToProps)(HorizontalNav);
+export { connectedNavbar as HorizontalNav };

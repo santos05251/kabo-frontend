@@ -15,6 +15,10 @@ const FoodCard = ({
   dog,
   user,
   handleKibbleChange,
+  className,
+  noFixedHeight,
+  customSelectButton,
+  customBgImage,
 }) => {
   if (!selectedCookedRecipes && !kibble) return null;
 
@@ -22,14 +26,14 @@ const FoodCard = ({
   const [details, openDetails] = useState(false);
   const kibbleOnlyNull = kibble.some((el) => el !== null);
 
-  const selectedText = 'bg-green-600 btn-text-white border border-green focus:outline-none font-bold p-1 md:py-3 w-11/12 sm:w-10/12 rounded mt-2 foodcard-add-button';
-  const unSelectedText = 'bg-transparent border border-green-700 hover:border-transparent focus:outline-none hover:bg-green-700 hover:text-white font-bold w-11/12 sm:w-10/12 p-1 md:py-3 rounded border-green mt-2 foodcard-add-button';
+  const selectedText = `bg-green-600 btn-text-white border border-green focus:outline-none p-1 md:py-0.25 w-11/12 sm:w-10/12 rounded-5lg mt-2.5 foodcard-add-button ${noFixedHeight && 'relative-button'} font-normal sm:font-bold  ${customSelectButton || 'text-sm lg:absolute lg:bottom-2 ml-0 px-2.5 py-2.5 sm:py-0.25 sm:px-1.25'}`;
+  const unSelectedText = `bg-transparent border border-green-700 hover:border-transparent focus:outline-none hover:bg-green-700 hover:text-white w-11/12 sm:w-10/12 p-1 md:py-0.25 rounded-5lg border-green mt-2.5 foodcard-add-button ${noFixedHeight && 'relative-button'} font-normal sm:font-bold  ${customSelectButton || 'text-sm lg:absolute lg:bottom-2 ml-0 px-2.5 py-2.5 sm:py-0.25 sm:px-1.25'}`;
   return (
     <div>
       <div
-        className={`hidden sm:block rounded-6md w-full mb-4 md:flex-row flex-col overflow-hidden foodcard ${
-          selected ? 'border-2 border-green bg-green-100' : 'border-2 border-gray-100 bg-white'
-        }`}
+        className={`hidden sm:block rounded-6md w-full mb-4 md:flex-row flex-col overflow-hidden ${!noFixedHeight && 'foodcard'} ${
+          selected ? 'border-2 border-green bg-recipeSelection' : 'border-2 border-gray-100 bg-white'
+        } ${className}`}
       >
         <div
           className={
@@ -49,23 +53,23 @@ const FoodCard = ({
         <div
           className={
             selected
-              ? 'w-full rounded-br-lg rounded-bl-lg focus:bg-green-100 py-5 flex flex-col items-center justify-between'
-              : 'w-full rounded-br-lg rounded-bl-lg focus:bg-green-100 py-5 flex flex-col items-center justify-between'
+              ? 'w-full rounded-br-lg rounded-bl-lg focus:bg-green-100 py-5 md:pt-4.75 flex flex-col items-center justify-between'
+              : 'w-full rounded-br-lg rounded-bl-lg focus:bg-green-100 py-5 md:pt-4.75 flex flex-col items-center justify-between'
           }
         >
-          <div className="font-cooper text-lg text-black text-center pb-2">{food.name}</div>
+          <div className="font-cooper text-lg text-black leading-4 text-center">{food.name}</div>
           <div
             onClick={() => {
               openDetails(true);
             }}
-            className="text-primary text-sm mt-2 md:mt-1 mb-1 font-messina cursor-pointer font-medium mealplan-choose-details"
+            className="text-primary text-xs font-messina cursor-pointer font-medium mealplan-choose-details mt-3.25 md:mt-5 leading-none font-bold"
           >
             See Details
           </div>
-          <div className="text-fadeGrey font-messina font-normal py-2 px-4 foodCardDesc">{food.ingredients}</div>
+          <div className="text-black font-messina font-normal pt-3.5 px-7.25 foodCardDesc text-xs md:pt-4 md:leading-4.5">{food.ingredients}</div>
           {type !== 'kibble' && user.kibble_recipes && (
             <select
-              className="w-11/12 mx-auto px-3 py-3 bg-transparent border border-gray-400 rounded-0 opacity-0"
+              className="w-11/12 mx-auto px-3 py-3 bg-transparent border border-gray-400 rounded-0 opacity-0 hidden"
               disabled
             >
               {user.kibble_recipes
@@ -115,14 +119,14 @@ const FoodCard = ({
       {/* -----mobile card */}
       <div
         className={`sm:hidden rounded-6md w-full h-full mb-4 flex flex-row overflow-hidden  ${
-          selected ? 'border-3 border-green bg-green-100' : 'border-2 border-gray-200 bg-white'
-        }`}
+          selected ? 'border border-green bg-recipeSelection' : 'border border-gray-200 bg-white'
+        } ${className || ''}`}
       >
         <div
           className={
             type === 'kibble'
-              ? `bg-kibble-${food.recipe}  rounded-tl-5md p-4  h-full  flex items-center justify-center md:h-auto relative`
-              : `bg-${food.recipe} h-full  rounded-tl-5md p-4  flex items-center justify-center h-1/2 md:h-auto relative`
+              ? `bg-kibble-${food.recipe}  rounded-tl-5md p-4 px-7 h-full  flex items-center justify-center md:h-auto relative`
+              : `bg-${food.recipe} h-full  rounded-tl-5md p-4 px-7 flex items-center justify-center h-1/2 md:h-auto relative`
           }
         >
           {food.new && (
@@ -131,7 +135,7 @@ const FoodCard = ({
             </div>
           )}
           <div
-            className="h-20 w-20 bg-contain bg-image"
+            className={`h-20 w-20 bg-contain bg-image ${customBgImage}`}
             style={{ backgroundImage: `url(${food.image_url})` }}
           />
         </div>
@@ -142,13 +146,13 @@ const FoodCard = ({
               : 'w-full rounded-br-lg rounded-bl-lg focus:bg-green-100  flex flex-col  px-2 relative'
           }
         >
-          <div className="flex flex-col justify-center items-center mt-4">
-            <div className="font-normal md:text-xl text-md text-black ">{food.name}</div>
+          <div className="flex flex-col justify-center items-center mt-2.5">
+            <div className="font-normal text-xl font-cooper text-copyPrimary">{food.name}</div>
             <div
               onClick={() => {
                 openDetails(true);
               }}
-              className="text-primary text-sm font-bold md:text-base font-messina cursor-pointer"
+              className="text-primary text-sm font-bold md:text-base font-messina cursor-pointer mt-1.25"
             >
               See Details
             </div>

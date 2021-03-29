@@ -15,6 +15,7 @@ class CancelSubscription extends Component {
   };
 
   render() {
+    const { dogs } = this.props;
     return (
       <React.Fragment>
         <div className="grid lg:grid-cols-2 xs:grid-cols-1">
@@ -24,9 +25,9 @@ class CancelSubscription extends Component {
               We'll be waiting for you to come back
             </p>
             <div className="mt-8 flex">
-              {this.props.dogs && this.props.dogs.length > 1 && (
+              {dogs && dogs.length >= 1 && (
                 <DogSelector
-                  dogs={this.props.dogs}
+                  dogs={dogs}
                   setDog={this.setDog}
                   dogIndex={this.state.dogIndex}
                 />
@@ -44,21 +45,24 @@ class CancelSubscription extends Component {
                   We'll be waiting for you to come back
                 </p>
                 <div className="mt-8 flex">
-                  {this.props.dogs && this.props.dogs.length > 1 && (
+                  {dogs && dogs.length >= 1 && (
                     <DogSelector
-                      dogs={this.props.dogs}
+                      dogs={dogs}
                       setDog={this.setDog}
                       dogIndex={this.state.dogIndex}
                     />
                   )}
                 </div>
               </div>
+              {dogs &&
+                dogs.length >= 1 &&
               <div className="mt-10 px-10">
                 <CancelOptions
                   currentDog={
-                    this.props.dogs.length > 1 &&
-                    this.props.dogs[this.state.dogIndex]
+                    dogs.length >= 1 &&
+                    dogs[this.state.dogIndex]
                   }
+                  dogIndex={this.state.dogIndex}
                   userName={this.props.userName}
                   subscriptionPhase={this.props.subscriptionPhase}
                   cancelSubscription={this.props.cancelSubscription}
@@ -68,7 +72,7 @@ class CancelSubscription extends Component {
                   subscription={this.props.subscription}
                   delivery_starting_date_options={this.props.delivery_starting_date_options}
                   />
-              </div>
+              </div>}
             </div>
           </div>
         </div>

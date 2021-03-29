@@ -40,6 +40,7 @@ class DeliveryAddress extends React.Component {
 
   render() {
     const { deliveryAddress } = this.state;
+    console.log(deliveryAddress)
     return (
       <>
         <div className="rounded-xl shadow-md bg-white">
@@ -58,9 +59,18 @@ class DeliveryAddress extends React.Component {
               {deliveryAddress.line1 && (
                 <span className="inline-block">{deliveryAddress.line1},</span>
               )}
-
+              <br />
               {deliveryAddress.city && (
-                <span className="inline-block">{deliveryAddress.city}</span>
+                <span className="inline-block">{deliveryAddress.city},</span>
+              )}
+              {deliveryAddress.state_code && (
+                <span className="inline-block">&nbsp;{deliveryAddress.state_code}</span>
+              )}
+              {deliveryAddress.zip && (
+                <span className="inline-block">&nbsp;{deliveryAddress.zip}</span>
+              )}
+              {deliveryAddress.delivery_instructions && (
+                <div>{deliveryAddress.delivery_instructions},</div>
               )}
             </div>
 

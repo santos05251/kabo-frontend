@@ -40,7 +40,7 @@ class LoginPage extends React.Component {
     const { email, password, submitted } = this.state;
     return (
       <Layout>
-        <div className="login md:mt-28 sm:mt-23 w-full mb-5 md:mb-12">
+        <div className="login mt-12 w-full mb-5 md:mb-12">
           <div className="w-full md:w-3/5 mx-auto">
             <div className="bg-white px-8 md:py-10 sm:py-1 sm:px-12 sm:py-8 ">
               <form name="form" data-cy="login-form" onSubmit={this.handleSubmit}>

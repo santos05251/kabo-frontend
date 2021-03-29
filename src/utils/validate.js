@@ -3,6 +3,10 @@ const validateEmail = (email) => {
   return re.test(email);
 }
 
+const validatePostalCode = (postalCode) => {
+  const re = /^(?!.*[DFIOQU])[A-VXY][0-9][A-Z] ?[0-9][A-Z][0-9]$/;
+  return re.test(postalCode);
+}
 const validateCreditCard = (creditCard) => {
   const re = /^[0-9]{15,16}$/;
   return re.test(creditCard);
@@ -21,6 +25,7 @@ const validateCvc = (cvc) => {
 
 export const validate = {
   validateEmail,
+  validatePostalCode,
   validateCreditCard,
   validateExpireDate,
   validateCvc,

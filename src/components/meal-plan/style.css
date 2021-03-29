@@ -95,6 +95,15 @@
 .mealplan-meal-image {
   height: 200px;
 }
+.meal-plan-modal .mealplan-meal-image {
+  height: auto;
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+.meal-plan-modal .mealplan-meal-image img {
+  max-width: 106px;
+  max-height: 106px;
+}
 .foodcard {
   height: 540px;
   position: relative;
@@ -114,23 +123,14 @@
   padding-right: 5px;
   /* padding: 1rem 0.5rem; */
   /* margin: 1rem; */
-  font-size: 14px;
   margin-bottom: 0.5rem;
 }
 .foodcard-add-button.btn-text-white{
   color: white
 }
-
 .bg-image{
   height: 5.6rem;
   background-repeat: no-repeat;
-}
-
-@media screen and (min-width: 1024px) {
-  .foodcard-add-button {
-    position: absolute;
-    bottom: 0.5rem;
-  }
 }
 
 .meal-name {
@@ -140,14 +140,12 @@
 }
 
 @media screen and (max-width: 576px) {
-  .foodcard-add-button {
-    font-size: 14px;
-    font-weight: normal;
-    margin-left: 0;
-    padding: 10px;
-    margin-top: 10px;
-  }
   .margin-bottom-4{
     margin-bottom: 20px;
   }
+
+  /* .meal-plan-modal .bg-image{
+    width: 96px;
+    height: 96px;
+  } */
 }

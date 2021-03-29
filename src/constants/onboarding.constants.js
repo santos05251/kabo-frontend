@@ -35,5 +35,15 @@ export const onboardingContstants = {
 
   GET_CHECKOUT_RESULT: "GET_CHECKOUT_RESULT",
   GET_CHECKOUT_RESULT_SUCCESS: "GET_CHECKOUT_RESULT_SUCCESS",
-  GET_CHECKOUT_RESULT_FAILED: "GET_CHECKOUT_RESULT_FAILED"
+  GET_CHECKOUT_RESULT_FAILED: "GET_CHECKOUT_RESULT_FAILED",
+
+  SPECIAL_DELIVERY_INSTRUCTIONS: [
+    'Ring door bell',
+    'Do not ring door bell',
+    'Leave at back door',
+    'Leave at side door',
+    'Leave at front door',
+    'Leave with concierge',
+    'Buzz code: '
+  ]
 };

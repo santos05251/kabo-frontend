@@ -9,6 +9,7 @@ import GuideOptions from "./guide-options";
 import { otherConstants } from "../../constants";
 
 const CancelOptions = ({
+  dogIndex,
   currentDog,
   userName,
   subscriptionPhase,
@@ -179,7 +180,7 @@ const CancelOptions = ({
             { opt.value === 'specific' && pauseUntil !== null && pauseType === 'specific' &&
             (<div className="bg-yellow-100 p-5 rounded-md mb-3">
                 { subscription && subscription.next_billing_at &&
-                  <p className="text-xl font-semibold mb-2">Next billing date is
+                  <p className="text-xl font-semibold mb-2">Next delivery date is
                     <span className="font-medium"> {new Date(subscription.next_billing_at * 1000).toDateString()}</span>
                   </p>
                 }
@@ -217,7 +218,9 @@ const CancelOptions = ({
             ? 'Next'
             : 'Confirm'}
         </button>
-        <a className="ml-3 mb-0 text-primary font-messina font-bold" href="/">Select a different meal plan</a>
+        <a className="ml-3 mb-0 text-primary font-messina font-bold" href={`/edit-plan/${dogIndex}`}>
+          Select a different meal plan
+        </a>
         </div>}
       </div>
 
@@ -251,7 +254,7 @@ const CancelOptions = ({
           </div>
           {
               pauseUntil &&
-              <p className="text-sm mb-4 font-messina">Next billing date is <b>{moment(pauseUntil).format('LL')}</b></p>
+              <p className="text-sm mb-4 font-messina">Next delivery date is <b>{moment(pauseUntil).format('LL')}</b></p>
             }
 
           <div className="flex justify-center">

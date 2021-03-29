@@ -19,13 +19,15 @@ import OnboardingVersionA from './pages/onboardings/combined-version';
 import CheckoutStep from './pages/onboardings/steps/checkout';
 import ManageSubscription from './pages/profile/manage-subscription';
 import CheckoutSuccess from './pages/onboardings/steps/success';
+import { HorizontalNav } from "./components/navbar/horizontal-nav";
 
 function App() {
   const [navHeight, setNav] = useState(0);
-  const subcriptionPage = window.location.pathname.includes('manage-subscription');
+  const isSubcriptionPage = window.location.pathname.includes('manage-subscription');
+  const isMealPlanPage = window.location.pathname.includes('/edit-plan')
   useEffect(() => {
     let findNavHeight = document.getElementById('outer-container') && document.getElementById('outer-container').clientHeight + 20 || '2rem';
-    if (findNavHeight > 200 && !subcriptionPage) {
+    if (findNavHeight > 200 && !isSubcriptionPage) {
       findNavHeight = '2rem'
     } else {
       findNavHeight = 0
@@ -34,15 +36,17 @@ function App() {
   }, [])
 
   const loginPage = window.location.pathname.includes('login');
+  const isSignupPage = window.location.pathname.includes('checkout') || window.location.pathname.includes('signup')
   return (
     <div className="bg-container min-h-screen">
       {loginPage && <LoginNav />}
-      <div className={`container flex mx-auto ${!subcriptionPage && "padding-container"}`}>
-        {window.location.pathname !== '/manage-subscription' && !window.location.pathname.includes('login') && !window.location.pathname.includes('/edit-plan') && <Navbar />}
+      {(isMealPlanPage || isSubcriptionPage) && <HorizontalNav />}
+      <div className={`container flex mx-auto ${!isSubcriptionPage && "padding-container"}`}>
+        {!isSubcriptionPage && !loginPage && !isMealPlanPage && !isSignupPage && <Navbar />}
         <div className="md:h-20 sm:h-14 h-24"> </div>
         <Alert />
-        {!loginPage && !subcriptionPage && <div className="w-1/5 hidden md:block" />}
-        <div style={{ marginTop: navHeight }} className={`page-content w-full ${!loginPage && !subcriptionPage &&'md:w-4/5 mt-8 xl:px-6'} bg-container relative`}>
+        {!loginPage && !isSubcriptionPage && <div className="w-1/5 hidden md:block" />}
+        <div style={{ marginTop: navHeight }} className={`page-content w-full ${!loginPage && !isSubcriptionPage && 'md:w-4/5 mt-8 xl:px-6'} bg-container relative`}>
           <div className="page-routing">
             <BrowserRouter>
               <Switch>

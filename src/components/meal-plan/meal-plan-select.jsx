@@ -18,7 +18,11 @@ const MealPlanSelect = ({
   selectedLength,
   dog,
   user,
-  handleKibbleChange
+  handleKibbleChange,
+  foodCardClassName,
+  noFixedHeight,
+  customSelectButton,
+  customFoodCardBgImage,
 }) => {
   let icons = {
     chicken: chickenIcon,
@@ -51,6 +55,10 @@ const MealPlanSelect = ({
             recipe={food.recipe}
             dog={dog}
             user={user}
+            className={foodCardClassName}
+            noFixedHeight={noFixedHeight}
+            customSelectButton={customSelectButton}
+            customBgImage={customFoodCardBgImage}
           />
         ))}
     </React.Fragment>

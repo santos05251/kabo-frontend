@@ -8,9 +8,9 @@ class BillingMethodIcon extends React.Component {
   render() {
     return (
       <div className="flex h-8">
-        <img src={iconVisa} />
-        <img src={iconMasterCard} />
-        <img src={iconAmex} />
+        <img className="w-12" src={iconVisa} />
+        <img className="w-12 ml-1" src={iconMasterCard} />
+        <img className="w-12 ml-1" src={iconAmex} />
       </div>
     )
   }

@@ -109,11 +109,15 @@ class AccountPage extends React.Component {
     if (!this.props.dogs.length) return <HomeLoader />;
     const { dogIndex } = this.state
     const { user, subscriptions, dogs, globalState, openUpdatePaymentModal, setBillingAddress, updatePaymentMethod } = this.props;
-    const { cooked_recipes, kibble_recipe } = user
+    const { cooked_recipes, kibble_recipe, how_often } = user
     if (!cooked_recipes) return <HomeLoader />
     const currentDog = dogs[dogIndex]
 
-    const dogInfo = `${currentDog.age_in_months / 12} years old, ${currentDog.weight}${currentDog.weight_unit}, ${currentDog.neutered && 'Neutered'}, ${currentDog.breed}`
+    let age = Math.round(currentDog.age_in_months / 12)
+    if (age === 0) {
+      age = 1
+    }
+    const dogInfo = `${age} years old, ${currentDog.weight}${currentDog.weight_unit}, ${currentDog.neutered && 'Neutered'}, ${currentDog.breed}`
 
     const firstTime = user.user.subscription_phase_status === otherConstants.SUBSCRIPTION_STATUS.FIRST_BOX_PREPARING_ORDER || user.user.subscription_phase_status === otherConstants.SUBSCRIPTION_STATUS.WAITING_FOR_TRIAL_SHIPMENT
 
@@ -122,10 +126,14 @@ class AccountPage extends React.Component {
       dogIndex
     );
 
+    const deliveryFreqNum = parseInt(how_often.replace(/[^0-9]/g, ""))
+
+    const frequencyText = firstTime ? `You'll be able to edit your delivery frequency after you receive your second box` : deliveryFreqNum === 1 ? `Your Kabo meals are delivered every ${deliveryFreqNum} week` : `Your Kabo meals are delivered every ${deliveryFreqNum} weeks`
+
+    console.log(deliveryFreqNum)
+
     const { invoice_estimate_total } = dogSubscription
     const displayPrice = (invoice_estimate_total / 100).toFixed(2)
-
-    console.log(displayPrice)
 
     const isPaused = dogSubscription.status === "paused"
     const isCancelled = dogSubscription.status === "cancelled"
@@ -185,15 +193,16 @@ class AccountPage extends React.Component {
             buttonAction={() => this.selectSubscription(isPaused, isCancelled)}
             paused={isPaused}
             cancelled={isCancelled}
-            redirectLink={`/edit-plan/${dogIndex}`}
+            redirectLink={isPaused ? `/reactivate/1` : `/edit-plan/${dogIndex}`}
             buttonText="Edit Mealplan" />
           {!isCancelled &&
             <DashboardCard
               icon={<FrequencyIcon className="h-full" />}
               title="Delivery Frequency"
+              buttonAction={() => this.selectSubscription(isPaused, isCancelled)}
               paused={isPaused}
               cancelled={isCancelled}
-              text={portion}
+              text={frequencyText}
               buttonText="Edit Delivery Frequency"
               disabled={firstTime} />
           }
@@ -201,6 +210,7 @@ class AccountPage extends React.Component {
             <DashboardCard
               icon={<PortionCircle num={currentDog.cooked_portion} className="h-full" />}
               title="Portion"
+              buttonAction={() => this.selectSubscription(isPaused, isCancelled)}
               subText="When you change your portions, the size of your packs of food change"
               paused={isPaused}
               cancelled={isCancelled}
@@ -212,6 +222,7 @@ class AccountPage extends React.Component {
             <DashboardCard
               icon={<MealBox className="h-full" />}
               title="Amount of Food"
+              buttonAction={() => this.selectSubscription(isPaused, isCancelled)}
               subText="This is the amount of food in your next delivery "
               paused={isPaused}
               cancelled={isCancelled}

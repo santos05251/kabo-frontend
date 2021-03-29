@@ -1,28 +1,34 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import qs from 'qs';
+import LoadingCircle from "../../../components/partials/loading";
+import FormInput from "../../../components/onboardings/formInput";
+import BillingMethodIcon from "../../../components/global/billingMethodIcon";
+import { onboardingContstants } from "../../../constants";
+import { validate } from "../../../utils";
 import { onboardingActions } from "../../../actions";
 import { onboardingService } from '../../../services';
 import { ReactComponent as FilledCircle } from "../../../assets/images/filled-circle.svg";
 import Star from "../../../assets/images/star.png";
 import StarGreen from "../../../assets/images/stargreen.png";
-import CreateAccount from "../../../assets/images/create-account.svg";
-import ShippingInfo from "../../../assets/images/shipping-info.svg";
-import Billing from "../../../assets/images/billing.svg";
-import ImgTrusted from "../../../assets/images/verisign-trusted.png";
-import ImgCreditCard from "../../../assets/images/credit-card.png";
-import Divider from "../../../components/divider";
-import LoadingCircle from "../../../components/partials/loading";
-import CreditCardInput from "../../../components/onboardings/credit-card-input";
-import ExpirationInput from "../../../components/onboardings/expiration-input";
-import { validate } from "../../../utils";
+import ImgNavbarLogo from "../../../assets/images/kabo-logo-nav.svg";
+import IconDeliveryAddress from "../../../assets/images/delivery-address.svg";
+import IconBilling from "../../../assets/images/billing-icon.svg";
+import IconPaypal from "../../../assets/images/billingMethod/paypal-icon.svg";
+import ImgPaypalLogo from "../../../assets/images/paypal-logo.png";
+import IconGreenCheck from "../../../assets/images/green-check.svg";
+import IconCart from "../../../assets/images/cart-icon.svg";
+import IconChevron from "../../../assets/images/chevron.svg";
 
 class CheckoutStep extends Component {
   state = {
+    currentStep: 0,
+    validationKeys: {},
+    isCartOpen: false,
+    firstName: '',
+    lastName: '',
     email: '',
     password: '',
-    shippingFirstName: '',
-    shippingLastName: '',
     shippingAddress: '',
     shippingApt: '',
     shippingCity: '',
@@ -33,8 +39,6 @@ class CheckoutStep extends Component {
     billingExpiration: '',
     billingCVC: '',
     sameBillingAddress: true,
-    billingFirstName: '',
-    billingLastName: '',
     billingAddress: '',
     billingApt: '',
     billingCity: '',
@@ -84,7 +88,7 @@ class CheckoutStep extends Component {
       return;
     
     this.setState({email: account.details.email});
-    this.setState({shippingFirstName: account.details.first_name});
+    this.setState({firstName: account.details.first_name});
   }
 
   getPaymentDetails = (token) => {
@@ -141,8 +145,6 @@ class CheckoutStep extends Component {
 
     if (sameBillingAddress) {
       this.setState({
-        billingFirstName: '',
-        billingLastName: '',
         billingAddress: '',
         billingApt: '',
         billingCity: '',
@@ -157,10 +159,11 @@ class CheckoutStep extends Component {
   }
   async _purchase() {
     const {
+      validationKeys,
+      firstName,
+      lastName,
       email,
       password,
-      shippingFirstName,
-      shippingLastName,
       shippingAddress,
       shippingApt,
       shippingCity,
@@ -171,8 +174,6 @@ class CheckoutStep extends Component {
       billingExpiration,
       billingCVC,
       sameBillingAddress,
-      billingFirstName,
-      billingLastName,
       billingAddress,
       billingApt,
       billingCity,
@@ -188,61 +189,50 @@ class CheckoutStep extends Component {
     }
 
     this.setState({ isLoading: true });
-    if (!validate.validateEmail(email)) {
-      this.setState({ isLoading: false });
-      alert("Please fill correct e-mail!");
+
+    validationKeys['first_name'] = firstName.length > 0;
+    validationKeys['last_name'] = lastName.length > 0;
+    validationKeys['email'] = validate.validateEmail(email);
+    validationKeys['password'] = password.length >= 6;
+    if (!validationKeys['first_name'] || !validationKeys['last_name'] || !validationKeys['email'] || !validationKeys['password']) {
+      this.setState({ isLoading: false, validationKeys, currentStep: 0 });
+      this.forceUpdate();
       return;
     }
-    if (password.length < 6) {
-      this.setState({ isLoading: false });
-      alert("Password should be at least 6 characters!");
+    validationKeys['shipping_address'] = shippingAddress.length > 0;
+    validationKeys['shipping_city'] = shippingCity.length > 0;
+    validationKeys['shipping_postal_code'] = validate.validatePostalCode(shippingPostalCode);
+    validationKeys['shipping_phone_number'] = shippingPhoneNumber.length > 0;
+    if (!validationKeys['shipping_address'] && !validationKeys['shipping_city'] && !validationKeys['shipping_postal_code'] && !validationKeys['shipping_phone_number']) {
+      this.setState({ isLoading: false, validationKeys, currentStep: 1 });
+      this.forceUpdate();
       return;
     }
-    if (shippingFirstName.length <= 0 || shippingLastName.length <= 0 || shippingAddress.length <= 0 || shippingCity.length <= 0 || shippingPostalCode.length <= 0 || shippingPhoneNumber.length <= 0) {
-      this.setState({ isLoading: false });
-      alert("Please fill shipping details!");
-      return;
-    }
-    const validatePostalCode = await onboardingService.validatePostalCode({postal_code: shippingPostalCode});
-    if (!validatePostalCode || !validatePostalCode.valid) {
-      this.setState({ isLoading: false });
-      alert("We're not in your area yet!");
-      return;
-    }
-    if (!validate.validateCreditCard(creditCard.replace(/ /g, ''))) {
-      this.setState({ isLoading: false });
-      alert("Credit card number is not correct!");
-      return;
-    }
-    if (!validate.validateExpireDate(billingExpiration)) {
-      this.setState({ isLoading: false });
-      alert("Billing expiration date is not correct!");
-      return;
-    }
-    if (!validate.validateCvc(billingCVC)) {
-      this.setState({ isLoading: false });
-      alert("Billing CVC is not correct!");
-      return;
-    }
+    validationKeys['credit_card'] = validate.validateCreditCard(creditCard.replace(/ /g, ''));
+    validationKeys['billing_expiration'] = validate.validateExpireDate(billingExpiration);
+    validationKeys['billing_cvc'] = validate.validateCvc(billingCVC);
+    let bBillingAddress = true;
     if (!sameBillingAddress) {
-      if (billingFirstName.length <= 0 || billingLastName.length <= 0 || billingAddress.length <= 0 || billingCity.length <= 0 || billingPostalCode.length <= 0 || billingPhoneNumber.length <= 0) {
-        this.setState({ isLoading: false });
-        alert("Please fill billing details!");
-        return;
+      validationKeys['billing_address'] = billingAddress.length > 0;
+      validationKeys['billing_city'] = billingCity.length > 0;
+      validationKeys['billing_postal_code'] = validate.validatePostalCode(billingPostalCode);
+      validationKeys['billing_phone_number'] = billingPhoneNumber.length > 0;
+      if (validationKeys['billing_address'] && validationKeys['billing_city'] && validationKeys['billing_postal_code'] && validationKeys['billing_phone_number']) {
+        bBillingAddress = true;
       }
-      const validatePostalCode2 = await onboardingService.validatePostalCode({postal_code: billingPostalCode});
-      if (!validatePostalCode2 || !validatePostalCode2.valid) {
-        this.setState({ isLoading: false });
-        alert("We're not in your area yet!");
-        return;
+      else {
+        bBillingAddress = false;
       }
+    }
+    if (!validationKeys['credit_card'] || !validationKeys['billing_expiration'] | validationKeys['billing_cvc'] || !bBillingAddress) {
+      this.setState({ isLoading: false, validationKeys, currentStep: 2 });
     }
 
     let details = {
       email,
       password,
-      shipping_first_name: shippingFirstName,
-      shipping_last_name: shippingLastName,
+      shipping_first_name: firstName,
+      shipping_last_name: lastName,
       shipping_street_address: shippingAddress,
       shipping_apt_suite: shippingApt,
       shipping_city: shippingCity,
@@ -250,8 +240,8 @@ class CheckoutStep extends Component {
       shipping_phone_number: shippingPhoneNumber,
       shipping_delivery_instructions: shippingInstructions,
       same_as_billing_address: sameBillingAddress,
-      billing_first_name: billingFirstName,
-      billing_last_name: billingLastName,
+      billing_first_name: firstName,
+      billing_last_name: lastName,
       billing_street_address: billingAddress,
       billing_apt_suite: billingApt,
       billing_city: billingCity,
@@ -278,481 +268,555 @@ class CheckoutStep extends Component {
     this.setState({ isLoading: false });
   }
 
+  handleContactInformation = () => {
+    const { validationKeys, firstName, lastName, email, password } = this.state;
+    validationKeys['first_name'] = firstName.length > 0;
+    validationKeys['last_name'] = lastName.length > 0;
+    validationKeys['email'] = validate.validateEmail(email);
+    validationKeys['password'] = password.length >= 6;
+    if (validationKeys['first_name'] && validationKeys['last_name'] && validationKeys['email'] && validationKeys['password']) {
+      this.setState({ validationKeys, currentStep: 1 });
+    }
+    else {
+      this.forceUpdate();
+    }
+  };
+
+  openShippingAddress = () => {
+    const { currentStep } = this.state;
+    if (currentStep < 1) return;
+    this.setState({ currentStep: 1 });
+  };
+
+  handleShippingAddress = () => {
+    const { validationKeys, shippingAddress, shippingCity, shippingPostalCode, shippingPhoneNumber } = this.state;
+    validationKeys['shipping_address'] = shippingAddress.length > 0;
+    validationKeys['shipping_city'] = shippingCity.length > 0;
+    validationKeys['shipping_postal_code'] = validate.validatePostalCode(shippingPostalCode);
+    validationKeys['shipping_phone_number'] = shippingPhoneNumber.length > 0;
+    if (validationKeys['shipping_address'] && validationKeys['shipping_city'] && validationKeys['shipping_postal_code'] && validationKeys['shipping_phone_number']) {
+      this.setState({ validationKeys, currentStep: 2 });
+    }
+    else {
+      this.forceUpdate();
+    }
+  };
+
+  openBillingInformation = () => {
+    const { currentStep } = this.state;
+    if (currentStep < 2) return;
+    this.setState({ currentStep: 2 });
+  };
+
+  handleBillingInformation = () => {
+    const { validationKeys, creditCard, billingExpiration, billingCVC, sameBillingAddress, billingAddress, billingCity, billingPostalCode, billingPhoneNumber } = this.state;
+    validationKeys['credit_card'] = validate.validateCreditCard(creditCard.replace(/ /g, ''));
+    validationKeys['billing_expiration'] = validate.validateExpireDate(billingExpiration);
+    validationKeys['billing_cvc'] = validate.validateCvc(billingCVC);
+
+    let bBillingAddress = true;
+    if (!sameBillingAddress) {
+      validationKeys['billing_address'] = billingAddress.length > 0;
+      validationKeys['billing_city'] = billingCity.length > 0;
+      validationKeys['billing_postal_code'] = validate.validatePostalCode(billingPostalCode);
+      validationKeys['billing_phone_number'] = billingPhoneNumber.length > 0;
+      if (validationKeys['billing_address'] && validationKeys['billing_city'] && validationKeys['billing_postal_code'] && validationKeys['billing_phone_number']) {
+        bBillingAddress = true;
+      }
+      else {
+        bBillingAddress = false;
+      }
+    }
+
+    if (validationKeys['credit_card'] && validationKeys['billing_expiration'] && validationKeys['billing_cvc'] && bBillingAddress) {
+      this.setState({ validationKeys, currentStep: 3 });
+    }
+    else {
+      this.forceUpdate();
+    }
+  };
+
+  handleCart = () => {
+    const { isCartOpen } = this.state;
+    this.setState({ isCartOpen: !isCartOpen });
+  };
+
   render() {
     const { applied_referral_code, temp_dogs } = this.props.temp_user;
-    const { isLoading } = this.state;
-    
+    const { currentStep, validationKeys, isCartOpen, isLoading } = this.state;
     return (
-      <main className="h-auto md:flex md:px-12 px-0 md:py-10 py-0">
+      <main className="h-auto flex flex-col md:flex-row">
         { isLoading &&
           <LoadingCircle />
         }
-        <div className="md:flex-1 md:px-5 px-0">
-          <div className="bg-white md:rounded-md md:shadow-lg md:border outline-none px-3 md:px-8 pt-3 md:py-6">
-            <div className="text-2xl font-sans text-gray-700 px-6 text-center">
-              Try risk free for 30 days - money back guarantee
+        <div className="md:flex-1 order-2 md:order-1 bg-white">
+          <div className="px-2 md:px-20 py-4 md:py-10 flex flex-col gap-3">
+            <div className="hidden md:flex items-center justify-center pb-2 md:pb-4">
+              <img src={ImgNavbarLogo} alt="" />
             </div>
-            
-            <div className="my-5 px-5">
-              <hr className="text-gray-300" />
-            </div>
-
-            <div className="w-full py-4 px-10 my-6 flex items-center justify-center text-indigo-100 transition-colors duration-150 bg-yellow-300 rounded-md cursor-pointer hover:bg-yellow-400" onClick={this.openPaypalRedirect}>
-              <img
-                src="/static/media/paypal-logo.23de6718.png"
-                alt="PayPal"
-                width="100px"
-              />
-            </div>
-
-            <div className="my-4">
-              <Divider text="or" />
-            </div>
-
-            <div className="flex flex-col">
-              <div className="flex flex-col">
-                <div className="flex my-3">
-                  <img className="pr-3" src={CreateAccount} alt="" />
-                  <span className="text-gray-700 text-lg">
-                    Create an Account
-                  </span>
-                </div>
-
-                <div className="my-3">
-                  <label className="text-gray-700">
-                    Email <span className="text-red-500 pl-1">*</span>
-                  </label>
-                  <input
-                    type="email"
-                    className="w-full text-gray-700 rounded border-gray-300 border px-3 py-2 outline-none focus:border-black"
-                    value={this.state.email}
-                    onChange={(event) => this.setState({email: event.target.value})} />
-                </div>
-
-                <div className="my-3">
-                  <label className="text-gray-700">
-                    Password <span className="text-red-500 pl-1">*</span>
-                  </label>
-                  <input
-                    type="password"
-                    className="w-full text-gray-700 rounded border-gray-300 border px-3 py-2 outline-none focus:border-black"
-                    value={this.state.password}
-                    onChange={(event) => this.setState({password: event.target.value})}
-                  />
-                </div>
-
-                <div className="my-5">
-                  <hr className="text-gray-300" />
-                </div>
-              </div>
-
-              <div className="flex flex-col">
-                <div className="flex my-3">
-                  <img className="pr-3" src={ShippingInfo} alt="" />
-
-                  <span className="text-gray-700 text-lg">
-                    Shipping Information
-                  </span>
-                </div>
-
-                <div className="flex justify-between my-3">
-                  <div className="flex-1">
-                    <label className="text-gray-700">
-                      First Name<span className="text-red-500 pl-1">*</span>
-                    </label>
-                    <input
-                      className="w-full rounded text-gray-700 border-gray-300 border px-3 py-2 outline-none focus:border-black"
-                      value={this.state.shippingFirstName}
-                      onChange={(event) => this.setState({shippingFirstName: event.target.value})}
-                    />
-                  </div>
-
-                  <div className="flex-1 pl-3">
-                    <label className="text-gray-700">
-                      Last Name<span className="text-red-500 pl-1">*</span>
-                    </label>
-                    <input
-                      className="w-full rounded text-gray-700 border-gray-300 border px-3 py-2 outline-none focus:border-black"
-                      value={this.state.shippingLastName}
-                      onChange={(event) => this.setState({shippingLastName: event.target.value})}
-                    />
-                  </div>
-                </div>
-
-                <div className="my-3">
-                  <label className="py-3 text-gray-700">
-                    Street Address<span className="text-red-500 pl-1">*</span>
-                  </label>
-                  <input
-                    className="w-full rounded text-gray-700 border-gray-300 border px-3 py-2 outline-none focus:border-black"
-                    value={this.state.shippingAddress}
-                    onChange={(event) => this.setState({shippingAddress: event.target.value})}
-                  />
-                </div>
-
-                <div className="flex justify-between my-3">
-                  <div className="flex-1">
-                    <label className="text-gray-700">Apt/Suite</label>
-                    <input
-                      className="w-full rounded text-gray-700 border-gray-300 border px-3 py-2 outline-none focus:border-black"
-                      value={this.state.shippingApt}
-                      onChange={(event) => this.setState({shippingApt: event.target.value})}
-                    />
-                  </div>
-
-                  <div className="flex-1 pl-3">
-                    <label className="text-gray-700">
-                      City<span className="text-red-500 pl-1">*</span>
-                    </label>
-                    <input
-                      className="w-full rounded text-gray-700 border-gray-300 border px-3 py-2 outline-none focus:border-black"
-                      value={this.state.shippingCity}
-                      onChange={(event) => this.setState({shippingCity: event.target.value})}
-                    />
-                  </div>
-                </div>
-
-                <div className="flex justify-between my-3">
-                  <div className="flex-1">
-                    <label className="py-3 text-gray-700">
-                      Postal Code<span className="text-red-500 pl-1">*</span>
-                    </label>
-                    <input
-                      className="w-full rounded text-gray-700 border-gray-300 border px-3 py-2 outline-none focus:border-black"
-                      value={this.state.shippingPostalCode}
-                      onChange={(event) => this.setState({shippingPostalCode: event.target.value})}
-                    />
-                  </div>
-
-                  <div className="flex-1 pl-3">
-                    <label className="py-3 text-gray-700">
-                      Phone Number<span className="text-red-500 pl-1">*</span>
-                    </label>
-                    <input
-                      className="w-full rounded text-gray-700 border-gray-300 border px-3 py-2 outline-none focus:border-black"
-                      value={this.state.shippingPhoneNumber}
-                      onChange={(event) => this.setState({shippingPhoneNumber: event.target.value})}
-                    />
-                  </div>
-                </div>
-                <div className="my-3">
-                  <label className="text-gray-700">
-                    Special Delivery Instructions
-                  </label>
-                  <p className="text-gray-500 pb-1">
-                    (i.e. buzzer,leave with security, etc)
-                  </p>
-                  <input
-                    className="w-full rounded text-gray-700 border-gray-300 border px-3 py-2 outline-none focus:border-black"
-                    value={this.state.shippingInstructions}
-                    onChange={(event) => this.setState({shippingInstructions: event.target.value})}
-                  />
-                </div>
-
-                <div className="my-5">
-                  <hr className="text-gray-300" />
-                </div>
-              </div>
-
-              <div className="flex flex-col">
-                <div className="flex my-3">
-                  <img className="pr-3" src={Billing} alt="" />
-                  <span className="text-gray-700 text-lg">
-                    Billing
-                  </span>
-                </div>
-
-                <div className="flex justify-between my-3 h-7">
-                  <img src={ImgCreditCard} alt="" />
-                  <img className="float-right" src={ImgTrusted} alt="" />
-                </div>
-
-                <div className="my-3">
-                  <label className="text-gray-700">
-                    Credit Card Number
-                  </label>
-                  <CreditCardInput
-                    className="w-full text-gray-700 rounded border-gray-300 border px-3 py-2 outline-none focus:border-black"
-                    value={this.state.creditCard}
-                    placeholder="1234 1234 1234 1234"
-                    setValue={(value) => this.setState({creditCard: value})}
-                  />
-                </div>
-
-                <div className="flex justify-between my-3">
-                  <div className="flex-1">
-                    <label className="text-gray-700">
-                      Expiration
-                    </label>
-                    <ExpirationInput
-                      className="w-full rounded text-gray-700 border-gray-300 border px-3 py-2 outline-none focus:border-black"
-                      value={this.state.billingExpiration}
-                      placeholder="MM/YY"
-                      setValue={(value) => this.setState({billingExpiration: value})}
-                    />
-                  </div>
-
-                  <div className="flex-1 pl-3">
-                    <label className="text-gray-700">
-                      CVC
-                    </label>
-                    <input
-                      className="w-full rounded text-gray-700 border-gray-300 border px-3 py-2 outline-none focus:border-black"
-                      value={this.state.billingCVC}
-                      placeholder="CVC"
-                      maxLength="4"
-                      onChange={(event) => this.setState({billingCVC: event.target.value})}
-                    />
-                  </div>
-                </div>
-
-                <div className="my-3">
-                  <label className="py-3 text-gray-700">
-                    Billing Address
-                  </label>
-                  <div className="pt-2 w-full">
-                    <input
-                      type="checkbox"
-                      className="rounded text-gray-700 border-gray-300 border mr-3 px-3 py-2 outline-none focus:border-black"
-                      defaultChecked={this.state.sameBillingAddress}
-                      onClick={(event) => this.updateBilling(event.target.checked)}
-                    />
-                    <label>Same as shipping address</label>
-                  </div>
-                </div>
-
-                { !this.state.sameBillingAddress &&
-                <div>
-                  <div className="flex justify-between my-3">
-                    <div className="flex-1">
-                      <label className="text-gray-700">
-                        First Name<span className="text-red-500 pl-1">*</span>
-                      </label>
-                      <input
-                        className="w-full rounded text-gray-700 border-gray-300 border px-3 py-2 outline-none focus:border-black"
-                        value={this.state.billingFirstName}
-                        onChange={(event) => this.setState({billingFirstName: event.target.value})}
-                      />
-                    </div>
-
-                    <div className="flex-1 pl-3">
-                      <label className="text-gray-700">
-                        Last Name<span className="text-red-500 pl-1">*</span>
-                      </label>
-                      <input
-                        className="w-full rounded text-gray-700 border-gray-300 border px-3 py-2 outline-none focus:border-black"
-                        value={this.state.billingLastName}
-                        onChange={(event) => this.setState({billingLastName: event.target.value})}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="my-3">
-                    <label className="py-3 text-gray-700">
-                      Street Address<span className="text-red-500 pl-1">*</span>
-                    </label>
-                    <input
-                      className="w-full rounded text-gray-700 border-gray-300 border px-3 py-2 outline-none focus:border-black"
-                      value={this.state.billingAddress}
-                      onChange={(event) => this.setState({billingAddress: event.target.value})}
-                    />
-                  </div>
-
-                  <div className="flex justify-between my-3">
-                    <div className="flex-1">
-                      <label className="text-gray-700">Apt/Suite</label>
-                      <input
-                        className="w-full rounded text-gray-700 border-gray-300 border px-3 py-2 outline-none focus:border-black"
-                        value={this.state.billingApt}
-                        onChange={(event) => this.setState({billingApt: event.target.value})}
-                      />
-                    </div>
-
-                    <div className="flex-1 pl-3">
-                      <label className="text-gray-700">
-                        City<span className="text-red-500 pl-1">*</span>
-                      </label>
-                      <input
-                        className="w-full rounded text-gray-700 border-gray-300 border px-3 py-2 outline-none focus:border-black"
-                        value={this.state.billingCity}
-                        onChange={(event) => this.setState({billingCity: event.target.value})}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="flex justify-between my-3">
-                    <div className="flex-1">
-                      <label className="py-3 text-gray-700">
-                        Postal Code<span className="text-red-500 pl-1">*</span>
-                      </label>
-                      <input
-                        className="w-full rounded text-gray-700 border-gray-300 border px-3 py-2 outline-none focus:border-black"
-                        value={this.state.billingPostalCode}
-                        onChange={(event) => this.setState({billingPostalCode: event.target.value})}
-                      />
-                    </div>
-
-                    <div className="flex-1 pl-3">
-                      <label className="py-3 text-gray-700">
-                        Phone Number<span className="text-red-500 pl-1">*</span>
-                      </label>
-                      <input
-                        className="w-full rounded text-gray-700 border-gray-300 border px-3 py-2 outline-none focus:border-black"
-                        value={this.state.billingPhoneNumber}
-                        onChange={(event) => this.setState({billingPhoneNumber: event.target.value})}
-                      />
-                    </div>
-                  </div>
-                </div>
+            <div className="flex flex-col border border-green border-opacity-20	rounded-lg shadow">
+              <div
+                className="p-4 flex bg-white cursor-pointer"
+                onClick={ () => this.setState({ currentStep: 0 }) }
+              >
+                <span className="font-cooper font-bold text-lg">
+                  Contact Information
+                </span>
+                { currentStep > 0 &&
+                  <img className="ml-auto" src={IconGreenCheck} alt="" />
                 }
               </div>
+              { currentStep === 0 && 
+                <div>
+                  <hr className="text-gray-300" />
+                  <div className="p-4 flex flex-col gap-3 bg-gray-50">
+                    <div className="flex flex-col md:flex-row gap-3 justify-between">
+                      <FormInput
+                        className="flex-1 p-2 flex flex-col border rounded-md"
+                        label="FIRST NAME"
+                        required
+                        validation={validationKeys['first_name']}
+                        value={ this.state.firstName }
+                        onChange={ (value) => this.setState({ firstName: value }) }
+                      />
+                      <FormInput
+                        className="flex-1 p-2 flex flex-col border rounded-md"
+                        label="LAST NAME"
+                        required
+                        validation={validationKeys['last_name']}
+                        value={ this.state.lastName }
+                        onChange={ (value) => this.setState({ lastName: value }) }
+                      />
+                    </div>
+                    <FormInput
+                      className="p-2 flex flex-col border rounded-md"
+                      label="EMAIL ADDRESS"
+                      type="email"
+                      required
+                      validation={validationKeys['email']}
+                      value={ this.state.email }
+                      onChange={ (value) => this.setState({ email: value }) }
+                    />
+                    <FormInput
+                      className="p-2 flex flex-col border rounded-md"
+                      label="PASSWORD"
+                      type="password"
+                      required
+                      validation={validationKeys['password']}
+                      validationText="Password should be at least 6 characters"
+                      value={ this.state.password }
+                      onChange={ (value) => this.setState({ password: value }) }
+                    />
+                    <button
+                      className="w-full px-6 py-4 font-messina text-center text-white text-xl focus:outline-none transition-colors duration-150 bg-green-600 rounded-md focus:shadow-outline hover:bg-green-700 cursor-pointer"
+                      onClick={this.handleContactInformation}>
+                      Continue to shipping
+                    </button>
+                  </div>
+                </div>
+              }
+            </div>
+
+            <div className="flex flex-col border border-green border-opacity-20	rounded-lg shadow">
+              <div
+                className="p-4 flex items-center bg-white cursor-pointer"
+                onClick={this.openShippingAddress}
+              >
+                <img className="pr-3" src={IconDeliveryAddress} alt="" />
+                <span className="font-cooper font-bold text-lg">
+                  Shipping Address
+                </span>
+                { currentStep > 1 &&
+                  <img className="ml-auto" src={IconGreenCheck} alt="" />
+                }
+              </div>
+              { currentStep === 1 &&
+                <div>
+                  <hr className="text-gray-300" />
+                  <div className="p-4 flex flex-col gap-3 bg-gray-50">
+                    <FormInput
+                      className="p-2 flex flex-col border rounded-md"
+                      label="STREET ADDRESS"
+                      placeholder="Enter Street Address"
+                      required
+                      validation={validationKeys['shipping_address']}
+                      value={ this.state.shippingAddress }
+                      onChange={ (value) => this.setState({ shippingAddress: value }) }
+                    />
+                    <div className="flex flex-col md:flex-row gap-3 justify-between">
+                      <FormInput
+                        className="flex-1 p-2 flex flex-col border rounded-md"
+                        label="APT / SUITE #"
+                        placeholder="Optional"
+                        validation={validationKeys['shipping_apt']}
+                        value={ this.state.shippingApt }
+                        onChange={ (value) => this.setState({ shippingApt: value }) }
+                      />
+                      <FormInput
+                        className="flex-1 p-2 flex flex-col border rounded-md"
+                        label="CITY"
+                        placeholder="Enter City Name"
+                        required
+                        validation={validationKeys['shipping_city']}
+                        value={ this.state.shippingCity }
+                        onChange={ (value) => this.setState({ shippingCity: value }) }
+                      />
+                    </div>
+                    <div className="flex flex-col md:flex-row gap-3 justify-between">
+                      <FormInput
+                        className="flex-1 p-2 flex flex-col border rounded-md"
+                        label="POSTAL CODE"
+                        type="postal"
+                        placeholder="Enter Postal Code"
+                        required
+                        validation={validationKeys['shipping_postal_code']}
+                        validationText="Sorry! Kabo is not available in your area"
+                        value={ this.state.shippingPostalCode }
+                        onChange={ (value) => this.setState({ shippingPostalCode: value }) }
+                      />
+                      <FormInput
+                        className="flex-1 p-2 flex flex-col border rounded-md"
+                        label="PHONE NUMBER"
+                        type="phone"
+                        placeholder="Enter Phone Number"
+                        required
+                        validation={validationKeys['shipping_phone_number']}
+                        value={ this.state.shippingPhoneNumber }
+                        onChange={ (value) => this.setState({ shippingPhoneNumber: value }) }
+                      />
+                    </div>
+                    <FormInput
+                      className="p-2 flex flex-col border rounded-md"
+                      label="SPECIAL DELIVERY INSTRUCTIONS"
+                      type="instructions"
+                      options={ onboardingContstants.SPECIAL_DELIVERY_INSTRUCTIONS }
+                      placeholder="(i.e. buzzer, leave with security, etc.)"
+                      validation={validationKeys['shipping_instructions']}
+                      value={ this.state.shippingInstructions }
+                      onChange={ (value) => this.setState({ shippingInstructions: value }) }
+                    />
+                    <button
+                      className="w-full px-6 py-4 font-messina text-center text-white text-xl focus:outline-none transition-colors duration-150 bg-green-600 rounded-md focus:shadow-outline hover:bg-green-700 cursor-pointer"
+                      onClick={this.handleShippingAddress}
+                    >
+                      Continue to shipping
+                    </button>
+                  </div>
+                </div>
+              }
+            </div>
+
+            <div className="flex flex-col border border-green border-opacity-20	rounded-lg shadow">
+              <div
+                className="p-4 flex flex-col md:flex-row bg-white cursor-pointer"
+                onClick={ this.openBillingInformation }
+              >
+                <div className="flex items-center">
+                  <img className="pr-3" src={IconBilling} alt="" />
+                  <span className="font-cooper font-bold text-lg">
+                    Billing Information
+                  </span>
+                </div>
+                <div className="flex md:ml-auto">
+                  <BillingMethodIcon />
+                  <img className="w-12 ml-1 px-1" src={IconPaypal} alt="" />
+                </div>
+              </div>
+              { currentStep === 2 &&
+                <div>
+                  <hr className="text-gray-300" />
+                  <div className="p-4 flex flex-col gap-3 bg-gray-50">
+                    <FormInput
+                      className="p-2 flex flex-col border rounded-md"
+                      label="CREDIT CARD NUMBER"
+                      type="credit"
+                      placeholder="1234 1234 1234 1234"
+                      required
+                      validation={validationKeys['credit_card']}
+                      value={ this.state.creditCard }
+                      onChange={ (value) => this.setState({ creditCard: value }) }
+                    />
+                    <div className="flex flex-col md:flex-row gap-3 justify-between">
+                      <FormInput
+                        className="flex-1 p-2 flex flex-col border rounded-md"
+                        label="EXPIRATION"
+                        type="expiration"
+                        placeholder="MM / YY"
+                        required
+                        validation={validationKeys['billing_expiration']}
+                        value={ this.state.billingExpiration }
+                        onChange={ (value) => this.setState({ billingExpiration: value }) }
+                      />
+                      <FormInput
+                        className="flex-1 p-2 flex flex-col border rounded-md"
+                        label="CVC"
+                        placeholder="CVC"
+                        required
+                        validation={validationKeys['billing_cvc']}
+                        maxLength="4"
+                        value={ this.state.billingCVC }
+                        onChange={ (value) => this.setState({ billingCVC: value }) }
+                      />
+                    </div>
+                    <div className="py-2 w-full">
+                      <input
+                        type="checkbox"
+                        className="rounded font-light text-gray-700 border-gray-300 border mr-3 px-3 py-2 outline-none focus:border-black"
+                        defaultChecked={this.state.sameBillingAddress}
+                        onClick={(event) => this.updateBilling(event.target.checked)}
+                      />
+                      <label className="font-messina text-md">
+                        My billing address is the same as my shipping address
+                      </label>
+                    </div>
+                    { !this.state.sameBillingAddress && 
+                      <div className="flex flex-col gap-3">
+                        <FormInput
+                          className="p-2 flex flex-col border rounded-md"
+                          label="STREET ADDRESS"
+                          placeholder="Enter Street Address"
+                          required
+                          validation={validationKeys['billing_address']}
+                          value={ this.state.billingAddress }
+                          onChange={ (value) => this.setState({ billingAddress: value }) }
+                        />
+                        <div className="flex flex-col md:flex-row gap-3 justify-between">
+                          <FormInput
+                            className="flex-1 p-2 flex flex-col border rounded-md"
+                            label="APT / SUITE #"
+                            placeholder="Optional"
+                            validation={validationKeys['billing_apt']}
+                            value={ this.state.billingApt }
+                            onChange={ (value) => this.setState({ billingApt: value }) }
+                          />
+                          <FormInput
+                            className="flex-1 p-2 flex flex-col border rounded-md"
+                            label="CITY"
+                            placeholder="Enter City Name"
+                            required
+                            validation={validationKeys['billing_city']}
+                            value={ this.state.billingCity }
+                            onChange={ (value) => this.setState({ billingCity: value }) }
+                          />
+                        </div>
+                        <div className="flex flex-col md:flex-row gap-3 justify-between">
+                          <FormInput
+                            className="flex-1 p-2 flex flex-col border rounded-md"
+                            label="POSTAL CODE"
+                            type="postal"
+                            placeholder="Enter Postal Code"
+                            validation={validationKeys['billing_postal_code']}
+                            value={ this.state.billingPostalCode }
+                            onChange={ (value) => this.setState({ billingPostalCode: value }) }
+                          />
+                          <FormInput
+                            className="flex-1 p-2 flex flex-col border rounded-md"
+                            label="PHONE NUMBER"
+                            type="phone"
+                            placeholder="Enter Phone Number"
+                            required
+                            validation={validationKeys['billing_phone_number']}
+                            value={ this.state.billingPhoneNumber }
+                            onChange={ (value) => this.setState({ billingPhoneNumber: value }) }
+                          />
+                        </div>
+                      </div>
+                    }
+                    <button
+                      className="w-full px-6 py-4 font-messina text-center text-white text-xl focus:outline-none transition-colors duration-150 bg-green-600 rounded-md focus:shadow-outline hover:bg-green-700 cursor-pointer"
+                      onClick={this.handleBillingInformation}>
+                      Continue to shipping
+                    </button>
+                    <div className="my-2 flex items-center">
+                      <hr className="flex-1"/>
+                      <span className="px-3 text-black">OR</span>
+                      <hr className="flex-1"/>
+                    </div>
+                    <div
+                      className="w-full py-4 px-10 my-2 flex items-center justify-center text-indigo-100 transition-colors duration-150 bg-yellow-400 rounded-md cursor-pointer hover:bg-yellow-500"
+                      onClick={this.openPaypalRedirect}>
+                      <img className="w-24" src={ImgPaypalLogo} alt="PayPal" />
+                    </div>
+                    <div className="text-sm font-light font-messina text-gray-400 text-center">
+                      By clicking "Purchase", you're agreeing to a no-commitment, recurring subscription. After your trial, feel free to email us at any time should you need to pause or cancel your order.
+                    </div>
+                  </div>
+                </div>
+              }
             </div>
           </div>
         </div>
-        <div className="md:flex-1 md:px-5 px-3">
-          <div className="flex flex-col">
-            <div className="text-gray-700 text-md py-1">
-              Have a coupon code?
+        <div className="md:flex-1 order-1 md:order-2">
+          <div className="flex md:hidden flex-col">
+            <div className="flex items-center justify-center px-4 py-4 bg-white">
+              <img src={ImgNavbarLogo} alt="" />
             </div>
-            <div className="flex justify-between">
-              <div className="w-9/12">
-                <input
-                  className="w-full rounded border-gray-300 border px-3 py-2 outline-none focus:border-black"
-                  value={this.state.coupon}
-                  onChange={(event) => this.setState({coupon: event.target.value})}
-                />
-              </div>
-              <div className="ml-2 flex-1">
-                <button className="w-full py-2 px-6 text-center text-white focus:outline-none transition-colors duration-150 bg-green-600 rounded-md focus:shadow-outline hover:bg-green-700" onClick={this.getProductDetails}>
-                  Apply
-                </button>
-              </div>
-            </div>
-            { applied_referral_code &&
-              <div className="py-1 w-12/12">
-                <div className="bg-green-100 py-3">
-                  <h1 className="text-center text-1xl">
-                    { applied_referral_code }
-                  </h1>
-                </div>
-              </div>
-            }
-          </div>
-          <div className="flex flex-col sticky top-0">
-            <hr className="w-10/12 text-gray-300 mx-auto my-10" />
-            {
-              temp_dogs &&
-              temp_dogs.length > 0 &&
-              temp_dogs.map((dogItem, idx) => (
-                <div className="flex flex-col px-3" key={idx}>
-                  <div className="flex flex-col">
-                    <h3 className="text-center text-2xl">
-                      {dogItem.name ? dogItem.name : ''}'s first box
-                    </h3>
-                    <h3 className="text-center py-2">
-                      { dogItem.checkout_estimate.productDescription[0] ? dogItem.checkout_estimate.productDescription[0] : ''}
-                    </h3>
-                  </div>
-                  {
-                    dogItem.checkout_estimate.mealplanInfo &&
-                    dogItem.checkout_estimate.mealplanInfo.length > 0 &&
-                    <div className="flex justify-center">
-                      <div className="w-full bg-white rounded border border-gray-300 px-3 py-5">
-                        {
-                          dogItem.checkout_estimate.mealplanInfo.map((item, idx) => (
-                            <div className="flex justify-between mb-1" key={idx}>
-                              <h3 className="text-gray-600">{item}</h3>
-                            </div>
-                          ))
-                        }
-                      </div>
-                    </div>
-                  }
-                  <div className="flex justify-center py-2">
-                    <div className="w-full py-5">
-                      {
-                        dogItem.checkout_estimate.priceDetails &&
-                        dogItem.checkout_estimate.priceDetails.map((item, idx) => (
-                          <div className="flex justify-between mb-1" key={idx}>
-                            <h3 className="text-gray-600">{item.title}</h3>
-                            <h3 className="text-gray-600">{item.details}</h3>
-                          </div>
-                        ))
-                      }
-                    </div>
-                  </div>
-                </div>
-              ))
-            }
-            <div className="flex justify-center py-5">
-              <div className="w-full">
-                <hr className="text-gray-300" />
-              </div>
-            </div>
-            <div className="flex justify-between">
-              <h3 className="text-black text-2xl">Total Due</h3>
-              <h3 className="text-black text-2xl">
+            <div
+              className="flex items-center px-6 py-4 cursor-pointer border-t border-b border-gray-300"
+              onClick={ this.handleCart }>
+              <img src={IconCart} alt="" />
+              <span className="ml-4 font-messina text-lg">Show Order Summary</span>
+              <img className={`ml-4 transform ${isCartOpen ? 'rotate-180' : 'rotate-0'}`} src={IconChevron} alt="" />
+              <span className="ml-auto font-messina font-medium text-base">
                 {
                   temp_dogs &&
                   temp_dogs.length > 0 &&
                   temp_dogs[0].checkout_estimate.priceTotal.details ? temp_dogs[0].checkout_estimate.priceTotal.details : ''
                 }
-              </h3>
+              </span>
             </div>
-            <div className="flex justify-center px-3 py-2">
-              <div className="w-full">
-                <div className="py-7">
-                  <div className="py-2 flex">
-                    <FilledCircle className="rounded-full  h-5 w-5" />
-                    <p className="text-gray-600 px-3">
-                      No Commitment. Pause or cancel at any time after your trial.
-                    </p>
+          </div>
+          <div className={`${isCartOpen ? 'flex' : 'hidden'} md:flex flex-col gap-3 px-2 md:px-10 py-4 md:py-10`}>
+            <div className="text-3xl font-cooper text-black text-center">
+              Try risk free for 30 days
+            </div>
+            <div className="my-4 text-base font-messina text-black text-center font-light">
+              Money back guarantee
+            </div>
+            <div className="flex flex-col">
+              <div className="text-gray-700 text-md py-1">
+                Have a coupon code?
+              </div>
+              <div className="flex justify-between">
+                <div className="w-9/12">
+                  <input
+                    className="w-full rounded border-gray-300 border px-3 py-2 outline-none focus:border-black"
+                    value={this.state.coupon}
+                    onChange={(event) => this.setState({coupon: event.target.value})}
+                  />
+                </div>
+                <div className="ml-2 flex-1">
+                  <button className="w-full py-2 px-6 text-center text-white focus:outline-none transition-colors duration-150 bg-green-600 rounded-md focus:shadow-outline hover:bg-green-700" onClick={this.getProductDetails}>
+                    Apply
+                  </button>
+                </div>
+              </div>
+              { applied_referral_code &&
+                <div className="py-1 w-12/12">
+                  <div className="bg-green-100 py-3">
+                    <h1 className="text-center text-1xl">
+                      { applied_referral_code }
+                    </h1>
                   </div>
-                  <div className="flex">
-                    <FilledCircle className=" rounded-full  h-5 w-5" />
-                    <p className="text-gray-600 px-3">
-                      We'll refund your order 100% if your dog doesn't like the
-                      food.
-                    </p>
+                </div>
+              }
+            </div>
+            <div className="flex flex-col sticky top-0">
+              <hr className="w-10/12 text-gray-300 mx-auto my-10" />
+              {
+                temp_dogs &&
+                temp_dogs.length > 0 &&
+                temp_dogs.map((dogItem, idx) => (
+                  <div className="flex flex-col px-3" key={idx}>
+                    <div className="flex flex-col">
+                      <h3 className="text-center text-2xl">
+                        {dogItem.name ? dogItem.name : ''}'s first box
+                      </h3>
+                      <h3 className="text-center py-2">
+                        { dogItem.checkout_estimate.productDescription[0] ? dogItem.checkout_estimate.productDescription[0] : ''}
+                      </h3>
+                    </div>
+                    {
+                      dogItem.checkout_estimate.mealplanInfo &&
+                      dogItem.checkout_estimate.mealplanInfo.length > 0 &&
+                      <div className="flex justify-center">
+                        <div className="w-full bg-white rounded border border-gray-300 px-3 py-5">
+                          {
+                            dogItem.checkout_estimate.mealplanInfo.map((item, idx) => (
+                              <div className="flex justify-between mb-1" key={idx}>
+                                <h3 className="text-gray-600">{item}</h3>
+                              </div>
+                            ))
+                          }
+                        </div>
+                      </div>
+                    }
+                    <div className="flex justify-center py-2">
+                      <div className="w-full py-5">
+                        {
+                          dogItem.checkout_estimate.priceDetails &&
+                          dogItem.checkout_estimate.priceDetails.map((item, idx) => (
+                            <div className="flex justify-between mb-1" key={idx}>
+                              <h3 className="text-gray-600">{item.title}</h3>
+                              <h3 className="text-gray-600">{item.details}</h3>
+                            </div>
+                          ))
+                        }
+                      </div>
+                    </div>
+                  </div>
+                ))
+              }
+              <div className="flex justify-center py-5">
+                <div className="w-full">
+                  <hr className="text-gray-300" />
+                </div>
+              </div>
+              <div className="flex justify-between">
+                <h3 className="text-black text-2xl">Total Due</h3>
+                <h3 className="text-black text-2xl">
+                  {
+                    temp_dogs &&
+                    temp_dogs.length > 0 &&
+                    temp_dogs[0].checkout_estimate.priceTotal.details ? temp_dogs[0].checkout_estimate.priceTotal.details : ''
+                  }
+                </h3>
+              </div>
+              <div className="flex justify-center px-3 py-2">
+                <div className="w-full">
+                  <div className="py-7">
+                    <div className="py-2 flex">
+                      <FilledCircle className="rounded-full  h-5 w-5" />
+                      <p className="text-gray-600 px-3">
+                        No Commitment. Pause or cancel at any time after your trial.
+                      </p>
+                    </div>
+                    <div className="flex">
+                      <FilledCircle className=" rounded-full  h-5 w-5" />
+                      <p className="text-gray-600 px-3">
+                        We'll refund your order 100% if your dog doesn't like the
+                        food.
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="py-1 w-12/12">
-              <button className="bg-gray-800 w-full py-3 text-center text-white text-2xl focus:outline-none focus:text-green-600	cursor-pointer" onClick={this.purchase}>
-                Purchase
-              </button>
-            </div>
-            <div>
-              <p className="text-center text-gray-600 px-5 py-5">
-                By clicking "Purchase", you're agreeing to a no-commitment, recurring subscription. After your trial, feel free to email us at any time should you need to pause or cancel your order.
-              </p>
-            </div>
-            <div className="flex justify-center">
-              <div className="bg-green-300 py-1 px-1 mx-1">
-                <img src={Star} alt="" />
+              <div className="py-1 w-12/12">
+                <button className="bg-gray-800 w-full py-3 text-center text-white text-2xl focus:outline-none focus:text-green-600	cursor-pointer" onClick={this.purchase}>
+                  Purchase
+                </button>
               </div>
-              <div className="bg-green-300 py-1 px-1 mx-1">
-                <img src={Star} alt="" />
-              </div>{" "}
-              <div className="bg-green-300 py-1 px-1 mx-1">
-                <img src={Star} alt="" />
-              </div>{" "}
-              <div className="bg-green-300 py-1 px-1 mx-1">
-                <img src={Star} alt="" />
+              <div>
+                <p className="text-center text-gray-600 px-5 py-5">
+                  By clicking "Purchase", you're agreeing to a no-commitment, recurring subscription. After your trial, feel free to email us at any time should you need to pause or cancel your order.
+                </p>
               </div>
-              <div className="bg-green-300 py-1 px-1 mx-1">
-                <img src={Star} alt="" />
+              <div className="flex justify-center">
+                <div className="bg-green-300 py-1 px-1 mx-1">
+                  <img src={Star} alt="" />
+                </div>
+                <div className="bg-green-300 py-1 px-1 mx-1">
+                  <img src={Star} alt="" />
+                </div>{" "}
+                <div className="bg-green-300 py-1 px-1 mx-1">
+                  <img src={Star} alt="" />
+                </div>{" "}
+                <div className="bg-green-300 py-1 px-1 mx-1">
+                  <img src={Star} alt="" />
+                </div>
+                <div className="bg-green-300 py-1 px-1 mx-1">
+                  <img src={Star} alt="" />
+                </div>
               </div>
-            </div>
-            <div className="flex justify-center py-5  text-2xl">
-              Related &nbsp; <span className="font-bold ">Excellent</span>{" "}
-              &nbsp;on &nbsp;
-              <span className=" ">
-                {" "}
-                <img className="h-7" src={StarGreen} alt="" />{" "}
-              </span>{" "}
-              &nbsp;Trustpilot
+              <div className="flex justify-center py-5  text-2xl">
+                Related &nbsp; <span className="font-bold ">Excellent</span>{" "}
+                &nbsp;on &nbsp;
+                <span className=" ">
+                  {" "}
+                  <img className="h-7" src={StarGreen} alt="" />{" "}
+                </span>{" "}
+                &nbsp;Trustpilot
+              </div>
             </div>
           </div>
         </div>
