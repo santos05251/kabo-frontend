@@ -5,10 +5,6 @@ import MealPlanSelect from '../../components/meal-plan/meal-plan-select';
 import "./style.css";
 
 class RecipeSelection extends Component {
-  state = {
-    showMealPlanModal: null
-  }
-
   handleChange = (selectedDog) => {
     this.props.selectedDog(selectedDog);
   };
@@ -26,25 +22,11 @@ class RecipeSelection extends Component {
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevProps.selectedLength !== this.props.selectedLength && this.props.selectedLength > 1 && !this.state.showMealPlanModal) {
-      this.setState({
-        showMealPlanModal: true,
-      })
-    }
-  }
-
   handleKibbleChange = (index) => {
     let oneItem = [];
     oneItem.push(this.state.localkribbleRecipies[index]);
     this.setState({ selecTedKbRecipie: oneItem })
   };
-
-  onClose = () => {
-    this.setState({
-      showMealPlanModal: false,
-    })
-  }
 
   render() {
     const {
@@ -62,6 +44,8 @@ class RecipeSelection extends Component {
       showKibble,
       onConfirm,
       dog,
+      showMealPlanModal,
+      toggleMealPlanModal,
     } = this.props;
 
     return (
@@ -86,6 +70,7 @@ class RecipeSelection extends Component {
                   selectedDog={selectedDog}
                   selectedLength={selectedLength}
                   user={user}
+                  toggleMealPlanModal={toggleMealPlanModal}
                 />
               )}
 
@@ -103,13 +88,14 @@ class RecipeSelection extends Component {
                   dog={dog}
                   user={user}
                   handleKibbleChange={this.handleKibbleChange}
+                  toggleMealPlanModal={toggleMealPlanModal}
                 />
               )}
             </div>
           </>
           <Modal
-            isOpen={this.state.showMealPlanModal}
-            onRequestClose={this.onClose}
+            isOpen={showMealPlanModal}
+            onRequestClose={toggleMealPlanModal}
             noSpacingheader
             closeIconClassName="absolute top-4.5 right-3.5 md:top-4 md:right-3.25"
             modalClassName="max-w-137"
@@ -132,10 +118,11 @@ class RecipeSelection extends Component {
                     selectedDog={selectedDog}
                     selectedLength={selectedLength}
                     user={user}
-                    foodCardClassName="mb-6.75 md:mb-16.6 md:h-auto"
+                    foodCardClassName="mb-6.75 md:mb-16.6 md:h-auto md:min-h-117 md:relative"
                     noFixedHeight
-                    customSelectButton="md:relative md:bottom-0 lg:relative lg:bottom-0 text-xs leading-8 md:mt-0.75 p-0.25 sm:p-0.25 max-w-39.5"
+                    customSelectButton="md:absolute md:bottom-9 text-xs leading-8 md:mt-2 p-0.25 sm:p-0.25 max-w-39.5"
                     customFoodCardBgImage="w-24 h-24"
+                    toggleMealPlanModal={toggleMealPlanModal}
                   />
                 )}
                 {user.kibble_recipes && user.kibble_recipes.some((i) => selectedKibble.includes(i.recipe)) && (
@@ -152,10 +139,11 @@ class RecipeSelection extends Component {
                   dog={dog}
                   user={user}
                   handleKibbleChange={this.handleKibbleChange}
-                  foodCardClassName="mb-6.75 md:mb-16.6"
+                  foodCardClassName="mb-6.75 md:mb-16.6 md:h-auto md:min-h-117 md:relative"
                   noFixedHeight
-                  customSelectButton="md:relative md:bottom-0 lg:relative lg:bottom-0 text-xs leading-8 md:mt-0.75 p-0.25 sm:p-0.25 max-w-39.5"
+                  customSelectButton="md:absolute md:bottom-9 text-xs leading-8 md:mt-2 p-0.25 sm:p-0.25 max-w-39.5"
                   customFoodCardBgImage="w-24 h-24"
+                  toggleMealPlanModal={toggleMealPlanModal}
                 />
               )}
               </div>

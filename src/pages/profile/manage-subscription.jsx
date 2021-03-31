@@ -22,6 +22,7 @@ class ManageSubscription extends Component {
           isSubscriptionPaused={this.props.isSubscriptionPaused}
           subscription={this.props.subscription}
           delivery_starting_date_options={this.props.delivery_starting_date_options}
+          error={this.props.error}
         />
       </React.Fragment>
     );
@@ -30,7 +31,14 @@ class ManageSubscription extends Component {
 
 const mapStateToProps = (state) => {
   const { user } = state;
-  const { dogs, subscriptionCancel, isSubscriptionPaused, delivery_starting_date_options, subscription } = state.user;
+  const { 
+    dogs,
+    subscriptionCancel, 
+    isSubscriptionPaused, 
+    delivery_starting_date_options, 
+    subscription,
+    error
+  } = state.user;
   return {
     user,
     dogs,
@@ -39,6 +47,7 @@ const mapStateToProps = (state) => {
     isSubscriptionPaused,
     delivery_starting_date_options,
     userName: user.first_name ? user.first_name : 'Customer',
+    error
   };
 };
 

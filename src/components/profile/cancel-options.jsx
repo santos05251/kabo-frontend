@@ -7,6 +7,7 @@ import ConfirmationMessage from "./confirmation-message";
 import { cancelConstants } from "../../constants"
 import GuideOptions from "./guide-options";
 import { otherConstants } from "../../constants";
+import { ReactComponent as ArrowIcon } from "../../assets/images/arrow-small.svg";
 
 const CancelOptions = ({
   dogIndex,
@@ -18,7 +19,7 @@ const CancelOptions = ({
   pauseSubscription,
   cancelSubscription,
   subscription,
-  delivery_starting_date_options
+  delivery_starting_date_options,
 }) => {
   const [pauseBoxType, setPauseBoxType] = useState('MAIN');
   const [pauseType, setPauseType] = useState('1_delivery');
@@ -226,46 +227,43 @@ const CancelOptions = ({
 
       { pauseBoxType === 'TIME' && (
         <>
-           <div className="flex w-11/12 md:w-9/12 justify-between items-center">
-             <div onClick={()=>cancelDateSelection()} className="cursor-pointer">
-	          <svg  width="7" height="24" viewBox="0 0 14 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-			<path fill-rule="evenodd" clip-rule="evenodd" d="M1.41421 13.4142C0.633165 12.6332 0.633165 11.3668 1.41421 10.5858L11.0614 0.938591C11.5798 0.420221 12.4202 0.420221 12.9386 0.938591C13.457 1.45696 13.457 2.2974 12.9386 2.81577L3.75437 12L12.9386 21.1842C13.457 21.7026 13.457 22.543 12.9386 23.0614C12.4202 23.5798 11.5798 23.5798 11.0614 23.0614L1.41421 13.4142Z" fill="black"/>
-		  </svg>
-	     </div>
-	     <h2 className="text-xl font-cooper text-center">
-	     	Choose your next delivery date
-	     </h2>
+          <div className="flex mx-auto w-11/12 md:w-9/12 justify-between items-center">
+            <div onClick={()=>cancelDateSelection()} className="cursor-pointer">
+              <ArrowIcon />
+            </div>
+            <h2 className="text-xl leading-7 md:text-2xl md:leading-8 font-cooper text-center pr-1.75 w-full text-black">
+              Choose your next delivery date
+            </h2>
           </div>
-        <div className="py-6 w-8/12 mx-auto">
+          <div className="py-6 mx-auto">
+            <div className="mb-4 max-w-80 mx-auto">
+              <DatePicker
+                dateFormat="YYYY-MM-DD"
+                startDate
+                selected={pauseUntil === null ? new Date() : pauseUntil}
+                onChange={(date) => setPauseUntil(date)}
+                inline
+                useWeekdaysShort
+                minDate={disablePastDates()}
+                maxDate={disableFutureDates()}
+                includeDates={getNextDeliveryDates()}
+                highlightDates={getNextDeliveryDates()}
+              />
+            </div>
+            {
+                pauseUntil &&
+                <p className="text-sm mb-4 font-messina text-center">Next delivery date is <b>{moment(pauseUntil).format('LL')}</b></p>
+              }
 
-          <div className="flex justify-center mt-6 mb-4">
-            <DatePicker
-              dateFormat="YYYY-MM-DD"
-              startDate
-              selected={pauseUntil === null ? new Date() : pauseUntil}
-              onChange={(date) => setPauseUntil(date)}
-              inline
-              useWeekdaysShort
-              minDate={disablePastDates()}
-              maxDate={disableFutureDates()}
-              includeDates={getNextDeliveryDates()}
-              highlightDates={getNextDeliveryDates()}
-            />
+            <div className="flex justify-center">
+              <button
+                className="rounded-xl py-3 px-8 text-base font-bold bg-primary text-white w-full max-w-41.25 mx-auto lg:max-w-80"
+                onClick={handleDateSelection}
+              >
+                Pick Date
+              </button>
+            </div>
           </div>
-          {
-              pauseUntil &&
-              <p className="text-sm mb-4 font-messina">Next delivery date is <b>{moment(pauseUntil).format('LL')}</b></p>
-            }
-
-          <div className="flex justify-center">
-            <button
-              className="rounded-xl py-3 px-8 text-base font-bold bg-primary text-white w-full"
-              onClick={handleDateSelection}
-            >
-              Pick Date
-            </button>
-          </div>
-        </div>
         </>
       )}
 

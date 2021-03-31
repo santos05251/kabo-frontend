@@ -67,7 +67,7 @@ function* cancelSubscriptionSaga(action) {
     const payload = yield call(userService.cancelSubscription, action.payload);
     yield put({ type: userConstants.CANCEL_SUBSCRIPTION_SUCCESS, payload })
   } catch(error) {
-    yield put({ type: userConstants.CANCEL_SUBSCRIPTION_FAILURE, payload: error})
+    yield put({ type: otherConstants.REQUEST_ERROR, payload: error })
   }
 }
 
@@ -78,7 +78,7 @@ function* pauseSubscriptionSaga(action) {
       put({ type: userConstants.PAUSE_SUBSCRIPTION_SUCCESS, payload }),
     ]);
   } catch (e) {
-    yield put({ type: userConstants.PAUSE_SUBSCRIPTION_FAILURE, payload: e });
+    yield put({ type: otherConstants.REQUEST_ERROR, payload: e });
   }
 }
 

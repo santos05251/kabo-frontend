@@ -23,6 +23,7 @@ const MealPlanSelect = ({
   noFixedHeight,
   customSelectButton,
   customFoodCardBgImage,
+  toggleMealPlanModal,
 }) => {
   let icons = {
     chicken: chickenIcon,
@@ -59,6 +60,7 @@ const MealPlanSelect = ({
             noFixedHeight={noFixedHeight}
             customSelectButton={customSelectButton}
             customBgImage={customFoodCardBgImage}
+            toggleMealPlanModal={toggleMealPlanModal}
           />
         ))}
     </React.Fragment>

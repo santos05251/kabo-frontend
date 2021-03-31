@@ -3,7 +3,7 @@ import moment from 'moment'
 import Stepper from "../partials/stepper.jsx";
 import { ReactComponent as DeliveryBox } from "../../assets/images/box-colour.svg";
 import { ReactComponent as QuestionMark } from "../../assets/images/green-question.svg";
-
+import FeedGuide from '../../assets/documents/Feeding_guide.pdf'
 
 const DeliveryModal = ({
   dogsLength,
@@ -62,9 +62,11 @@ const DeliveryModal = ({
             <b>Amount: </b>
             {readablePortion}
           </div>
-          <div className="flex items-center text-primary text-xs font-semibold mt-1">
-            <QuestionMark className="-ml-1" />
-            Read feeding guide
+          <div className="mt-1">
+            <a target="_blank" href={FeedGuide} className="inline-flex items-center text-primary text-xs font-semibold">
+              <QuestionMark className="-ml-1" />
+              Read feeding guide
+            </a>
           </div>
         </div>
         <div className="w-full md:w-2/5 bg-deliveryStepper p-4 lg:p-8 flex justify-center items-center" data-cy="delivery-stepper" aria-label="Progress">

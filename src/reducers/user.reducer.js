@@ -126,12 +126,6 @@ export const user = (state = initialState, action) => {
         isSubscriptionPaused: true,
       };
 
-    case userConstants.PAUSE_SUBSCRIPTION_FAILURE:
-      return {
-        ...state,
-        pausing_subscription: false,
-      };
-
     case userConstants.UNPAUSE_SUBSCRIPTION_REQUESTED:
       return {
         ...state,
@@ -296,6 +290,7 @@ export const user = (state = initialState, action) => {
         subscriptionCancel: true,
       };
     }
+
     case userConstants.RESET_ERROR:
       return {
         ...state,

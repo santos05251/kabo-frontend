@@ -109,7 +109,8 @@ class DeliveryAddressModal extends React.Component {
               type="large"
               inputValue={deliveryAddress.line3}
               onChange={(e) => this.changeAddress(e, 'line3')}
-              maxLength={100}
+              maxLength={50}
+              showCounter
             />
             {submitted && !loading && !error && (
               <div className="text-primary text-xs font-messina mt-1">

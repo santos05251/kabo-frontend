@@ -109,7 +109,7 @@ const getReferrer = () => {
 const getPage = () => ({
   page: {
     path: window.location.pathname,
-    referrer: jsCookie.get('referrer'),
+    referrer: document.referrer,
     title: document.title,
     search: window.location.search,
     url: window.location.href,

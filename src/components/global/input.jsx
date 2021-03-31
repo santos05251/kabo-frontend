@@ -17,7 +17,8 @@ class Input extends React.Component {
       disabled,
       onChange,
       required,
-      maxLength = null
+      maxLength = null,
+      showCounter,
     } = this.props;
 
     return (
@@ -47,7 +48,7 @@ class Input extends React.Component {
           </div>
         )}
         {type == "large" && (
-          <div className='border rounded h-14 h-20'>
+          <div className={`border rounded relative border-textarea ${showCounter ? 'h-26.5' : 'h-20'}`}>
             <label htmlFor='input' className='m-1 text-xs'>
               {name}
             </label>
@@ -59,8 +60,15 @@ class Input extends React.Component {
               onChange={onChange}
               defaultValue={inputValue}
               style={{ width: '95%' }}
-              className='outline-none text-grey-darkest ml-2.5 h-11 mb-2.5 text-sm resize-none'
-            ></textarea>
+              className={`outline-none text-copyPrimary ml-2.5 h-11 mb-2.5 text-sm resize-none ${showCounter && 'pb-1.75'}`}
+            />
+            {showCounter && (
+              <div
+                className="absolute font-messina text-placeholder text-xs leading-4 bottom-2.5 right-3.5 md:right-2 md:bottom-1.5"
+              >
+                50 characters
+              </div>
+            )}
           </div>
         )}
         {type == "tel" && (

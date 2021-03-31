@@ -63,17 +63,13 @@ const commonArgs = (args) => {
     },
     page: {
       path: args.page ? args.page.path : path,
-      referrer: args.referrer || undefined,
+      referrer: args.page ? args.page.referrer : '',
       title: '',
       search: args.page ? args.page.search : search,
       url: args.page ? args.page.url : url,
     },
     ...args.options,
   };
-};
-
-const expectedArguments = (name, args) => {
-  return [name, args.properties || {}, commonArgs(args)];
 };
 
 const mockCommonArguments = (args) => {
@@ -92,6 +88,7 @@ const mockCommonArguments = (args) => {
           search,
           title: '',
           url,
+          referrer: document.referrer,
         },
       }),
     },
@@ -182,7 +179,7 @@ describe('.init', () => {
 
   it('throws an error if init is called with no host', () => {
     expect(() => {
-      analytics.init()
+      analytics.init();
     }).toThrow('You must initialize analytics with a host');
   });
 
@@ -589,8 +586,6 @@ describe('anonymousId', () => {
   });
   it('returns the users anonymousId', () => {
     expect(validateUUID(analytics.anonymousId())).toBe(true);
-    // console.log('analytics.anonymousId()', analytics.anonymousId());
-    // expect(analytics.anonymousId()).toEqual(anonymousId);
   });
   it('stores anonymous_id to cookie', () => {
     jsCookie.remove('anonymous_id');

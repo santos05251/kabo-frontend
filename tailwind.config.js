@@ -30,6 +30,7 @@ module.exports = {
         charcoal: '#414141',
         lightGrey: '#525252',
         fadeGrey: '#2a3c49',
+        placeholder: '#5f5d5d',
       },
       backgroundColor: {
         container: '#F2F5F4',
@@ -68,6 +69,7 @@ module.exports = {
           duck: '#91CEB6',
         },
         label: '#2F3D33',
+        textarea: '#CFCFCF',
       },
       borderWidth: {
         '3': '1.72532px',
@@ -96,6 +98,7 @@ module.exports = {
       },
       height: {
         '40': '40%',
+        26.5: '105px',
       },
       width: {
         7.3: '1.875rem',
@@ -104,15 +107,21 @@ module.exports = {
       maxHeight: {
         '63': '63%',
       },
+      minHeight: {
+        117: '468px',
+      },
       maxWidth: {
         23: '23rem',
         37: '148px',
         39.5: '156.52px',
+        41.25: '165px',
         43: '170px',
         56.5: '225px',
         54: '213px',
         58: '237px',
         70: '272px',
+        75: '300px',
+        80: '320px',
         137: '579px',
       },
       minWidth: {
@@ -143,7 +152,15 @@ module.exports = {
       },
       lineHeight: {
         4.5: '18px',
-      }
+      },
+      zIndex: {
+        10000: 10000,
+      },
+      inset: {
+        1.5: '6px',
+        2.5: '10px',
+        3.5: '14px',
+      },
     },
     fontFamily: {
       messina: ['Messinasans, sans-serif'],

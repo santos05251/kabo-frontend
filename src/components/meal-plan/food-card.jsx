@@ -19,8 +19,21 @@ const FoodCard = ({
   noFixedHeight,
   customSelectButton,
   customBgImage,
+  toggleMealPlanModal,
 }) => {
   if (!selectedCookedRecipes && !kibble) return null;
+
+  const handleShowMealPlanModal = () => {
+    if (type === 'kibble') {
+      if (selectedLength >= 2 && !selected && !kibbleOnlyNull) {
+        toggleMealPlanModal();
+      }
+    } else {
+      if (selectedLength >= 2 && !selected) {
+        toggleMealPlanModal();
+      }
+    }
+  };
 
   const recipeImage = require(`../../assets/images/recipe/${food.name.split(" ").join("-")}.png`);
   const [details, openDetails] = useState(false);
@@ -38,9 +51,10 @@ const FoodCard = ({
         <div
           className={
             type === 'kibble'
-              ? `bg-kibble-${food.recipe} rounded-tr-5md rounded-tl-5md p-5 w-auto  h-full flex items-center justify-center h-1/2 md:h-auto relative mealplan-meal-image`
-              : `bg-${food.recipe} w-auto rounded-tr-5md rounded-tl-5md p-5 h-full flex items-center justify-center h-1/2 md:h-auto relative mealplan-meal-image`
+              ? `bg-kibble-${food.recipe} rounded-tr-5md rounded-tl-5md p-5 w-auto h-full flex items-center justify-center h-1/2 md:h-auto relative mealplan-meal-image cursor-pointer`
+              : `bg-${food.recipe} w-auto rounded-tr-5md rounded-tl-5md p-5 h-full flex items-center justify-center h-1/2 md:h-auto relative mealplan-meal-image cursor-pointer`
           }
+          onClick={handleShowMealPlanModal}
         >
           {food.new && (
             <div className="bg-label text-white px-6 py-1 rounded-tr-md text-sm font-semibold rounded-br-md absolute left-0 top-4 recipeBadge">
@@ -57,7 +71,7 @@ const FoodCard = ({
               : 'w-full rounded-br-lg rounded-bl-lg focus:bg-green-100 py-5 md:pt-4.75 flex flex-col items-center justify-between'
           }
         >
-          <div className="font-cooper text-lg text-black leading-4 text-center">{food.name}</div>
+          <div className="font-cooper text-lg text-black leading-4 text-center cursor-pointer" onClick={handleShowMealPlanModal}>{food.name}</div>
           <div
             onClick={() => {
               openDetails(true);
@@ -66,7 +80,7 @@ const FoodCard = ({
           >
             See Details
           </div>
-          <div className="text-black font-messina font-normal pt-3.5 px-7.25 foodCardDesc text-xs md:pt-4 md:leading-4.5">{food.ingredients}</div>
+          <div className="text-black font-messina font-normal pt-3.5 px-7.25 foodCardDesc text-xs md:pt-4 md:leading-4.5 cursor-pointer" onClick={handleShowMealPlanModal}>{food.ingredients}</div>
           {type !== 'kibble' && user.kibble_recipes && (
             <select
               className="w-11/12 mx-auto px-3 py-3 bg-transparent border border-gray-400 rounded-0 opacity-0 hidden"
@@ -91,8 +105,13 @@ const FoodCard = ({
             <button
               type="button"
               className={`${selected ? selectedText : unSelectedText} md:mt-4`}
-              onClick={() => selectKibbleRecipe(food)}
-              disabled={selectedLength >= 2 && !selected && !kibbleOnlyNull}
+              onClick={() => {
+                if (selectedLength >= 2 && !selected && !kibbleOnlyNull) {
+                  toggleMealPlanModal();
+                } else {
+                  selectKibbleRecipe(food);
+                }
+              }}
             >
               {selected ? "Remove from box" : `Add to ${ dog && dog.name }'s box`}
             </button>
@@ -100,8 +119,13 @@ const FoodCard = ({
             <button
               type="button"
               className={`${selected ? selectedText : unSelectedText} md:mt-4`}
-              onClick={() => selectCookedFood(food)}
-              disabled={selectedLength >= 2 && !selected}
+              onClick={() => {
+                if (selectedLength >= 2 && !selected) {
+                  toggleMealPlanModal();
+                } else {
+                  selectCookedFood(food)
+                }
+              }}
             >
               {selected ? "Remove from box" : `Add to ${ dog && dog.name }'s box`}
             </button>
@@ -128,6 +152,7 @@ const FoodCard = ({
               ? `bg-kibble-${food.recipe}  rounded-tl-5md p-4 px-7 h-full  flex items-center justify-center md:h-auto relative`
               : `bg-${food.recipe} h-full  rounded-tl-5md p-4 px-7 flex items-center justify-center h-1/2 md:h-auto relative`
           }
+          onClick={handleShowMealPlanModal}
         >
           {food.new && (
             <div className="bg-label text-white px-6 py-1 rounded-tr-md text-sm font-semibold rounded-br-md absolute left-0 top-4 recipeBadge">
@@ -147,7 +172,7 @@ const FoodCard = ({
           }
         >
           <div className="flex flex-col justify-center items-center mt-2.5">
-            <div className="font-normal text-xl font-cooper text-copyPrimary">{food.name}</div>
+            <div className="font-normal text-xl font-cooper text-copyPrimary" onClick={handleShowMealPlanModal}>{food.name}</div>
             <div
               onClick={() => {
                 openDetails(true);
@@ -173,8 +198,13 @@ const FoodCard = ({
               <button
                 type="button"
                 className={`${selected ? selectedText : unSelectedText} margin-bottom-4`}
-                onClick={() => selectKibbleRecipe(food)}
-                disabled={selectedLength >= 2 && !selected && !kibbleOnlyNull}
+                onClick={() => {
+                  if (selectedLength >= 2 && !selected && !kibbleOnlyNull) {
+                    toggleMealPlanModal();
+                  } else {
+                    selectKibbleRecipe(food);
+                  }
+                }}
               >
                 {selected ? "Remove from box" : `Add to ${ dog && dog.name }'s box`}
               </button>
@@ -182,8 +212,13 @@ const FoodCard = ({
               <button
                 type="button"
                 className={`${selected ? selectedText : unSelectedText} md:mt-4`}
-                onClick={() => selectCookedFood(food)}
-                disabled={selectedLength >= 2 && !selected}
+                onClick={() => {
+                  if (selectedLength >= 2 && !selected) {
+                    toggleMealPlanModal();
+                  } else {
+                    selectCookedFood(food)
+                  }
+                }}
               >
                 {selected ? "Remove from box" : `Add to ${ dog && dog.name }'s box`}
               </button>

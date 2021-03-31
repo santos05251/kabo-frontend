@@ -31,6 +31,7 @@ class EditPlan extends Component {
     editRecipiesOpen: false,
     editPortionsOpen: false,
     selectedDogIndex: this.props.match.params.id,
+    showMealPlanModal: false,
   };
 
   componentDidMount() {
@@ -63,7 +64,7 @@ class EditPlan extends Component {
       ///again not sure can be more then one kibble recipe
       this.setState({
         cookedRecipes: loadRecipes,
-        kibbleRecipes: [currentdog.kibble_recipe] || [],
+        kibbleRecipes: currentdog.kibble_recipe ? [currentdog.kibble_recipe] : [],
         dietPortion: {
           cooked_portion: currentdog.cooked_portion,
           kibble_portion: currentdog.kibble_portion,
@@ -103,7 +104,7 @@ class EditPlan extends Component {
     }
     this.setState({
       cookedRecipes: loadRecipes,
-      kibbleRecipes: [currentdog.kibble_recipe] || [],
+      kibbleRecipes: currentdog.kibble_recipe ? [currentdog.kibble_recipe] : [],
       dietPortion: {
         cooked_portion: currentdog.cooked_portion,
         kibble_portion: currentdog.kibble_portion,
@@ -141,31 +142,40 @@ class EditPlan extends Component {
       [name]: !this.state[name],
     });
   }
+  toggleMealPlanModal = () => {
+    this.setState({
+      showMealPlanModal: !this.state.showMealPlanModal,
+    });
+  }
   handleSelectedCookedRecipes = (food) => {
-    const { cookedRecipes } = this.state;
+    const { cookedRecipes, kibbleRecipes } = this.state;
     if (cookedRecipes && cookedRecipes.length > 0 && cookedRecipes.includes(food.recipe)) {
       let recipes = [...cookedRecipes];
       const index = recipes.indexOf(food.recipe);
       recipes.splice(index, 1);
       this.setState({ cookedRecipes: recipes, step: 1, dirty: true });
+      this.manageRecipeModal(recipes.length + kibbleRecipes.length);
       this.handleNext();
       return;
     }
+    cookedRecipes.push(food.recipe);
     this.setState({
-      cookedRecipes: [...cookedRecipes, food.recipe],
+      cookedRecipes,
       dirty: true,
       step: 1,
     });
+    this.manageRecipeModal(cookedRecipes.length + kibbleRecipes.length);
     this.handleNext();
   };
 
   handleSelectedKibbleRecipe = (food) => {
-    const { kibbleRecipes } = this.state;
+    const { cookedRecipes, kibbleRecipes } = this.state;
     if (kibbleRecipes.length > 0 && kibbleRecipes.includes(food.recipe)) {
       let recipes = [...kibbleRecipes];
       const index = recipes.indexOf(food.recipe);
       recipes.splice(index, 1);
       this.setState({ kibbleRecipes: [], step: 1, dirty: true });
+      this.manageRecipeModal(cookedRecipes.length);
       this.handleNext();
       return;
     }
@@ -174,8 +184,16 @@ class EditPlan extends Component {
       step: 1,
       dirty: true,
     });
+    this.manageRecipeModal(cookedRecipes.length + 1);
     this.handleNext();
   };
+
+  manageRecipeModal = (selectedLength) => {
+    const { showMealPlanModal } = this.state;
+    if (selectedLength <= 0 && showMealPlanModal) {
+      this.toggleMealPlanModal();
+    }
+  }
 
   handleNext = () => {
     const { cookedRecipes, kibbleRecipes, dietPortion, dog } = this.state;
@@ -304,6 +322,8 @@ class EditPlan extends Component {
               toggleKibble={this.toggleKibble}
               isKibble={this.state.isKibble}
               dog={dog}
+              showMealPlanModal={this.state.showMealPlanModal}
+              toggleMealPlanModal={this.toggleMealPlanModal}
             />
             <div id="DailyDietPortion" />
             <DailyDietPortion
