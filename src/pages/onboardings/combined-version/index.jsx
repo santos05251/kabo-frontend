@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { onboardingActions } from "../../../actions";
+import * as AnalyticEvent from "../../../components/analytic-events";
 import Header from "../../../components/onboardings/header";
 import Steps from "../../../components/onboardings/steps";
 import StartStep from "../steps/start";
@@ -10,6 +11,35 @@ import PortionStep from "../steps/portion";
 import UserStep from "../steps/user";
 import LoadingCircle from "../../../components/partials/loading";
 import qs from 'qs';
+
+const trackDogsEntered = (dogs, onboarding_data)=>{
+  (dogs || []).map(({
+    name,
+    breed,
+    age,
+    gender,
+    neutered,
+    weight,
+    weight_unit,
+    body_type,
+    activity_level,    
+  })=>{
+    const selectedBodyType = onboarding_data && onboarding_data.body_type && onboarding_data.body_types.find((bt)=>(bt.value == body_type));
+    const selectedActivityType = onboarding_data && onboarding_data.activity_level && onboarding_data.activity_levels.find((al)=>(al.value == activity_level));
+    AnalyticEvent.fireDogInfoEntered({
+      name,
+      breed: breed ? breed.label : null,
+      age: age ? age.label : null,
+      sex: gender,
+      spayed_or_neutered: neutered,
+      weight: weight ? +weight : null,
+      weight_unit: weight_unit ? weight_unit : null,
+      body_type: selectedBodyType ? selectedBodyType.label : null,
+      activity_level: selectedActivityType ? selectedActivityType.lablel : null,
+    });
+  })
+  return true
+}
 
 class OnboardingVersionA extends Component {
   state = {
@@ -35,6 +65,11 @@ class OnboardingVersionA extends Component {
   componentWillReceiveProps(newProps) {
     const { temp_user } = newProps;
     if (temp_user.checkout_token) {
+      const { user } = this.state
+      if(user && user.email) {
+        //only call identify with valid email/fname
+        AnalyticEvent.callIdentify(user.email, {first_name: user.first_name, email: user.email});
+      }
       this.props.history.push("/checkout/" + temp_user.checkout_token);
     }
   }
@@ -96,6 +131,7 @@ class OnboardingVersionA extends Component {
       step: "start",
       dogs: start_dogs
     };
+    trackDogsEntered(start_dogs, this.props.onboarding_data);
     this.props.createTempUser(data);
     this.setState({ step: this.state.step + 1 });
   };
@@ -134,6 +170,7 @@ class OnboardingVersionA extends Component {
         dogs: detail_dogs
       }
     };
+    trackDogsEntered(detail_dogs, this.props.onboarding_data);
     this.props.updateTempUser(data);
     this.setState({ step: this.state.step + 1 });
   };
@@ -184,6 +221,10 @@ class OnboardingVersionA extends Component {
         cooked_recipes: cookedRecipes[dogId] == undefined ? [] : cookedRecipes[dogId],
         kibble_recipe: kibble[dogId] == undefined ? null : kibble[dogId]
       });
+      let recipeNames = !cookedRecipes[dogId] ? [] : cookedRecipes[dogId];
+      AnalyticEvent.fireRecipeInfoEntered({
+        recipes: !kibble[dogId] ? [...recipeNames] : [...recipeNames, kibble[dogId]]
+      });
     });
     const data = {
       id: this.props.temp_user.temp_user_id,
@@ -207,6 +248,10 @@ class OnboardingVersionA extends Component {
       if (dietPortions[dogId].cooked_portion)
         dog["cooked_portion"] = dietPortions[dogId].cooked_portion;
       dogs.push(dog)
+      AnalyticEvent.firePortionInfoEntered({
+        cooked_portion_percent: dog.cooked_portion,
+        kibble_portion_percent: dog.kibble_portion,
+      });
     });
 
     const data = {
@@ -237,6 +282,10 @@ class OnboardingVersionA extends Component {
         referral_code: Number(couponPercentage) <= 0 ? null : '40off'
       }
     };
+    AnalyticEvent.fireHumanInfoEntered({
+      first_name: user.first_name,
+      email: user.email
+    });
     localStorage.setItem("account", JSON.stringify(data));
     this.props.updateTempUser(data);
   };
@@ -305,7 +354,7 @@ class OnboardingVersionA extends Component {
           {step > 1 && (
             <button
               onClick={this.handlePrevious}
-              className="flex justify-center items-center border btn mx-5 border-green text-green-600 focus:outline-none rounded-lg py-3 px-20"
+              className="btn-prev-step flex justify-center items-center border btn mx-5 border-green text-green-600 focus:outline-none rounded-lg py-3 px-20"
             >
               Prev
             </button>
@@ -316,8 +365,8 @@ class OnboardingVersionA extends Component {
               onClick={this.handleStartStep}
               className={
                 dogs.length <= 0 || !dogs.every(dog => dog.name != undefined && dog.breed != undefined && dog.age != undefined && dog.name !== '' && dog.breed.label != '' && dog.age.value >= 0)
-                  ? "flex justify-center items-center border btn mx-5 border-gray-300 bg-gray-200 text-gray-400 focus:outline-none rounded-lg py-3 px-20"
-                  : "flex justify-center items-center border btn mx-5 border-green-600 bg-green-600 text-white focus:outline-none rounded-lg py-3 px-20"
+                  ? "btn-next-step flex justify-center items-center border btn mx-5 border-gray-300 bg-gray-200 text-gray-400 focus:outline-none rounded-lg py-3 px-20"
+                  : "btn-next-step flex justify-center items-center border btn mx-5 border-green-600 bg-green-600 text-white focus:outline-none rounded-lg py-3 px-20"
               }
             >
               Next
@@ -329,8 +378,8 @@ class OnboardingVersionA extends Component {
               onClick={this.handleDetailStep}
               className={
                 dogs.length <= 0 || !dogs.every(dog => dog.gender != undefined && dog.ovary != undefined && dog.weight_unit != undefined && dog.weight != undefined && dog.body_type != undefined && dog.activity_level != undefined && dog.weight_unit != '' && Number(dog.weight) > 0 && dog.body_type >= 0 && dog.activity_level >= 0)
-                  ? "flex justify-center items-center border btn mx-5 border-gray-300 bg-gray-200 text-gray-400 focus:outline-none rounded-lg py-3 px-20"
-                  : "flex justify-center items-center border btn mx-5 border-green-600 bg-green-600 text-white focus:outline-none rounded-lg py-3 px-20"
+                  ? "btn-next-step flex justify-center items-center border btn mx-5 border-gray-300 bg-gray-200 text-gray-400 focus:outline-none rounded-lg py-3 px-20"
+                  : "btn-next-step flex justify-center items-center border btn mx-5 border-green-600 bg-green-600 text-white focus:outline-none rounded-lg py-3 px-20"
               }
             >
               Next
@@ -343,8 +392,8 @@ class OnboardingVersionA extends Component {
               onClick={this.handleRecipeStep}
               className={
                 !temp_user.temp_dog_ids.every(dogId => (cookedRecipes[dogId] != undefined ? cookedRecipes[dogId].length : 0) + (kibble[dogId] != undefined ? 1 : 0) > 0)
-                  ? "flex justify-center items-center border btn mx-5 border-gray-300 bg-gray-200 text-gray-400 focus:outline-none rounded-lg py-3 px-20"
-                  : "flex justify-center items-center border btn mx-5 border-green-600 bg-green-600 text-white focus:outline-none rounded-lg py-3 px-20"
+                  ? "btn-next-step flex justify-center items-center border btn mx-5 border-gray-300 bg-gray-200 text-gray-400 focus:outline-none rounded-lg py-3 px-20"
+                  : "btn-next-step flex justify-center items-center border btn mx-5 border-green-600 bg-green-600 text-white focus:outline-none rounded-lg py-3 px-20"
               }
             >
               Next
@@ -356,8 +405,8 @@ class OnboardingVersionA extends Component {
               onClick={this.handlePortionStep}
               className={
                 !temp_user.temp_dog_ids.every(dogId => dietPortions[dogId] != undefined)
-                  ? "flex justify-center items-center border btn mx-5 border-gray-300 bg-gray-200 text-gray-400 focus:outline-none rounded-lg py-3 px-20"
-                  : "flex justify-center items-center border btn mx-5 border-green-600 bg-green-600 text-white focus:outline-none rounded-lg py-3 px-20"
+                  ? "btn-next-step flex justify-center items-center border btn mx-5 border-gray-300 bg-gray-200 text-gray-400 focus:outline-none rounded-lg py-3 px-20"
+                  : "btn-next-step flex justify-center items-center border btn mx-5 border-green-600 bg-green-600 text-white focus:outline-none rounded-lg py-3 px-20"
               }
             >
               Next
@@ -367,7 +416,7 @@ class OnboardingVersionA extends Component {
           {step === 5 && (
             <button
               onClick={this.handleUserStep}
-              className="flex justify-center items-center border btn mx-5 border-green-600 bg-green-600 text-white focus:outline-none rounded-lg py-3 px-20"
+              className="btn-next-step flex justify-center items-center border btn mx-5 border-green-600 bg-green-600 text-white focus:outline-none rounded-lg py-3 px-20"
             >
               Next
             </button>
@@ -391,7 +440,8 @@ function mapStateToProps(state) {
   return {
     dogs: state.onboarding.dogs,
     temp_user: state.onboarding.temp_user,
-    updating_temp_user: state.onboarding.updating_temp_user
+    updating_temp_user: state.onboarding.updating_temp_user,
+    onboarding_data: {...state.onboarding.onboarding_details_data, ...state.onboarding.onboarding_starter_data},
   };
 }
 

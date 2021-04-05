@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { userActions } from "../../actions";
+import * as AnalyticEvent from "../analytic-events";
 import RecipeSelection from "./recipe-selection";
 
 class Recipes extends Component {
@@ -23,9 +24,11 @@ class Recipes extends Component {
       const index = recipes.indexOf(food.recipe);
       recipes.splice(index, 1);
       this.setState({ cookedRecipes: recipes });
+      AnalyticEvent.fireRemoveRecipeClicked({recipe_name: food.name});
       this.props.handleSelectedCookedRecipes(this.props.tempDogId, food.recipe);
       return;
     }
+    AnalyticEvent.fireAddRecipeClicked({recipe_name: food.name});
     this.setState({ cookedRecipes: [...cookedRecipes, food.recipe] });
     this.props.handleSelectedCookedRecipes(this.props.tempDogId, food.recipe);
   };
@@ -35,9 +38,11 @@ class Recipes extends Component {
     if (kibble && kibble.length > 0 && kibble.includes(food.recipe)) {
       // kibble is single selection
       this.setState({ kibble: [] });
+      AnalyticEvent.fireRemoveRecipeClicked({recipe_name: food.name});
       this.props.handleSelectedKibbleRecipe(this.props.tempDogId, food.recipe);
       return;
     }
+    AnalyticEvent.fireAddRecipeClicked({recipe_name: food.name});
     this.setState({ kibble: [food.recipe] });
     this.props.handleSelectedKibbleRecipe(this.props.tempDogId, food.recipe);
   };

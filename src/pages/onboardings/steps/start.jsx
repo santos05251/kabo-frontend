@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { onboardingActions } from "../../../actions";
 import addEmpty from "../../../assets/images/add-empty.png";
 import DogForm from "../../../components/onboardings/dog-form";
+import * as AnalyticEvent from "../../../components/analytic-events";
 
 class StartStep extends Component {
   state = {
@@ -12,6 +13,7 @@ class StartStep extends Component {
 
   addDogForm = () => {
     const { dogForm, lastLength } = this.state;
+    AnalyticEvent.fireAddAnotherDogClicked();
     this.setState({
       dogForm: [...dogForm, lastLength + 1],
       lastLength: lastLength + 1
@@ -66,7 +68,7 @@ class StartStep extends Component {
             </React.Fragment>
           ))}
           <div
-            className="flex px-4 md:px-9 py-5 md:py-7 mt-3 md:mt-5 bg-white rounded-lg cursor-pointer"
+            className="add-dog flex px-4 md:px-9 py-5 md:py-7 mt-3 md:mt-5 bg-white rounded-lg cursor-pointer"
             onClick={this.addDogForm}
           >
             <img src={addEmpty} />

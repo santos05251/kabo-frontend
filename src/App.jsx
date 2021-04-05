@@ -9,6 +9,7 @@ import AllOrdersPage from "./pages/order";
 import { Navbar } from "./components/navbar";
 import { LoginNav } from "./components/navbar/login-nav";
 import { Alert } from "./components/alert";
+import { EventPageViews } from "./components/analytic-events";
 import ProfilePage from "./pages/profile";
 import EditPlan from "./pages/meal-plan";
 import OrderDetail from "./pages/order/detail";
@@ -82,6 +83,7 @@ function App() {
                 <PrivateRoute path="/unpause/:dog_id" exact component={ReactivationPage} />
                 <PrivateRoute component={AccountPage} />
               </Switch>
+              <EventPageViews/>
             </BrowserRouter>
           </div>
         </div>
